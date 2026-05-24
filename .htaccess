@@ -1,0 +1,9 @@
+RewriteEngine On
+RewriteBase /WEB_GR4/
+
+# Bỏ qua file và thư mục thật (css, js, img)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Tất cả request → index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
