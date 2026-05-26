@@ -458,13 +458,6 @@ body::before {
   position: relative;
 }
 
-.category-header h2::before {
-  content: "◈";
-  font-size: 18px;
-  margin-right: 8px;
-  color: var(--plum);
-}
-
 .no-products {
   padding: 40px 0;
   text-align: center;

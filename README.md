@@ -11,13 +11,11 @@ WEB_GR4/
 ├── api/
 │   └── search.php
 │
->>>>>>> cf981dd (ud)
 ├── app/                        # Thư mục chứa logic chính của ứng dụng
 │   ├── controllers/            # Điều hướng và xử lý yêu cầu từ người dùng
 │   │   ├── ProductController.php
 │   │   ├── CartController.php
 │   │   └── HomeController.php
->>>>>>> cf981dd (ud)
 │   │   └── AuthController.php
 │   ├── models/                 # Xử lý dữ liệu và tương tác với Database
 │   │   ├── ProductModel.php
@@ -28,7 +26,6 @@ WEB_GR4/
 │       │   ├── header.php
 │       │   └── footer.php
 │       │   └── product-card.php
->>>>>>> cf981dd (ud)
 │       ├── products/           # Giao diện liên quan đến sản phẩm
 │       │   ├── index.php       # Trang danh sách sản phẩm
 │       │   └── detail.php      # Trang chi tiết sản phẩm
@@ -48,7 +45,7 @@ WEB_GR4/
 ├── index.php                   # Single Entry Point (Điểm vào DUY NHẤT của ứng dụng)
 │
 └── .htaccess
->>>>>>> cf981dd (ud)
+
 ```
 
 ## 🛠 Công Nghệ Sử Dụng

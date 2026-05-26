@@ -5,7 +5,7 @@
             <img src="/WEB_GR4<?php echo htmlspecialchars($p['image_url']); ?>"
                  alt="<?php echo htmlspecialchars($p['product_name']); ?>" loading="lazy">
         <?php else: ?>
-            <div class="no-img">📦</div>
+            <div class="no-img"><i class="fa-solid fa-box-open" style="color: rgb(177, 151, 252);"></i></div>
         <?php endif; ?>
         <div class="product-info">
             <h3><?php echo htmlspecialchars($p['product_name']); ?></h3>

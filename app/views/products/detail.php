@@ -2,14 +2,14 @@
 
 <section class="product-detail">
     <div class="container">
-        <a href="/WEB_GR4/products" class="btn btn-secondary">← Quay lại</a>
+        <a href="/WEB_GR4/products" class="btn btn-secondary">Quay lại</a>
 
         <div class="detail-wrap">
             <?php if (!empty($product['image_url'])): ?>
                 <img src="/WEB_GR4<?php echo htmlspecialchars($product['image_url']); ?>"
                      alt="<?php echo htmlspecialchars($product['product_name']); ?>">
             <?php else: ?>
-                <div class="no-img-large">📦</div>
+                <div class="no-img-large"><i class="fa-solid fa-box-open" style="color: rgb(177, 151, 252);"></i></div>
             <?php endif; ?>
 
             <div class="detail-info">
@@ -24,10 +24,10 @@
                     <p>Còn hàng: <?php echo (int)$product['stock_quantity']; ?></p>
                     <button class="btn btn-add-cart"
                         onclick="addToCart(<?php echo $product['product_id']; ?>)">
-                        + Thêm vào giỏ hàng
+                        <i class="fas fa-shopping-cart" style="color: rgb(255, 255, 255);"></i> Thêm vào giỏ hàng
                     </button>
                 <?php else: ?>
-                    <button class="btn btn-disabled" disabled>Hết hàng</button>
+                    <button class="btn btn-disabled" disabled><i class="fas fa-exclamation-circle" style="color: rgb(255, 255, 255);"></i> Hết hàng</button>
                 <?php endif; ?>
             </div>
         </div>

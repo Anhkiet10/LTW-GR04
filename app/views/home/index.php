@@ -13,9 +13,9 @@
         <section class="category-section">
             <div class="container">
                 <div class="category-header">
-                    <h2><?php echo htmlspecialchars($catName); ?></h2>
+                    <h2><i class="fa-solid fa-diamond" style="color: rgb(177, 151, 252);"></i> <?php echo htmlspecialchars($catName); ?></h2>
                     <a href="/WEB_GR4/products?category=<?php echo (int)$catData['id']; ?>" class="view-more-link">
-                        Xem thêm →
+                        Xem thêm <i class="fas fa-arrow-right" style="color: rgb(177, 151, 252);"></i>
                     </a>
                 </div>
                 <?php if (!empty($catData['products'])): ?>

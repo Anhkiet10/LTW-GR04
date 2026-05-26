@@ -1,20 +1,20 @@
 
 <link rel="stylesheet" href="/WEB_GR4/public/assets/css/style.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <div class="admin-layout">
 
     <!-- SIDEBAR -->
     <aside class="admin-sidebar">
 
-        <h2 class="admin-logo">⚙ Admin</h2>
+        <h2 class="admin-logo">Admin</h2>
 
         <ul class="admin-menu">
-            <li><a href="#">🏠 Dashboard</a></li>
-            <li><a href="#">📦 Sản phẩm</a></li>
-            <li><a href="#">🛒 Đơn hàng</a></li>
-            <li><a href="#">👥 Người dùng</a></li>
-            <li><a href="#">📊 Thống kê</a></li>
+            <li><a href="#"><i class="fas fa-home" style="color: rgb(177, 151, 252);"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-box" style="color: rgb(177, 151, 252);"></i> Sản phẩm</a></li>
+            <li><a href="#"><i class="fas fa-shopping-cart" style="color: rgb(177, 151, 252);"></i> Đơn hàng</a></li>
+            <li><a href="#"><i class="fas fa-users" style="color: rgb(177, 151, 252);"></i> Người dùng</a></li>
+            <li><a href="#"><i class="fas fa-chart-bar" style="color: rgb(177, 151, 252);"></i> Thống kê</a></li>
         </ul>
 
     </aside>
