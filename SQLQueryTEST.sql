@@ -242,65 +242,37 @@ CREATE TABLE reviews (
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- ============================================================
+-- demo ghim sản phẩm của admin
+-- ============================================================
 
-
-CREATE TABLE vouchers (
-  voucher_id      INT            NOT NULL AUTO_INCREMENT,
-  code            VARCHAR(50)    NOT NULL COMMENT 'Mã voucher, ví dụ: GIAY20K, SUMMER99',
-  voucher_name    VARCHAR(100)   NOT NULL COMMENT 'Tên hiển thị của mã',
-  discount_type   ENUM('percentage', 'fixed_amount') NOT NULL COMMENT 'percentage: %, fixed_amount: số tiền',
-  discount_value  DECIMAL(15,2)  NOT NULL COMMENT 'Giá trị giảm (ví dụ: 10.00 cho 10%, hoặc 50000.00 cho 50k)',
-  min_order_value DECIMAL(15,2)  NOT NULL DEFAULT 0.00 COMMENT 'Đơn hàng tối thiểu để được áp dụng',
-  max_discount    DECIMAL(15,2)  NULL     COMMENT 'Số tiền giảm tối đa (chỉ áp dụng nếu chọn loại percentage)',
-  usage_limit     INT            NOT NULL DEFAULT 1 COMMENT 'Tổng số lượt mã này có thể sử dụng',
-  used_count      INT            NOT NULL DEFAULT 0 COMMENT 'Số lượt đã sử dụng thực tế',
-  start_date      DATETIME       NOT NULL,
-  end_date        DATETIME       NOT NULL,
-  is_active       TINYINT(1)     NOT NULL DEFAULT 1,
-  created_at      DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-  PRIMARY KEY (voucher_id),
-  UNIQUE KEY uq_vouchers_code (code),
-  KEY idx_vouchers_date (start_date, end_date)
+CREATE TABLE homepage_categories (
+  id          INT NOT NULL AUTO_INCREMENT,
+  category_id INT NOT NULL,
+  sort_order  INT NOT NULL DEFAULT 0 COMMENT 'Thứ tự hiển thị, số nhỏ xếp trước',
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_home_cat (category_id), -- Để một danh mục không bị ghim trùng 2 lần
+  CONSTRAINT fk_home_cat_categories
+    FOREIGN KEY (category_id) REFERENCES categories (category_id)
+    ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-
--- Khi khách áp dụng mã vào đơn hàng, bạn cần lưu lại mã đó vào bảng orders 
--- để tính toán doanh thu và đối soát sau này.
-
-ALTER TABLE orders 
-ADD COLUMN voucher_id INT NULL AFTER address_id,
-ADD COLUMN discount_amount DECIMAL(15,2) NOT NULL DEFAULT 0.00 AFTER total_amount,
-ADD CONSTRAINT fk_orders_voucher FOREIGN KEY (voucher_id) REFERENCES vouchers(voucher_id) ON UPDATE CASCADE ON DELETE SET NULL;
-
-CREATE TABLE flash_sales (
-  flash_sale_id INT          NOT NULL AUTO_INCREMENT,
-  title         VARCHAR(100) NOT NULL COMMENT 'Ví dụ: Flash Sale Giữa Đêm, Chợ Phiên Thứ 7',
-  start_time    DATETIME     NOT NULL,
-  end_time      DATETIME     NOT NULL,
-  is_active     TINYINT(1)   NOT NULL DEFAULT 1,
-
-  PRIMARY KEY (flash_sale_id),
-  KEY idx_flash_sales_time (start_time, end_time)
+CREATE TABLE homepage_products (
+  id          INT NOT NULL AUTO_INCREMENT,
+  product_id  INT NOT NULL,
+  sort_order  INT NOT NULL DEFAULT 0 COMMENT 'Thứ tự hiển thị trên trang chủ',
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_home_prod (product_id), -- Để một sản phẩm không bị ghim trùng
+  CONSTRAINT fk_home_prod_products
+    FOREIGN KEY (product_id) REFERENCES products (product_id)
+    ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE flash_sale_items (
-  flash_sale_item_id INT          NOT NULL AUTO_INCREMENT,
-  flash_sale_id      INT          NOT NULL,
-  product_id         INT          NOT NULL,
-  flash_sale_price   DECIMAL(15,2) NOT NULL COMMENT 'Giá đặc biệt trong thời gian sale',
-  sale_quantity      INT          NOT NULL COMMENT 'Tổng số lượng hàng mang ra gom sale',
-  sold_quantity      INT          NOT NULL DEFAULT 0 COMMENT 'Số lượng đã bán được trong khung giờ',
-  sort_order         INT          NOT NULL DEFAULT 0 COMMENT 'Thứ tự xếp sản phẩm trên UI',
-
-  PRIMARY KEY (flash_sale_item_id),
-  UNIQUE KEY uq_fs_product (flash_sale_id, product_id), -- Một sản phẩm không xuất hiện 2 lần trong 1 khung giờ
-  CONSTRAINT fk_fsi_flash_sale FOREIGN KEY (flash_sale_id) REFERENCES flash_sales(flash_sale_id) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT fk_fsi_product FOREIGN KEY (product_id) REFERENCES products(product_id) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB;
 -- ============================================================
 -- SAMPLE DATA
 -- ============================================================
+
+
 
 -- Admin + 2 khách hàng
 INSERT INTO users (full_name, email, password_hash, phone, role) VALUES
