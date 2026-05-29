@@ -1,4 +1,3 @@
-
 <?php
 // Autoload tất cả file cần thiết
 // require_once __DIR__ . '/config/database.php';
@@ -13,10 +12,13 @@ $router = new Router();
 
 $router->get('/',              'HomeController',    'index');
 $router->get('/products',      'ProductController', 'index');
+$router->get('/products/search', 'ProductController', 'search');
 $router->get('/products/{id}', 'ProductController', 'detail');
 $router->get('/cart',          'CartController',    'index');
 $router->get('/login',         'AuthController',    'loginPage');
 $router->get('/admin',         'AdminController',   'home');
+
+$router->post('/admin/save-homepage', 'AdminController', 'saveHomepage');
 
 $router->dispatch();
 ?>

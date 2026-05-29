@@ -3,7 +3,11 @@ class Router {
     private $routes = [];
 
     public function get($path, $controller, $method) {
-        $this->routes[] = ['path' => $path, 'controller' => $controller, 'method' => $method];
+        $this->routes[] = ['path' => $path, 'controller' => $controller, 'method' => $method, 'httpMethod' => 'GET'];
+    }
+
+    public function post($path, $controller, $method) {
+        $this->routes[] = ['path' => $path, 'controller' => $controller, 'method' => $method, 'httpMethod' => 'POST'];
     }
 
     public function dispatch() {
@@ -18,8 +22,10 @@ class Router {
 
         if ($url === '' || $url === '/') $url = '/';
 
+        $httpMethod = $_SERVER['REQUEST_METHOD'];
+
         foreach ($this->routes as $route) {
-            if ($this->match($route['path'], $url, $params)) {
+            if ($route['httpMethod'] === $httpMethod && $this->match($route['path'], $url, $params)) {
                 $controllerFile = __DIR__ . '/../app/controllers/' . $route['controller'] . '.php';
                 require_once $controllerFile;
                 $ctrl = new $route['controller']();

@@ -13,7 +13,7 @@
     <div class="container nav-inner">
 
         <a href="/WEB_GR4/" class="logo"><i class="fa-brands fa-canadian-maple-leaf" style="color: rgb(255, 59, 113);"></i> W4Shop</a>
-
+        <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars" style="color: rgb(255, 59, 59);"></i></button>
         <!-- SEARCH -->
         <div class="search-wrap">
             <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
@@ -22,7 +22,7 @@
         </div>
 
         <!-- NAV -->
-        <nav>
+        <nav class="nav-container" id="navContainer">
             <ul class="nav-links">
                 <li><a href="/WEB_GR4/"><i class="fas fa-home" style="color: rgb(177, 151, 252);"></i>Trang chủ</a></li>
                 <li class="cart-link"><a href="/WEB_GR4/cart"><i class="fas fa-shopping-cart" style="color: rgb(177, 151, 252);"></i> Giỏ hàng</a></li>
@@ -35,7 +35,7 @@
 
     <div class="categories-bar">
     <div class="container">
-        <div class="categories-list">
+        <div class="categories-list" id="idcategoriesList">
             <a href="/WEB_GR4/products" class="category-link all-products">Tất cả sản phẩm</a>
             <?php
             if (isset($categories) && !empty($categories)) {
