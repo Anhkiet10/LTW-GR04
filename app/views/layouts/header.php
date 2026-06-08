@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($pageTitle) ? htmlspecialchars($pageTitle) . " - W4Shop" : "W4Shop"; ?></title>
-    <link rel="stylesheet" href="/WEB_GR4/public/assets/css/style.css">
+    <link rel="stylesheet" href="/WEB_GR4/public/assets/css/user/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>

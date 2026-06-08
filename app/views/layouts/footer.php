@@ -44,6 +44,6 @@
 <button class="back-to-top" id="backToTop"
     onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Về đầu trang"><i class="fa-solid fa-caret-up" style="color: rgb(238, 235, 245);"></i></button>
 
-<script src="/WEB_GR4/public/assets/js/main.js"></script>
+<script src="/WEB_GR4/public/assets/js/user/main.js"></script>
 </body>
 </html>
