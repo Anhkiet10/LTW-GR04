@@ -6,7 +6,7 @@
 
         <div class="detail-wrap">
             <?php if (!empty($product['image_url'])): ?>
-                <img src="/WEB_GR4<?php echo htmlspecialchars($product['image_url']); ?>"
+                <img src="/WEB_GR4/public<?php echo htmlspecialchars($product['image_url']); ?>"
                      alt="<?php echo htmlspecialchars($product['product_name']); ?>">
             <?php else: ?>
                 <div class="no-img-large"><i class="fa-solid fa-box-open" style="color: rgb(177, 151, 252);"></i></div>
