@@ -7,24 +7,24 @@ class HomeController extends Controller {
     public function index() {
         $model = new ProductModel();
 
-        $categories = $model->getCategoriesWithParent();
-
         $categoryProducts = [];
-        if (!empty($categories)) {
-            foreach ($categories as $cat) {
-                $products = $model->getByCategory($cat['category_id'], 5);
+        $homepageCategories = $model->getHomepageCategoriesWithProducts();
 
+        if (!empty($homepageCategories)) {
+            foreach ($homepageCategories as $cat) {
                 $categoryProducts[$cat['category_name']] = [
                     'id' => $cat['category_id'],
-                    'products' => $products ?: []
+                    'products' => $cat['products'] ?: []
                 ];
             }
         }
 
+        $allCategories = $model->getCategoriesWithParent();
+
         $this->render('home/index', [
             'pageTitle'        => 'Trang chủ',
             'categoryProducts' => $categoryProducts,
-            'categories'       => $categories,
+            'categories'       => $allCategories,
             'categoryName'     => '',
         ]);
     }
