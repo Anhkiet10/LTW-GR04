@@ -1,0 +1,282 @@
+.order-detail-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #7c3aed;
+  text-decoration: none;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.order-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.order-title h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #1f2937;
+}
+
+.order-title i {
+  color: #7c3aed;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+.status-paid {
+  background: #d1fae5;
+  color: #065f46;
+}
+.status-shipping {
+  background: #dbeafe;
+  color: #0c2d6b;
+}
+.status-completed {
+  background: #cffafe;
+  color: #0c454d;
+}
+.status-cancelled {
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+
+.order-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.info-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.info-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-section h3 i {
+  color: #7c3aed;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.info-label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.info-value {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.items-section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.items-header {
+  padding: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.items-header h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.items-table thead {
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.items-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.items-table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.items-table td {
+  padding: 16px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.item-product {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.item-image {
+  width: 60px;
+  height: 60px;
+  background: #f3f4f6;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.item-name {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.item-price {
+  font-weight: 600;
+  color: #059669;
+}
+
+.summary-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.summary-row.total {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  border-top: 2px solid #e5e7eb;
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+.summary-label {
+  color: #6b7280;
+}
+
+.summary-value {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.action-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.btn-primary {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  background: #6d28d9;
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover {
+  background: #d1d5db;
+}

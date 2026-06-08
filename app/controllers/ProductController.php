@@ -52,5 +52,32 @@ class ProductController extends Controller {
             'categories' => $model->getCategoriesWithParent(),
         ]);
     }
+
+    public function search() {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $q = isset($_GET['q']) ? trim($_GET['q']) : '';
+
+        if (strlen($q) < 1) {
+            echo json_encode([]);
+            exit;
+        }
+
+        $model = new ProductModel();
+        $results = $model->search($q, 6);
+        $suggestions = [];
+
+        foreach ($results as $row) {
+            $suggestions[] = [
+                'id'    => $row['product_id'],
+                'name'  => $row['product_name'],
+                'price' => number_format($row['price'], 0, ',', '.') . 'đ',
+                'image' => $row['image_url'] ? $row['image_url'] : ''
+            ];
+        }
+
+        echo json_encode($suggestions, JSON_UNESCAPED_UNICODE);
+        exit;
+    }
 }
 ?>
