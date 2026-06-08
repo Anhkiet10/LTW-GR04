@@ -21,6 +21,7 @@
                 <?php if (!empty($catData['products'])): ?>
                     <div class="product-grid">
                         <?php foreach ($catData['products'] as $p): ?>
+                            <?php $categoryContext = ['parent_id' => $catData['id'], 'parent_name' => $catName]; ?>
                             <?php require __DIR__ . '/../layouts/product-card.php'; ?>
                         <?php endforeach; ?>
                     </div>

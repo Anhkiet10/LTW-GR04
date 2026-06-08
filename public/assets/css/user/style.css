@@ -26,10 +26,16 @@
   --accent: #d4c8e8; /* lightest lavender = disabled */
 }
 
+html {
+  overflow-x: clip; /* clip thay hidden — không phá vỡ position: sticky */
+}
+
 body {
   font-family: "Lato", sans-serif;
   background: var(--cream);
   color: var(--soil);
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 body::before {
@@ -85,9 +91,6 @@ body::before {
   background: var(--forest);
   border-bottom: 1px solid var(--mint);
   padding: 16px 0;
-  position: sticky;
-  top: 61px;
-  z-index: 998;
   box-shadow: 0 2px 8px rgba(155, 142, 199, 0.1);
 }
 
@@ -103,7 +106,7 @@ body::before {
   padding: 10px 20px;
   color: var(--cream);
   text-decoration: none;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 500;
   border-radius: 20px;
   background: #9b8ec7;
@@ -131,13 +134,14 @@ body::before {
   display: flex;
   align-items: center;
   gap: 20px;
+  position: relative;
 }
 
 .logo {
   color: var(--linen);
   text-decoration: none;
   font-family: "Playfair Display", serif;
-  font-size: 25px;
+  font-size: 21px;
   font-weight: 700;
   white-space: nowrap;
   letter-spacing: 0.03em;
@@ -157,7 +161,7 @@ body::before {
   padding: 8px 14px;
   border: none;
   border-radius: 20px 0 0 20px;
-  font-size: 14px;
+  font-size: 10px;
   font-family: "Lato", sans-serif;
   outline: none;
   background: var(--linen);
@@ -175,7 +179,7 @@ body::before {
   border: none;
   border-radius: 0 20px 20px 0;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 11px;
   transition: background 0.2s;
 }
 
@@ -226,27 +230,32 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 16px;
   flex-shrink: 0;
 }
 
 .sg-name {
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   color: var(--forest);
 }
 .sg-price {
-  font-size: 13px;
+  font-size: 9px;
   color: var(--plum);
 }
 .sg-empty {
   padding: 14px;
   text-align: center;
   color: var(--wood);
-  font-size: 14px;
+  font-size: 10px;
 }
 
 /* ===== NAV LINKS ===== */
+.nav-container {
+  display: flex;
+  align-items: center;
+}
+
 .nav-links {
   list-style: none;
   display: flex;
@@ -257,7 +266,7 @@ body::before {
 .nav-links > li > a {
   color: var(--linen);
   text-decoration: none;
-  font-size: 22px;
+  font-size: 18px;
   font-family: "Lato", sans-serif;
   padding: 8px 12px;
   border-radius: 6px;
@@ -316,7 +325,7 @@ body::before {
   padding: 10px 18px;
   color: var(--bark);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 10px;
   border-bottom: 1px solid var(--mint);
   transition:
     background 0.15s,
@@ -363,14 +372,14 @@ body::before {
 
 .hero h1 {
   font-family: "Playfair Display", serif;
-  font-size: 42px;
+  font-size: 38px;
   font-weight: 700;
   margin-bottom: 14px;
   letter-spacing: -0.01em;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
 .hero p {
-  font-size: 18px;
+  font-size: 14px;
   margin-bottom: 32px;
   opacity: 0.88;
   font-weight: 300;
@@ -386,7 +395,7 @@ body::before {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 10px;
   font-family: "Lato", sans-serif;
   font-weight: 700;
   text-decoration: none;
@@ -453,7 +462,7 @@ body::before {
 
 .category-header h2 {
   font-family: "Playfair Display", serif;
-  font-size: 24px;
+  font-size: 20px;
   color: var(--forest);
   position: relative;
 }
@@ -462,7 +471,7 @@ body::before {
   padding: 40px 0;
   text-align: center;
   color: var(--wood);
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .no-products p {
@@ -506,7 +515,7 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
+  font-size: 44px;
   background: #f3eef9;
 }
 
@@ -518,23 +527,53 @@ body::before {
   padding: 14px;
 }
 .product-info h3 {
-  font-size: 15px;
+  font-size: 11px;
   margin-bottom: 6px;
   line-height: 1.4;
   color: var(--bark);
   font-weight: 600;
 }
 
+.product-categories {
+  font-size: 8px;
+  color: var(--plum);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.category-parent {
+  font-weight: 500;
+  color: var(--wood);
+}
+
+.category-parent + .fa-chevron-right {
+  font-size: 6px;
+  opacity: 0.6;
+}
+
+.category-child {
+  font-weight: 500;
+  color: var(--plum);
+}
+
+.category-main {
+  font-weight: 500;
+  color: var(--plum);
+}
+
 .price {
   color: var(--plum);
   font-weight: 700;
-  font-size: 17px;
+  font-size: 13px;
 }
 
 .out-of-stock {
   background: var(--wood);
   color: #fff;
-  font-size: 11px;
+  font-size: 7px;
   padding: 2px 8px;
   border-radius: 4px;
   margin-top: 4px;
@@ -575,13 +614,13 @@ body::before {
 .footer-col h3 {
   font-family: "Playfair Display", serif;
   color: var(--linen);
-  font-size: 16px;
+  font-size: 12px;
   margin-bottom: 14px;
   letter-spacing: 0.03em;
 }
 
 .footer-col p {
-  font-size: 14px;
+  font-size: 10px;
   line-height: 1.75;
   color: var(--sand);
 }
@@ -591,7 +630,7 @@ body::before {
 }
 .footer-col ul li {
   margin-bottom: 8px;
-  font-size: 14px;
+  font-size: 10px;
 }
 .footer-col ul li a {
   color: var(--sand);
@@ -606,7 +645,7 @@ body::before {
   border-top: 1px solid rgba(180, 211, 217, 0.14);
   text-align: center;
   padding: 18px;
-  font-size: 13px;
+  font-size: 9px;
   color: var(--sand);
 }
 
@@ -645,7 +684,7 @@ body::before {
   color: #fff;
   border: none;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 14px;
   cursor: pointer;
   z-index: 999;
   align-items: center;
@@ -671,7 +710,7 @@ body::before {
   color: #fff;
   padding: 12px 26px;
   border-radius: 24px;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   opacity: 0;
   transition: all 0.3s;
@@ -702,7 +741,7 @@ body::before {
   padding: 10px 14px;
   border: 1px solid var(--lavender);
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 10px;
   font-family: "Lato", sans-serif;
   outline: none;
   background: #f5f0f9;
@@ -719,7 +758,7 @@ body::before {
 }
 .products-page h2 {
   font-family: "Playfair Display", serif;
-  font-size: 26px;
+  font-size: 22px;
   margin-bottom: 20px;
   color: var(--forest);
 }
@@ -743,7 +782,7 @@ body::before {
 /* LOGO */
 .admin-logo {
   color: var(--linen);
-  font-size: 28px;
+  font-size: 24px;
   margin-bottom: 32px;
   font-family: "Playfair Display", serif;
 }
@@ -765,7 +804,7 @@ body::before {
   text-decoration: none;
   border-radius: 10px;
   transition: all 0.2s;
-  font-size: 17px;
+  font-size: 13px;
 }
 
 .admin-menu a:hover {
@@ -806,7 +845,7 @@ body::before {
 /* ===== LOGO ===== */
 .admin-logo {
   color: var(--linen);
-  font-size: 32px;
+  font-size: 28px;
   margin-bottom: 30px;
   font-family: "Playfair Display", serif;
 }
@@ -835,7 +874,7 @@ body::before {
 
   border-radius: 12px;
 
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
 
   transition: all 0.25s ease;
@@ -862,4 +901,190 @@ body::before {
   justify-content: center;
 
   border-bottom-left-radius: 24px;
+}
+
+.menu-toggle {
+  display: none; /* Trên Laptop/PC thì ẩn nút 3 gạch đi */
+  background: none;
+  border: none;
+  color: var(--linen);
+  font-size: 20px;
+  cursor: pointer;
+}
+/* ==========================================================================
+   BỔ SUNG CSS RESPONSIVE CHO MOBILE & TABLET (MÀN HÌNH DƯỚI 768PX)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* ── Navbar: dùng flexbox dọc, padding đủ chỗ cho logo + toggle ── */
+  .navbar {
+    padding: 0;
+  }
+
+  .nav-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Hàng đầu: toggle (trái) + logo (phải), chiều cao cố định */
+  .nav-inner .logo,
+  .menu-toggle {
+    position: static;
+  }
+
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    order: 1;
+    padding: 14px 0;
+    width: fit-content;
+  }
+
+  .logo {
+    order: 2;
+    /* đẩy logo sang phải bằng margin-left auto trên search-wrap */
+    position: absolute;
+    right: 16px;
+    top: 14px;
+  }
+
+  /* Search wrap xuống dòng thứ hai, full width */
+  .search-wrap {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 12px 0;
+    box-sizing: border-box;
+  }
+
+  /* Nav links: ẩn, khi .active thì hiện dưới search */
+  .nav-container {
+    display: none;
+    order: 4;
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .nav-container.active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+  }
+
+  .nav-links > li {
+    width: 100%;
+  }
+
+  .nav-links > li > a {
+    font-size: 15px;
+    padding: 12px 16px;
+    border-radius: 0;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    white-space: normal;
+  }
+
+  /* ── Categories bar: padding mobile ── */
+  .categories-bar {
+    padding: 10px 0;
+  }
+
+  /* Categories list: wrap, không tràn ngang */
+  .categories-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 16px;
+    justify-content: flex-start;
+  }
+
+  .category-link {
+    font-size: 13px;
+    padding: 6px 12px;
+    white-space: nowrap;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 50px 16px;
+  }
+
+  .hero h1 {
+    font-size: 26px;
+  }
+
+  .hero p {
+    font-size: 15px;
+  }
+
+  /* ── Product grid: 2 cột ── */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+
+  .product-card img,
+  .no-img {
+    height: 130px;
+  }
+
+  .product-info {
+    padding: 10px;
+  }
+
+  .product-info h3 {
+    font-size: 13px;
+  }
+
+  .price {
+    font-size: 14px;
+  }
+
+  /* ── Footer ── */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    text-align: center;
+  }
+
+  /* ── Floating elements ── */
+  .zalo-bubble {
+    bottom: 70px;
+    right: 15px;
+    width: 46px;
+    height: 46px;
+  }
+}
+
+/* Thêm breakpoint cho màn hình rất nhỏ (dưới 380px) */
+@media (max-width: 380px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px;
+  }
+
+  .product-card img,
+  .no-img {
+    height: 110px;
+  }
+
+  .category-link {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
 }
