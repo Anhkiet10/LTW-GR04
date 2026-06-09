@@ -1,5 +1,13 @@
 let currentOrderId = null;
 
+function showToast(msg, type = "success") {
+  const t = document.createElement("div");
+  t.className = "toast " + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2800);
+}
+
 function openStatusModal(orderId, currentStatus) {
   currentOrderId = orderId;
   document.getElementById("statusSelect").value = currentStatus;
@@ -15,7 +23,7 @@ function updateOrderStatus() {
   const status = document.getElementById("statusSelect").value;
 
   if (!status) {
-    alert("Vui lòng chọn trạng thái");
+    showToast("Vui lòng chọn trạng thái", "error");
     return;
   }
 
@@ -32,19 +40,18 @@ function updateOrderStatus() {
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        alert("Cập nhật trạng thái thành công");
-        location.reload();
+        showToast("Cập nhật trạng thái thành công", "success");
+        setTimeout(() => location.reload(), 1000);
       } else {
-        alert("Lỗi: " + data.message);
+        showToast("Lỗi: " + data.message, "error");
       }
     })
     .catch((error) => {
       console.error("Error:", error);
-      alert("Có lỗi xảy ra");
+      showToast("Có lỗi xảy ra", "error");
     });
 }
 
-// Close modal when clicking outside
 document.getElementById("statusModal").addEventListener("click", function (e) {
   if (e.target === this) {
     closeStatusModal();
