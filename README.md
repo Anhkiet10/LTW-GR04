@@ -41,6 +41,8 @@ WEB_GR4/
 ├── config/                     # Cấu hình hệ thống
 │   └── database.php            # Cấu hình kết nối cơ sở dữ liệu
 ├── public/                     # Thư mục chứa tài nguyên tĩnh tiếp cận công khai
+│   ├── api/
+│   │   └──add-to-cart.php      # bỏ qua hoàn toàn bước "xếp hàng" và "so khớp" củaRouter
 │   └── assets/                 # Chứa các file CSS, JS, Images, Fonts
 │       └── css/
 │       └──js/
