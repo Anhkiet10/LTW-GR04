@@ -4,10 +4,14 @@ require_once __DIR__ . '/../../core/Model.php';
 class ProductModel extends Model {
 
     public function getAll($limit = null) {
-        $sql = "SELECT p.*, pi.image_url
+        $sql = "SELECT p.*, pi.image_url,
+                       MIN(pv.price) as min_price, MAX(pv.price) as max_price,
+                       SUM(pv.stock_quantity) as total_stock
                 FROM products p
                 LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.is_primary = 1
+                LEFT JOIN product_variants pv ON p.product_id = pv.product_id AND pv.is_active = 1
                 WHERE p.is_active = 1
+                GROUP BY p.product_id
                 ORDER BY p.created_at DESC";
         if ($limit) $sql .= " LIMIT " . (int)$limit;
         return $this->fetchAll($sql);
@@ -18,15 +22,19 @@ public function getByCategory($categoryId, $limit = 5) {
 
     $sql = "SELECT p.*, pi.image_url,
                    c.category_id as prod_cat_id, c.category_name as prod_cat_name, c.parent_id as prod_parent_id,
-                   pc.category_name as parent_cat_name
+                   pc.category_name as parent_cat_name,
+                   MIN(pv.price) as min_price, MAX(pv.price) as max_price,
+                   SUM(pv.stock_quantity) as total_stock
             FROM products p
             LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.is_primary = 1
+            LEFT JOIN product_variants pv ON p.product_id = pv.product_id AND pv.is_active = 1
             JOIN categories c ON p.category_id = c.category_id
             LEFT JOIN categories pc ON c.parent_id = pc.category_id
             WHERE p.is_active = 1 AND (
                 p.category_id = $categoryId
                 OR p.category_id IN (SELECT category_id FROM categories WHERE parent_id = $categoryId)
             )
+            GROUP BY p.product_id
             ORDER BY p.created_at DESC";
 
     if ($limit) {
@@ -57,11 +65,15 @@ public function getByCategory($categoryId, $limit = 5) {
     public function search($keyword, $limit = 6) {
         $keyword = $this->escape($keyword);
         return $this->fetchAll(
-            "SELECT p.*, pi.image_url
+            "SELECT p.*, pi.image_url,
+                    MIN(pv.price) as min_price, MAX(pv.price) as max_price,
+                    SUM(pv.stock_quantity) as total_stock
              FROM products p
              LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.is_primary = 1
+             LEFT JOIN product_variants pv ON p.product_id = pv.product_id AND pv.is_active = 1
              WHERE p.is_active = 1 AND
                    (p.product_name LIKE '%$keyword%' OR p.description LIKE '%$keyword%')
+             GROUP BY p.product_id
              ORDER BY
                 CASE WHEN p.product_name LIKE '$keyword%' THEN 0 ELSE 1 END,
                 p.product_name ASC
@@ -76,10 +88,14 @@ public function getByCategory($categoryId, $limit = 5) {
     public function getById($id) {
         $id = (int)$id;
         return $this->fetchOne(
-            "SELECT p.*, pi.image_url
+            "SELECT p.*, pi.image_url,
+                    MIN(pv.price) as min_price, MAX(pv.price) as max_price,
+                    SUM(pv.stock_quantity) as total_stock
              FROM products p
              LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.is_primary = 1
-             WHERE p.product_id = $id AND p.is_active = 1"
+             LEFT JOIN product_variants pv ON p.product_id = pv.product_id AND pv.is_active = 1
+             WHERE p.product_id = $id AND p.is_active = 1
+             GROUP BY p.product_id"
         );
     }
 
@@ -89,6 +105,33 @@ public function getByCategory($categoryId, $limit = 5) {
             "SELECT * FROM product_images
              WHERE product_id = $productId
              ORDER BY sort_order, is_primary DESC"
+        );
+    }
+
+    public function getVariants($productId) {
+        $productId = (int)$productId;
+        return $this->fetchAll(
+            "SELECT pv.*, GROUP_CONCAT(av.value_name ORDER BY a.attribute_name SEPARATOR ', ') as attributes
+             FROM product_variants pv
+             LEFT JOIN variant_attribute_values vav ON pv.variant_id = vav.variant_id
+             LEFT JOIN attribute_values av ON vav.value_id = av.value_id
+             LEFT JOIN attributes a ON av.attribute_id = a.attribute_id
+             WHERE pv.product_id = $productId
+             GROUP BY pv.variant_id
+             ORDER BY pv.price ASC"
+        );
+    }
+
+    public function getVariantById($variantId) {
+        $variantId = (int)$variantId;
+        return $this->fetchOne(
+            "SELECT pv.*, GROUP_CONCAT(av.value_name ORDER BY a.attribute_name SEPARATOR ', ') as attributes
+             FROM product_variants pv
+             LEFT JOIN variant_attribute_values vav ON pv.variant_id = vav.variant_id
+             LEFT JOIN attribute_values av ON vav.value_id = av.value_id
+             LEFT JOIN attributes a ON av.attribute_id = a.attribute_id
+             WHERE pv.variant_id = $variantId
+             GROUP BY pv.variant_id"
         );
     }
 
@@ -113,10 +156,13 @@ public function getByCategory($categoryId, $limit = 5) {
     public function getHomepageProducts() {
         return $this->fetchAll(
             "SELECT hp.id, hp.product_id, hp.category_id, hp.sort_order, hp.created_at,
-                    p.product_name, p.price, pi.image_url
+                    p.product_name, pi.image_url,
+                    MIN(pv.price) as min_price, MAX(pv.price) as max_price
              FROM homepage_products hp
              JOIN products p ON hp.product_id = p.product_id
              LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.is_primary = 1
+             LEFT JOIN product_variants pv ON p.product_id = pv.product_id AND pv.is_active = 1
+             GROUP BY hp.id
              ORDER BY hp.sort_order ASC"
         );
     }
@@ -190,10 +236,13 @@ public function getByCategory($categoryId, $limit = 5) {
 
     public function getAvailableProducts() {
         return $this->fetchAll(
-            "SELECT p.product_id, p.product_name, p.price, p.category_id, pi.image_url
+            "SELECT p.product_id, p.product_name, pi.image_url,
+                    MIN(pv.price) as min_price, MAX(pv.price) as max_price
              FROM products p
              LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.is_primary = 1
+             LEFT JOIN product_variants pv ON p.product_id = pv.product_id AND pv.is_active = 1
              WHERE p.is_active = 1 AND p.product_id NOT IN (SELECT product_id FROM homepage_products)
+             GROUP BY p.product_id
              ORDER BY p.product_name ASC"
         );
     }
@@ -221,15 +270,19 @@ public function getByCategory($categoryId, $limit = 5) {
             $catId = (int)$cat['category_id'];
             $cat['products'] = $this->fetchAll(
                 "SELECT hp.id as hp_id, hp.product_id, hp.sort_order,
-                        p.product_name, p.price, p.category_id, p.stock_quantity, pi.image_url,
+                        p.product_name, p.category_id, pi.image_url,
                         pc.category_id as prod_cat_id, pc.category_name as prod_cat_name, pc.parent_id as prod_parent_id,
-                        ppc.category_name as parent_cat_name
+                        ppc.category_name as parent_cat_name,
+                        MIN(pv.price) as min_price, MAX(pv.price) as max_price,
+                        SUM(pv.stock_quantity) as total_stock
                  FROM homepage_products hp
                  JOIN products p ON hp.product_id = p.product_id
                  LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.is_primary = 1
+                 LEFT JOIN product_variants pv ON p.product_id = pv.product_id AND pv.is_active = 1
                  JOIN categories pc ON p.category_id = pc.category_id
                  LEFT JOIN categories ppc ON pc.parent_id = ppc.category_id
                  WHERE p.is_active = 1 AND hp.category_id = $catId
+                 GROUP BY hp.id
                  ORDER BY hp.sort_order ASC"
             );
         }
