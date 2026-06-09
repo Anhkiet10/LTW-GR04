@@ -46,6 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="/WEB_GR4/public/assets/css/user/style.css">
     <link rel="stylesheet" href="/WEB_GR4/public/assets/css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body class="login-page">
 
@@ -129,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Footer link -->
             <p class="login-footer-text">
-                Chưa có tài khoản? <a href="/WEB_GR4/register.php" class="form-link">Đăng ký ngay</a>
+                Chưa có tài khoản? <a href="/WEB_GR4/app/views/auth/register.php" class="form-link">Đăng ký ngay</a>
             </p>
 
         </div>

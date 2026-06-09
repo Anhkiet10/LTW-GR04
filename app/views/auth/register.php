@@ -88,6 +88,9 @@ function old(string $key, string $default = ''): string {
     <link rel="stylesheet" href="/WEB_GR4/public/assets/css/login.css">
     <link rel="stylesheet" href="/WEB_GR4/public/assets/css/register.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body class="login-page">
 
@@ -140,25 +143,6 @@ function old(string $key, string $default = ''): string {
                     >
                     <?php if (isset($errors['fullname'])): ?>
                         <span class="field-error"><i class="fas fa-triangle-exclamation"></i> <?= $errors['fullname'] ?></span>
-                    <?php endif; ?>
-                </div>
-
-                <!-- Tên đăng nhập -->
-                <div class="form-group <?= isset($errors['username']) ? 'has-error' : '' ?>">
-                    <label for="username" class="form-label">
-                        <i class="fas fa-user"></i> Tên đăng nhập
-                    </label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        class="form-input"
-                        placeholder="Nhập tên đăng nhập"
-                        value="<?= old('username') ?>"
-                        autocomplete="username"
-                    >
-                    <?php if (isset($errors['username'])): ?>
-                        <span class="field-error"><i class="fas fa-triangle-exclamation"></i> <?= $errors['username'] ?></span>
                     <?php endif; ?>
                 </div>
 
@@ -251,7 +235,7 @@ function old(string $key, string $default = ''): string {
             <!-- Footer -->
             <?php if (!$success): ?>
             <p class="login-footer-text">
-                Đã có tài khoản? <a href="/WEB_GR4/login.php" class="form-link">Đăng nhập</a>
+                Đã có tài khoản? <a href="/WEB_GR4/app/views/auth/login.php" class="form-link">Đăng nhập</a>
             </p>
             <?php endif; ?>
 
