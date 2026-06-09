@@ -94,11 +94,16 @@ if (backToTop) {
 }
 
 // ===== ADD TO CART =====
-function addToCart(productId) {
+function addToCart(productId, variantId = null) {
+  if (!variantId) {
+    showToast("Vui lòng chọn phiên bản sản phẩm!", "error");
+    return;
+  }
+
   fetch("/WEB_GR4/api/add-to-cart.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ product_id: productId, quantity: 1 }),
+    body: JSON.stringify({ product_id: productId, variant_id: variantId, quantity: 1 }),
   })
     .then((r) => r.json())
     .then((data) => {
