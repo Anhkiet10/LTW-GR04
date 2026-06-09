@@ -65,13 +65,9 @@ body {
   font-size: 14px;
   transition: all 0.18s;
 }
-.admin-menu a:hover,
-.admin-menu a.active {
+.admin-menu a:hover {
   background: rgba(167, 139, 250, 0.18);
   color: #fff;
-}
-.admin-menu a.active {
-  font-weight: 600;
 }
 .admin-menu a[disabled] {
   opacity: 0.5;
