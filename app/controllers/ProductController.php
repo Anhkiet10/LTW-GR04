@@ -42,12 +42,14 @@ class ProductController extends Controller {
         }
 
         $images = $model->getImages($product['product_id']);
+        $variants = $model->getVariants($product['product_id']);
         $categoryName = $model->getCategoryName($product['category_id']);
 
         $this->render('products/detail', [
             'pageTitle' => $product['product_name'],
             'product'   => $product,
             'images'    => $images,
+            'variants'  => $variants,
             'categoryName' => $categoryName,
             'categories' => $model->getCategoriesWithParent(),
         ]);
@@ -68,10 +70,14 @@ class ProductController extends Controller {
         $suggestions = [];
 
         foreach ($results as $row) {
+            $price = $row['min_price'];
+            if ($row['min_price'] != $row['max_price']) {
+                $price = $row['min_price'] . ' - ' . $row['max_price'];
+            }
             $suggestions[] = [
                 'id'    => $row['product_id'],
                 'name'  => $row['product_name'],
-                'price' => number_format($row['price'], 0, ',', '.') . 'đ',
+                'price' => number_format($price, 0, ',', '.') . 'đ',
                 'image' => $row['image_url'] ? $row['image_url'] : ''
             ];
         }
