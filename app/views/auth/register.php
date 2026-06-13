@@ -1,77 +1,4 @@
 <?php
-session_start();
-
-// Nếu đã đăng nhập thì redirect
-if (isset($_SESSION['user_id'])) {
-    header('Location: /WEB_GR4/index.php');
-    exit;
-}
-
-$errors = [];
-$success = false;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $fullname  = trim($_POST['fullname']  ?? '');
-    $username  = trim($_POST['username']  ?? '');
-    $email     = trim($_POST['email']     ?? '');
-    $password  = $_POST['password']       ?? '';
-    $password2 = $_POST['password2']      ?? '';
-
-    // === VALIDATION ===
-    if (empty($fullname)) {
-        $errors['fullname'] = 'Vui lòng nhập họ và tên.';
-    } elseif (mb_strlen($fullname) < 2) {
-        $errors['fullname'] = 'Họ và tên phải có ít nhất 2 ký tự.';
-    }
-
-    if (empty($username)) {
-        $errors['username'] = 'Vui lòng nhập tên đăng nhập.';
-    } elseif (!preg_match('/^[a-zA-Z0-9_]{4,30}$/', $username)) {
-        $errors['username'] = 'Tên đăng nhập 4–30 ký tự, chỉ gồm chữ, số và dấu _.';
-    }
-
-    if (empty($email)) {
-        $errors['email'] = 'Vui lòng nhập email.';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Email không hợp lệ.';
-    }
-
-    if (empty($password)) {
-        $errors['password'] = 'Vui lòng nhập mật khẩu.';
-    } elseif (strlen($password) < 6) {
-        $errors['password'] = 'Mật khẩu phải có ít nhất 6 ký tự.';
-    }
-
-    if ($password !== $password2) {
-        $errors['password2'] = 'Mật khẩu xác nhận không khớp.';
-    }
-
-    if (empty($_POST['agree'])) {
-        $errors['agree'] = 'Bạn cần đồng ý với điều khoản sử dụng.';
-    }
-
-    // === NẾU KHÔNG CÓ LỖI → LƯU DB ===
-    if (empty($errors)) {
-        // TODO: Thay bằng logic lưu DB thực tế
-        // require_once __DIR__ . '/../config/db.php';
-        //
-        // // Kiểm tra username/email đã tồn tại
-        // $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? OR email = ? LIMIT 1");
-        // $stmt->execute([$username, $email]);
-        // if ($stmt->fetch()) {
-        //     $errors['username'] = 'Tên đăng nhập hoặc email đã được sử dụng.';
-        // } else {
-        //     $hashed = password_hash($password, PASSWORD_DEFAULT);
-        //     $stmt = $pdo->prepare("INSERT INTO users (fullname, username, email, password, role, created_at)
-        //                            VALUES (?, ?, ?, ?, 'user', NOW())");
-        //     $stmt->execute([$fullname, $username, $email, $hashed]);
-        //     $success = true;
-        // }
-
-        // --- DEMO: giả lập thành công ---
-        $success = true;
-    }
-}
 
 // Helper: giữ giá trị cũ khi có lỗi
 function old(string $key, string $default = ''): string {
@@ -110,7 +37,7 @@ function old(string $key, string $default = ''): string {
                 <h1 class="login-title">Tạo tài khoản</h1>
             </div>
 
-            <?php if ($success): ?>
+            <?php if (isset($success) && $success): ?>
             <!-- SUCCESS STATE -->
             <div class="register-success">
                 <div class="register-success__icon">
@@ -118,14 +45,14 @@ function old(string $key, string $default = ''): string {
                 </div>
                 <h2>Đăng ký thành công!</h2>
                 <p>Tài khoản của bạn đã được tạo. Hãy đăng nhập để tiếp tục.</p>
-                <a href="/WEB_GR4/login.php" class="btn-login" style="display:block; text-align:center; text-decoration:none; margin-top:8px;">
+                <a href="/WEB_GR4/login" class="btn-login" style="display:block; text-align:center; text-decoration:none; margin-top:8px;">
                     <i class="fas fa-right-to-bracket"></i> Đăng nhập ngay
                 </a>
             </div>
 
             <?php else: ?>
             <!-- FORM -->
-            <form class="login-form" method="POST" action="" novalidate id="registerForm">
+            <form class="login-form" method="POST" action="/WEB_GR4/register" novalidate id="registerForm">
 
                 <!-- Họ và tên -->
                 <div class="form-group <?= isset($errors['fullname']) ? 'has-error' : '' ?>">
@@ -233,9 +160,9 @@ function old(string $key, string $default = ''): string {
             <?php endif; ?>
 
             <!-- Footer -->
-            <?php if (!$success): ?>
+            <?php if (!isset($success) || !$success): ?>
             <p class="login-footer-text">
-                Đã có tài khoản? <a href="/WEB_GR4/app/views/auth/login.php" class="form-link">Đăng nhập</a>
+                Đã có tài khoản? <a href="/WEB_GR4/login" class="form-link">Đăng nhập</a>
             </p>
             <?php endif; ?>
 
