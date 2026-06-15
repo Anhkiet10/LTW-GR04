@@ -1,5 +1,5 @@
 <?php require_once __DIR__ . '/../layouts/admin_sidebar.php'; ?>
-
+    <link rel="stylesheet" href="/WEB_GR4/public/assets/css/admin/order_admin.css">
     <main class="admin-content">
         <div class="page-header">
             <h1><i class="fas fa-shopping-cart" style="color:#7c3aed; margin-right:8px;"></i>Quản lý đơn hàng</h1>

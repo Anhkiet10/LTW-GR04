@@ -4,7 +4,30 @@
     <div class="container">
         <a href="/WEB_GR4/products" class="btn btn-secondary">Quay lại</a>
 
-        <div class="detail-wrap">
+        <div class="detail-wrap"
+             data-variants="<?php echo htmlspecialchars(json_encode(array_map(function ($v) {
+                 $keyIds = ($v['variant_key'] ?? '') === 'default'
+                     ? []
+                     : array_map('intval', explode('_', $v['variant_key']));
+                 return [
+                     'variant_id'  => (int)$v['variant_id'],
+                     'variant_key' => $v['variant_key'],
+                     'key_ids'     => $keyIds,
+                     'price'       => (float)$v['price'],
+                     'stock'       => (int)$v['stock_quantity'],
+                 ];
+             }, $variants ?? []), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'); ?>"
+             data-has-attributes="<?php echo !empty($attributes) ? '1' : '0'; ?>"
+             data-attribute-row-count="<?php echo count($attributes ?? []); ?>"
+             data-default-price="<?php echo htmlspecialchars(
+                 ($product['min_price'] && $product['max_price'])
+                     ? ($product['min_price'] == $product['max_price']
+                         ? number_format($product['min_price'], 0, ',', '.') . 'đ'
+                         : number_format($product['min_price'], 0, ',', '.') . ' - ' . number_format($product['max_price'], 0, ',', '.') . 'đ')
+                     : '—'
+             , ENT_QUOTES, 'UTF-8'); ?>"
+             data-product-id="<?php echo (int)$product['product_id']; ?>">
+
             <?php if (!empty($product['image_url'])): ?>
                 <img src="/WEB_GR4/public<?php echo htmlspecialchars($product['image_url']); ?>"
                      alt="<?php echo htmlspecialchars($product['product_name']); ?>">
@@ -15,8 +38,8 @@
             <div class="detail-info">
                 <h1><?php echo htmlspecialchars($product['product_name']); ?></h1>
 
-                <?php if ($product['min_price'] && $product['max_price']): ?>
-                    <p class="price">
+                <p class="price" id="productPrice">
+                    <?php if ($product['min_price'] && $product['max_price']): ?>
                         <?php
                             if ($product['min_price'] == $product['max_price']) {
                                 echo number_format($product['min_price'], 0, ',', '.');
@@ -24,65 +47,52 @@
                                 echo number_format($product['min_price'], 0, ',', '.') . ' - ' . number_format($product['max_price'], 0, ',', '.');
                             }
                         ?>đ
-                    </p>
-                <?php endif; ?>
+                    <?php else: ?>
+                        —
+                    <?php endif; ?>
+                </p>
 
-                <?php if (!empty($product['description'])): ?>
-                    <p><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
-                <?php endif; ?>
+                <p class="variant-stock-info" id="variantStockInfo"></p>
 
-                <?php if (!empty($variants)): ?>
-                    <div class="variants-section">
-                        <h3>Chọn phiên bản:</h3>
-                        <div id="variantList">
-                            <?php foreach ($variants as $v): ?>
-                                <div class="variant-option" data-variant-id="<?php echo $v['variant_id']; ?>"
-                                     data-stock="<?php echo $v['stock_quantity']; ?>"
-                                     data-price="<?php echo $v['price']; ?>">
-                                    <span class="variant-sku"><?php echo htmlspecialchars($v['sku'] ?? ''); ?></span>
-                                    <span class="variant-attrs"><?php echo htmlspecialchars($v['attributes'] ?? 'Mặc định'); ?></span>
-                                    <span class="variant-price"><?php echo number_format($v['price'], 0, ',', '.'); ?>đ</span>
-                                    <span class="variant-stock">
-                                        <?php echo $v['stock_quantity'] > 0 ? 'Còn: ' . $v['stock_quantity'] : 'Hết hàng'; ?>
-                                    </span>
+                <?php if (!empty($attributes)): ?>
+                    <div class="attributes-section" id="attributesSection">
+                        <h3>Chọn cấu hình:</h3>
+                        <?php foreach ($attributes as $attr): ?>
+                            <div class="attribute-row" data-attribute-id="<?php echo (int)$attr['attribute_id']; ?>">
+                                <span class="attribute-label"><?php echo htmlspecialchars($attr['attribute_name']); ?>:</span>
+                                <div class="attribute-values">
+                                    <?php foreach ($attr['values'] as $val): ?>
+                                        <button type="button"
+                                                class="attr-value-btn"
+                                                data-value-id="<?php echo (int)$val['value_id']; ?>"
+                                                data-attribute-id="<?php echo (int)$attr['attribute_id']; ?>">
+                                            <?php echo htmlspecialchars($val['value_name']); ?>
+                                        </button>
+                                    <?php endforeach; ?>
                                 </div>
-                            <?php endforeach; ?>
-                        </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
 
+                <?php if (!empty($product['description'])): ?>
+                    <p class="product-desc"><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
+                <?php endif; ?>
+
                 <?php if ($product['total_stock'] > 0): ?>
-                    <button class="btn btn-add-cart"
-                        onclick="addToCart(<?php echo $product['product_id']; ?>, getSelectedVariantId())">
+                    <button class="btn btn-add-cart" id="btnAddCart">
                         <i class="fas fa-shopping-cart" style="color: rgb(255, 255, 255);"></i> Thêm vào giỏ hàng
                     </button>
                 <?php else: ?>
-                    <button class="btn btn-disabled" disabled><i class="fas fa-exclamation-circle" style="color: rgb(255, 255, 255);"></i> Hết hàng</button>
+                    <button class="btn btn-disabled" disabled>
+                        <i class="fas fa-exclamation-circle" style="color: rgb(255, 255, 255);"></i> Hết hàng
+                    </button>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 </section>
 
-<script>
-function getSelectedVariantId() {
-    const selected = document.querySelector('.variant-option.selected');
-    return selected ? selected.dataset.variantId : (document.querySelector('.variant-option')?.dataset.variantId || '');
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const variants = document.querySelectorAll('.variant-option');
-    if (variants.length > 0) {
-        variants[0].classList.add('selected');
-    }
-
-    variants.forEach(v => {
-        v.addEventListener('click', function() {
-            variants.forEach(item => item.classList.remove('selected'));
-            this.classList.add('selected');
-        });
-    });
-});
-</script>
+<script src="/WEB_GR4/public/assets/js/user/product_detail.js"></script>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
