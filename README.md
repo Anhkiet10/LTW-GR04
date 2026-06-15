@@ -11,7 +11,8 @@ WEB_GR4/
 
 │
 ├── app/                        # Thư mục chứa logic chính của ứng dụng
-│   ├── controllers/            # Điều hướng và xử lý yêu cầu từ người dùng
+│   ├── controllers/  # Điều hướng và xử lý yêu cầu từ người dùng
+│   │   ├── AdminProductController.php
 │   │   ├── ProductController.php
 │   │   ├── CartController.php
 │   │   └── HomeController.php
@@ -23,12 +24,15 @@ WEB_GR4/
 │   │   └── UserModel.php
 │   └── views/  # Giao diện hiển thị (HTML/PHP)
 │       ├── admin/
-│       │   └── home.php
+│       │   ├──  home.php
+│       │   └──  Products.php
 │       │
 │       ├── layouts/            # Thành phần giao diện chung
 │       │   ├── header.php
 │       │   └── footer.php
 │       │   └── product-card.php
+│       │   └── admin_sidebar.php
+│       │   └──
 │       ├── products/           # Giao diện liên quan đến sản phẩm
 │       │   ├── index.php       # Trang danh sách sản phẩm
 │       │   └── detail.php      # Trang chi tiết sản phẩm

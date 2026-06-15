@@ -38,7 +38,7 @@ class AdminController extends Controller {
         $stats = $orderModel->getOrderStats();
         $totalPages = ceil($totalOrders / $perPage);
 
-        $this->render('admin/Order', [
+        $this->render('admin/Orders', [
             'pageTitle' => 'Quản lý đơn hàng',
             'orders' => $orders,
             'stats' => $stats,
