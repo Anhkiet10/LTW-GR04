@@ -20,12 +20,15 @@ WEB_GR4/
 │   │   └── AdminController.php
 │   ├── models/                 # Xử lý dữ liệu và tương tác với Database
 │   │   ├── ProductModel.php
+│   │   ├── ProductModelAdmin.php
 │   │   ├── OrderModel.php
 │   │   └── UserModel.php
 │   └── views/  # Giao diện hiển thị (HTML/PHP)
 │       ├── admin/
 │       │   ├──  home.php
 │       │   └──  Products.php
+│       │   └──  Orders.php
+│       │   └──  OrderDetail.php
 │       │
 │       ├── layouts/            # Thành phần giao diện chung
 │       │   ├── header.php
@@ -49,7 +52,11 @@ WEB_GR4/
 │   │   └──add-to-cart.php      # bỏ qua hoàn toàn bước "xếp hàng" và "so khớp" củaRouter
 │   └── assets/                 # Chứa các file CSS, JS, Images, Fonts
 │       └── css/
+│       │   └──  admin/
+│       │   └──  user/
 │       └──js/
+│       │   └──  user/
+│       │   └──  admin/
 │       └──upload/
 ├── index.php                   # Single Entry Point (Điểm vào DUY NHẤT của ứng dụng)
 │

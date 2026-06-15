@@ -1,0 +1,134 @@
+.container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 15px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* TABLE */
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.cart-table thead {
+  background: #f5f5f5;
+}
+
+.cart-table th,
+.cart-table td {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+/* PRODUCT NAME */
+.cart-table td:nth-child(1) {
+  text-align: left;
+  font-weight: 500;
+}
+
+/* PRICE COLOR */
+.price-cart {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+/* QUANTITY BOX */
+.quantity {
+  display: inline-block;
+  min-width: 30px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* BUTTON + - */
+.plus,
+.btn-min {
+  width: 28px;
+  height: 28px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.plus {
+  background: #2ecc71;
+  color: #fff;
+}
+
+.btn-min {
+  background: #f39c12;
+  color: #fff;
+}
+
+/* DELETE BUTTON */
+.btn-delete {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-delete:hover {
+  opacity: 0.85;
+}
+
+/* SUBTOTAL */
+.subtotal {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* TOTAL AREA */
+.cart-total {
+  margin-top: 20px;
+  text-align: right;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+#total-price {
+  color: #e74c3c;
+}
+
+/* ACTION BUTTONS */
+.cart-action {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cart-action .btn {
+  padding: 10px 15px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  border: 1px solid #ddd;
+}
+
+.cart-action .btn:hover {
+  background: #f5f5f5;
+}
+
+/* EMPTY CART */
+.container h2 {
+  text-align: center;
+  margin-top: 40px;
+}

@@ -43,6 +43,7 @@ class ProductController extends Controller {
 
         $images = $model->getImages($product['product_id']);
         $variants = $model->getVariants($product['product_id']);
+        $attributes = $model->getAttributesForProduct($product['product_id']);
         $categoryName = $model->getCategoryName($product['category_id']);
 
         $this->render('products/detail', [
@@ -50,6 +51,7 @@ class ProductController extends Controller {
             'product'   => $product,
             'images'    => $images,
             'variants'  => $variants,
+            'attributes'=> $attributes,
             'categoryName' => $categoryName,
             'categories' => $model->getCategoriesWithParent(),
         ]);
