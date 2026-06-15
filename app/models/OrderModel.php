@@ -48,21 +48,35 @@ class OrderModel extends Model {
 
     public function getOrderItems($orderId) {
         $orderId = (int)$orderId;
+
         $sql = "SELECT oi.*, p.product_name, pi.image_url,
-                       pv.sku, pv.price as variant_price,
-                       GROUP_CONCAT(av.value_name ORDER BY a.attribute_name SEPARATOR ', ') as attributes
+                       pv.sku, pv.price as variant_price, pv.variant_key
                 FROM order_items oi
                 LEFT JOIN products p ON oi.product_id = p.product_id
                 LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.is_primary = 1
                 LEFT JOIN product_variants pv ON oi.variant_id = pv.variant_id
-                LEFT JOIN variant_attribute_values vav ON pv.variant_id = vav.variant_id
-                LEFT JOIN attribute_values av ON vav.value_id = av.value_id
-                LEFT JOIN attributes a ON av.attribute_id = a.attribute_id
                 WHERE oi.order_id = $orderId
-                GROUP BY oi.order_item_id
                 ORDER BY oi.order_item_id";
 
-        return $this->fetchAll($sql);
+        $rows = $this->fetchAll($sql);
+        foreach ($rows as &$row) {
+            $row['attributes'] = $this->resolveVariantKey($row['variant_key'] ?? '');
+        }
+        return $rows;
+    }
+
+    private function resolveVariantKey(string $key): string {
+        if ($key === '' || $key === 'default') return '';
+        $ids = array_filter(explode('_', $key), 'is_numeric');
+        if (empty($ids)) return '';
+        $idList = implode(',', array_map('intval', $ids));
+        $sql = "SELECT av.value_name, a.attribute_name
+                FROM attribute_values av
+                LEFT JOIN attributes a ON av.attribute_id = a.attribute_id
+                WHERE av.value_id IN ($idList)
+                ORDER BY a.attribute_name";
+        $values = $this->fetchAll($sql);
+        return implode(', ', array_column($values, 'value_name'));
     }
 
     public function updateOrderStatus($orderId, $status) {
