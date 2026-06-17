@@ -31,6 +31,7 @@ $router->post('/register', 'AuthController', 'registerPage');
 
 $router->get('/logout', 'AuthController', 'logout');
 $router->get('/register', 'AuthController', 'registerPage');
+$router->get('/', 'HomeController', 'index');
 $router->post('/admin/save-homepage',        'AdminController', 'saveHomepage');
 $router->post('/admin/update-order-status',  'AdminController', 'updateOrderStatus');
 
