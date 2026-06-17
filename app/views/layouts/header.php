@@ -1,8 +1,3 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -12,9 +7,6 @@ if (session_status() === PHP_SESSION_NONE) {
     <link rel="stylesheet" href="/WEB_GR4/public/assets/css/user/style.css">
     <link rel="stylesheet" href="/WEB_GR4/public/assets/css/user/style_product.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -31,22 +23,14 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
 
         <!-- NAV -->
-        <nav class="nav-container" id="navContainer"></nav>
-
-        <!-- AUTH BUTTON — luôn hiển thị, không bị ẩn bởi hamburger -->
-        <div class="nav-auth-wrap">
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <a href="/WEB_GR4/logout" class="nav-auth-btn btn-logout-pill" title="Đăng xuất">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Đăng xuất</span>
-                </a>
-            <?php else: ?>
-                <a href="/WEB_GR4/login" class="nav-auth-btn btn-login-pill" title="Đăng nhập">
-                    <i class="fa-solid fa-user"></i>
-                    <span>Đăng nhập</span>
-                </a>
-            <?php endif; ?>
-        </div>
+        <nav class="nav-container" id="navContainer">
+            <ul class="nav-links">
+                <li><a href="/WEB_GR4/"><i class="fas fa-home" style="color: rgb(177, 151, 252);"></i>Trang chủ</a></li>
+                <li class="cart-link"><a href="/WEB_GR4/cart"><i class="fas fa-shopping-cart" style="color: rgb(177, 151, 252);"></i> Giỏ hàng</a></li>
+                <li ><a href="/WEB_GR4/orders"> <i class="fa-solid fa-clipboard-list" style="color: rgb(177, 151, 252);"></i> Đơn hàng</a></li>
+                <li><a href="/WEB_GR4/login"><i class="fa-solid fa-user" style="color: rgb(177, 151, 252);"></i> Đăng nhập</a></li>
+            </ul>
+        </nav>
 
     </div>
 

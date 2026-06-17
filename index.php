@@ -3,14 +3,18 @@
 // require_once __DIR__ . '/config/database.php';
 // require_once __DIR__ . '/core/Model.php';
 // require_once __DIR__ . '/core/Controller.php';
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 require_once __DIR__ . '/core/Router.php';
 
 // require_once __DIR__ . '/app/models/ProductModel.php';
 // require_once __DIR__ . '/app/controllers/HomeController.php';
 // require_once __DIR__ . '/app/controllers/ProductController.php';
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+
+
 $router = new Router();
 // Định nghĩa các route: đường dẫn, controller, method
 $router->get('/',              'HomeController',    'index');
@@ -36,25 +40,16 @@ $router->post('/admin/save-homepage',        'AdminController', 'saveHomepage');
 $router->post('/admin/update-order-status',  'AdminController', 'updateOrderStatus');
 
 
-// Trang danh sách sản phẩm (GET)
 $router->get('/admin/products',                    'AdminProductController', 'index');
- 
-// API lấy chi tiết sản phẩm cho modal edit (GET)
 $router->get('/admin/products/getProduct',         'AdminProductController', 'getProduct');
- 
-// Tạo sản phẩm mới (POST)
 $router->post('/admin/products/store',             'AdminProductController', 'store');
  
-// Cập nhật sản phẩm (POST)
 $router->post('/admin/products/update',            'AdminProductController', 'update');
  
-// Xóa sản phẩm (POST)
 $router->post('/admin/products/delete',            'AdminProductController', 'delete');
  
-// Xóa một biến thể (POST)
 $router->post('/admin/products/deleteVariant',     'AdminProductController', 'deleteVariant');
 
-// Quản lý thuộc tính (GET/POST)
 $router->get('/admin/products/getAttributes',      'AdminProductController', 'getAttributes');
 $router->post('/admin/products/createAttribute',   'AdminProductController', 'createAttribute');
 $router->post('/admin/products/createAttributeValue','AdminProductController', 'createAttributeValue');
@@ -66,5 +61,23 @@ $router->get('/cart',              'CartController',    'index');
 $router->post('/cart/update',              'CartController',    'update');
 $router->post('/cart/delete',              'CartController',    'delete');
 $router->post('/cart/add','CartController','addAjax');
+
+
+$router->get('/checkout', 'OrderController', 'checkout');
+$router->post('/place-order', 'OrderController', 'placeOrder');
+
+$router->get('/orders', 'OrderController', 'history');
+$router->get('/orders/{id}', 'OrderController', 'detail');
+
+
+// Quản lý người dùng
+$router->get('/admin/users',               'AdminUserController', 'index');
+$router->get('/admin/users/create',        'AdminUserController', 'create');
+$router->post('/admin/users/store',        'AdminUserController', 'store');
+$router->get('/admin/users/edit',          'AdminUserController', 'edit');
+$router->post('/admin/users/update',       'AdminUserController', 'update');
+$router->post('/admin/users/delete',       'AdminUserController', 'delete');
+$router->post('/admin/users/toggle-status','AdminUserController', 'toggleStatus');
+$router->get('/admin/users/detail',        'AdminUserController', 'detail');
 $router->dispatch();
 ?>
