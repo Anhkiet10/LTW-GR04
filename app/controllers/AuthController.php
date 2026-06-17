@@ -57,7 +57,11 @@ class AuthController extends Controller
                         exit;
                     }
 
-                    // customer: ở nguyên trang, không chuyển hướng
+                    // customer
+                    if($user['role']==='customer'){
+                        header('Location: /WEB_GR4/');
+                        exit;
+                    }
                 }
             }
         }
@@ -140,5 +144,18 @@ class AuthController extends Controller
                 'success' => $success
             ]
         );
+    }
+
+    public function logout()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION = [];
+        session_destroy();
+
+        header('Location: /WEB_GR4/login');
+        exit;
     }
 }
