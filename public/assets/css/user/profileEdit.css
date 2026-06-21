@@ -1,0 +1,331 @@
+/* --- Khung Layout Chung --- */
+.profile-page {
+  background-color: #f8f9fa;
+  padding: 40px 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 80vh;
+}
+
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+/* --- Card Sidebar --- */
+.profile-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, #8e44ad, #6c3483);
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 5px;
+}
+
+.profile-email {
+  font-size: 14px;
+  color: #777777;
+  margin-bottom: 15px;
+}
+
+.profile-role-wrap {
+  margin-bottom: 25px;
+}
+
+.profile-role {
+  background-color: #ebdcf7;
+  color: #6c3483;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Menu Điều Hướng */
+.profile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  border-top: 1px solid #eeeeee;
+  padding-top: 15px;
+}
+
+.profile-menu a {
+  display: block;
+  padding: 12px 16px;
+  color: #4a4a4a;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.profile-menu a:hover {
+  background-color: #f3e8fa;
+  color: #6c3483;
+  font-weight: 500;
+}
+
+.profile-menu a.logout {
+  color: #e74c3c;
+  margin-top: 10px;
+}
+
+.profile-menu a.logout:hover {
+  background-color: #fdedec;
+}
+
+/* --- Khung Nội Dung Form --- */
+.profile-content {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 35px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.profile-section-title {
+  font-size: 24px;
+  color: #4a154b; /* Màu tím đậm thương hiệu */
+  margin-bottom: 25px;
+  font-weight: 600;
+  border-bottom: 2px solid #f3e8fa;
+  padding-bottom: 10px;
+}
+
+/* Các Ô Nhập Liệu (Form Group) */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px; /* Giãn cách các ô, sửa lỗi dính chữ */
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a4a4a;
+}
+
+.form-group label .required {
+  color: #e74c3c;
+}
+
+.form-group input {
+  padding: 12px 16px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #333333;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  border-color: #8e44ad;
+  box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.15);
+}
+
+/* Đường phân cách & Ghi chú mật khẩu */
+.form-divider {
+  border: 0;
+  border-top: 1px solid #eeeeee;
+  margin: 25px 0 15px;
+}
+
+.form-note {
+  font-size: 13px;
+  color: #7f8c8d;
+  font-style: italic;
+  margin-bottom: 15px;
+}
+
+/* Nút Bấm Hành Động */
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.profile-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-block;
+}
+
+.profile-btn--primary {
+  background-color: #6c3483; /* Tím đậm đồng bộ với logo gốc */
+  color: #ffffff;
+}
+
+.profile-btn--primary:hover {
+  background-color: #512265;
+  box-shadow: 0 4px 10px rgba(108, 52, 131, 0.3);
+}
+
+.profile-btn--secondary {
+  background-color: #9b59b6; /* Tím nhạt hơn */
+  color: #ffffff;
+}
+
+.profile-btn--secondary:hover {
+  background-color: #8e44ad;
+}
+
+/* Thông báo lỗi nếu có */
+.alert-error {
+  background-color: #fdedec;
+  color: #c0392b;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border-left: 4px solid #e74c3c;
+}
+
+/* --- Responsive cho màn hình nhỏ --- */
+@media (max-width: 768px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* profileEdit.js – supplemental styles
+   Thêm vào file profileEdit.css hoặc import riêng */
+
+/* ── Field error ─────────────────────────────────────── */
+.field-error {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: #e53e3e;
+}
+
+.input--error {
+  border-color: #e53e3e !important;
+  outline: none;
+}
+
+.input--error:focus {
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2);
+}
+
+/* ── Password wrapper (toggle) ───────────────────────── */
+.pw-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pw-wrapper input {
+  flex: 1;
+  padding-right: 2.5rem;
+}
+
+.btn-toggle-pw {
+  position: absolute;
+  right: 0.6rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.25rem;
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.btn-toggle-pw:hover {
+  opacity: 1;
+}
+
+/* ── Password strength bar ───────────────────────────── */
+.password-strength {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.password-strength--weak {
+  background: #fff5f5;
+  color: #c53030;
+}
+.password-strength--medium {
+  background: #fffaf0;
+  color: #c05621;
+}
+.password-strength--strong {
+  background: #f0fff4;
+  color: #276749;
+}
+
+/* ── Toast notification ──────────────────────────────── */
+.js-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+  pointer-events: none;
+}
+
+.js-toast--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.js-toast--success {
+  background: #276749;
+  color: #fff;
+}
+
+.js-toast--error {
+  background: #c53030;
+  color: #fff;
+}

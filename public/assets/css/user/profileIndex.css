@@ -1,0 +1,598 @@
+/* =============================================
+   PROFILE PAGE
+   Palette: Linen · Mist · Lavender
+============================================= */
+
+.profile-page {
+  min-height: 100vh;
+  background: var(--cream);
+  padding: 40px 0;
+  position: relative;
+}
+
+.profile-page::before {
+  content: "";
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  top: -150px;
+  left: -150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--lavender), transparent 70%);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.profile-page::after {
+  content: "";
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  bottom: -120px;
+  right: -120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--mist), transparent 70%);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.profile-container {
+  max-width: 1200px;
+  margin: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid var(--mint);
+  box-shadow:
+    0 4px 6px rgba(155, 142, 199, 0.08),
+    0 16px 40px rgba(155, 142, 199, 0.15);
+}
+
+/* SIDEBAR */
+
+.profile-sidebar {
+  padding: 32px;
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--plum), var(--lavender));
+  color: white;
+  font-size: 32px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto auto 18px;
+}
+
+.profile-name {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--forest);
+}
+
+.profile-email {
+  text-align: center;
+  color: var(--wood);
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.profile-role {
+  display: inline-block;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--lavender);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.profile-role-wrap {
+  text-align: center;
+}
+
+/* MENU */
+
+.profile-menu {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-menu a {
+  text-decoration: none;
+  padding: 13px 16px;
+  border-radius: 10px;
+  color: var(--bark);
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.profile-menu a:hover {
+  background: var(--linen);
+}
+
+.profile-menu a.active {
+  background: linear-gradient(135deg, var(--plum), var(--forest));
+  color: white;
+}
+
+.profile-menu a.logout {
+  color: #b43f5e;
+}
+
+/* CONTENT */
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.profile-section {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid var(--mint);
+  overflow: hidden;
+  box-shadow:
+    0 4px 6px rgba(155, 142, 199, 0.08),
+    0 16px 40px rgba(155, 142, 199, 0.15);
+}
+
+.profile-section-header {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--mint);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-section-title {
+  margin: 0;
+  font-size: 20px;
+  color: var(--forest);
+  font-weight: 700;
+}
+
+.profile-section-body {
+  padding: 28px;
+}
+
+.profile-info-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.profile-info-row:last-child {
+  border-bottom: none;
+}
+
+.profile-label {
+  color: var(--wood);
+  font-weight: 700;
+}
+
+.profile-value {
+  color: var(--soil);
+}
+
+/* BUTTON */
+
+.profile-btn {
+  text-decoration: none;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--plum), var(--forest));
+  color: white;
+  font-weight: 700;
+  transition: 0.2s;
+}
+
+.profile-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ADDRESS */
+
+.address-card {
+  padding: 18px;
+  border: 1px solid var(--mint);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  background: var(--linen);
+}
+
+.address-card.default {
+  border: 2px solid var(--plum);
+}
+
+.address-name {
+  font-weight: 700;
+  color: var(--forest);
+}
+
+.address-default {
+  background: var(--plum);
+  color: white;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-left: 10px;
+}
+
+.address-text {
+  margin-top: 8px;
+  color: var(--wood);
+}
+
+/* Layout ngang: thông tin bên trái, nút bên phải */
+.address-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.address-info {
+  flex: 1;
+}
+
+/* Nhóm nút hành động xếp dọc bên phải */
+.address-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.addr-btn {
+  display: inline-block;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  text-align: center;
+  min-width: 120px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Nút Sửa */
+.addr-btn--edit {
+  background: var(--linen);
+  color: var(--forest);
+  border: 1px solid var(--mint);
+}
+.addr-btn--edit:hover {
+  background: var(--lavender);
+  color: white;
+  border-color: var(--lavender);
+}
+
+/* Nút Đặt mặc định */
+.addr-btn--default {
+  background: linear-gradient(135deg, var(--plum), var(--forest));
+  color: white;
+  width: 100%;
+}
+.addr-btn--default:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+/* Nút Xóa */
+.addr-btn--delete {
+  background: #fff0f3;
+  color: #b43f5e;
+  border: 1px solid #f5c6d0;
+  width: 100%;
+}
+.addr-btn--delete:hover {
+  background: #b43f5e;
+  color: white;
+  border-color: #b43f5e;
+}
+
+/* Ẩn display:inline trên form wrapper để layout đúng */
+.address-actions form {
+  display: block !important;
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-info-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+/* --- CSS BỔ SUNG CHO TRANG THÊM & SỬA ĐỊA CHỈ --- */
+
+/* Căn giữa và bọc khung trắng cho form địa chỉ */
+.profile-page .profile-section[style*="max-width:600px"] {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 35px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+}
+
+/* Định dáng riêng cho hàng Checkbox (Đặt làm mặc định) */
+.form-group--checkbox {
+  display: flex;
+  flex-direction: row !important; /* Ghi đè cấu trúc cột của form-group thông thường */
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+
+.form-group--checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Tạo khoảng cách giữa ô vuông và chữ */
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555555;
+  user-select: none;
+}
+
+/* Custom ô Checkbox cho mượt và hợp màu tím */
+.form-group--checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #6c3483; /* Màu tím thương hiệu khi được tích chọn */
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid #dcdcdc;
+}
+
+/* Tùy biến lại placeholder cho chữ gợi ý nhạt đi dễ nhìn */
+.form-group input::placeholder {
+  color: #b0b0b0;
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* Điều chỉnh responsive cho nút bấm trên thiết bị di động */
+@media (max-width: 480px) {
+  .profile-page .profile-section[style*="max-width:600px"] {
+    padding: 20px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .profile-btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+/* --- ĐỊNH DẠNG CẤU TRÚC CÁC Ô NHẬP LIỆU (FORM CHUNG) --- */
+
+.form-group {
+  display: flex;
+  flex-direction: column; /* Đưa nhãn lên trên, input xuống dưới */
+  gap: 8px; /* Khoảng cách giữa nhãn và input */
+  margin-bottom: 20px; /* Khoảng cách giữa các hàng với nhau */
+  text-align: left;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--forest); /* Màu xanh Forest đồng bộ hệ thống */
+}
+
+.form-group label .required {
+  color: #b43f5e; /* Màu đỏ cảnh báo trùng màu nút Đăng xuất */
+  margin-left: 3px;
+}
+
+/* Định dáng cho các ô nhập liệu text/email/password */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--mint); /* Viền mint nhẹ nhàng giống khung section */
+  border-radius: 10px; /* Bo góc đồng bộ với nút bấm */
+  font-size: 14px;
+  color: var(--soil);
+  background-color: #ffffff;
+  box-sizing: border-box; /* Tránh tràn viền */
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* Hiệu ứng khi click chọn vào ô nhập liệu */
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="tel"]:focus,
+.form-group input[type="password"]:focus {
+  border-color: var(--plum);
+  box-shadow: 0 0 0 3px rgba(155, 142, 199, 0.15); /* Hiệu ứng đổ bóng mờ nhẹ */
+}
+
+/* --- ĐỊNH DẠNG NÚT BẤM VÀ HÀNH ĐỘNG --- */
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+  justify-content: flex-start; /* Căn các nút sang bên trái */
+}
+
+/* Nút chính (Thêm địa chỉ / Lưu thay đổi) */
+.profile-btn--primary {
+  background: linear-gradient(135deg, var(--plum), var(--forest)) !important;
+  color: white !important;
+  cursor: pointer;
+}
+
+/* Nút phụ (Hủy) */
+.profile-btn--secondary {
+  background: var(--linen) !important;
+  color: var(--bark) !important;
+  border: 1px solid var(--mint) !important;
+}
+
+.profile-btn--secondary:hover {
+  background: var(--lavender) !important;
+  color: white !important;
+}
+
+/* --- THÔNG BÁO (ALERT) --- */
+
+.alert {
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  opacity: 1;
+  max-height: 100px;
+  overflow: hidden;
+  transition:
+    opacity 0.35s ease,
+    max-height 0.35s ease,
+    margin-bottom 0.35s ease,
+    padding 0.35s ease;
+}
+
+.alert-success {
+  background: #e9f8ef;
+  color: #1f8a4c;
+  border: 1px solid #b9e8cc;
+}
+
+.alert-error {
+  background: #fff0f3;
+  color: #b43f5e;
+  border: 1px solid #f5c6d0;
+}
+
+/* Trạng thái khi alert chuẩn bị bị JS xóa khỏi DOM */
+.alert--hiding {
+  opacity: 0;
+  max-height: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-width: 0;
+}
+
+/* --- TRẠNG THÁI LOADING / DISABLED CHO NÚT --- */
+
+.addr-btn:disabled,
+.profile-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+}
+
+.addr-btn--delete:disabled {
+  background: #fff0f3;
+  color: #b43f5e;
+}
+
+.addr-btn--default:disabled {
+  background: linear-gradient(135deg, var(--plum), var(--forest));
+}
+/* =============================================
+   CUSTOM CONFIRM MODAL (Hộp thoại xác nhận xóa)
+============================================= */
+
+.custom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* Làm tối nền phía sau */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.custom-modal-content {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px; /* Bo góc đồng bộ với profile-section */
+  border: 1px solid var(--mint);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  /* Đổ bóng đồng bộ với hệ thống của bạn */
+  box-shadow:
+    0 4px 6px rgba(155, 142, 199, 0.08),
+    0 16px 40px rgba(155, 142, 199, 0.15);
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.custom-modal-content h3 {
+  margin-top: 0;
+  color: var(--forest); /* Màu chữ xanh Forest */
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.custom-modal-content p {
+  color: var(--wood); /* Màu chữ gỗ nhạt */
+  font-size: 15px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.custom-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Hiệu ứng xuất hiện mượt mà */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
