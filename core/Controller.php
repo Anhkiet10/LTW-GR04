@@ -1,5 +1,11 @@
 <?php
 class Controller {
+    public function __construct() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start(); // ← Thêm dòng này
+        }
+    }
+    
     // Render view và truyền data vào
     protected function render($view, $data = []) {
         //$view: Chuỗi đường dẫn đến file giao diện cần mở
