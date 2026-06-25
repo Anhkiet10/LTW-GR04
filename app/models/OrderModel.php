@@ -2,16 +2,89 @@
 require_once __DIR__ . '/../../core/Model.php';
 
 class OrderModel extends Model {
+    public function getAddressesByUser($userId) {
+        $userId = (int)$userId;
+        $sql = "SELECT *
+                FROM addresses
+                WHERE user_id = $userId
+                ORDER BY is_default DESC, address_id DESC";
+
+        return $this->fetchAll($sql);
+    }
+
+    public function getOrdersByUser($userId) {
+        $userId = (int)$userId;
+        $sql = "SELECT o.*, a.full_address, a.city,
+                       COUNT(DISTINCT oi.order_item_id) as item_count,
+                       GROUP_CONCAT(DISTINCT pdt.product_name ORDER BY oi.order_item_id SEPARATOR ', ') as product_names,
+                       p.payment_method, p.payment_status
+                FROM orders o
+                LEFT JOIN addresses a ON o.address_id = a.address_id
+                LEFT JOIN order_items oi ON o.order_id = oi.order_id
+                LEFT JOIN products pdt ON oi.product_id = pdt.product_id
+                LEFT JOIN payments p ON o.order_id = p.order_id
+                WHERE o.user_id = $userId
+                GROUP BY o.order_id
+                ORDER BY o.order_date DESC";
+
+        return $this->fetchAll($sql);
+    }
+
+    public function getOrderByIdForUser($orderId, $userId) {
+        $orderId = (int)$orderId;
+        $userId = (int)$userId;
+        $sql = "SELECT o.*, u.full_name, u.email, u.phone,
+                       a.full_address, a.city,
+                       p.payment_method, p.payment_status, p.transaction_id
+                FROM orders o
+                LEFT JOIN users u ON o.user_id = u.user_id
+                LEFT JOIN addresses a ON o.address_id = a.address_id
+                LEFT JOIN payments p ON o.order_id = p.order_id
+                WHERE o.order_id = $orderId
+                  AND o.user_id = $userId";
+
+        return $this->fetchOne($sql);
+    }
+
+    public function createOrder($userId, $addressId, $total, $note = null) {
+        $userId = (int)$userId;
+        $addressId = $addressId !== null ? (int)$addressId : 'NULL';
+        $total = (float)$total;
+        $noteSql = $note !== null && $note !== ''
+            ? "'" . $this->escape($note) . "'"
+            : 'NULL';
+
+        $sql = "INSERT INTO orders (user_id, address_id, total_amount, status, note)
+                VALUES ($userId, $addressId, $total, 'pending', $noteSql)";
+
+        $this->query($sql);
+        return $this->lastInsertId();
+    }
+
+    public function addOrderItem($orderId, $productId, $variantId, $quantity, $unitPrice) {
+        $orderId = (int)$orderId;
+        $productId = (int)$productId;
+        $variantId = $variantId !== null ? (int)$variantId : 'NULL';
+        $quantity = (int)$quantity;
+        $unitPrice = (float)$unitPrice;
+
+        $sql = "INSERT INTO order_items (order_id, product_id, variant_id, quantity, unit_price)
+                VALUES ($orderId, $productId, $variantId, $quantity, $unitPrice)";
+
+        return $this->query($sql);
+    }
 
     public function getAllOrders($limit = null, $offset = 0, $status = null) {
         $sql = "SELECT o.*, u.full_name, u.email, u.phone,
                        a.full_address, a.city,
-                       COUNT(oi.order_item_id) as item_count,
+                       COUNT(DISTINCT oi.order_item_id) as item_count,
+                       GROUP_CONCAT(DISTINCT pdt.product_name ORDER BY oi.order_item_id SEPARATOR ', ') as product_names,
                        p.payment_method, p.payment_status
                 FROM orders o
                 LEFT JOIN users u ON o.user_id = u.user_id
                 LEFT JOIN addresses a ON o.address_id = a.address_id
                 LEFT JOIN order_items oi ON o.order_id = oi.order_id
+                LEFT JOIN products pdt ON oi.product_id = pdt.product_id
                 LEFT JOIN payments p ON o.order_id = p.order_id
                 WHERE 1=1";
 
@@ -76,7 +149,16 @@ class OrderModel extends Model {
                 WHERE av.value_id IN ($idList)
                 ORDER BY a.attribute_name";
         $values = $this->fetchAll($sql);
-        return implode(', ', array_column($values, 'value_name'));
+        $labels = [];
+        foreach ($values as $value) {
+            $attributeName = $value['attribute_name'] ?? '';
+            $valueName = $value['value_name'] ?? '';
+            $labels[] = $attributeName !== ''
+                ? $attributeName . ': ' . $valueName
+                : $valueName;
+        }
+
+        return implode(', ', $labels);
     }
 
     public function updateOrderStatus($orderId, $status) {

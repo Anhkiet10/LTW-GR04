@@ -43,7 +43,7 @@ class UserModel
                 ?,
                 ?,
                 ?,
-                'admin',
+                'customer',
                 NOW()
             )
         ";

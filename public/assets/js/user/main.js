@@ -1,5 +1,5 @@
 // ===== SEARCH REALTIME =====
-const searchInput = document.getElementById("searchInput");
+// const searchInput = document.getElementById("searchInput");
 const suggestions = document.getElementById("searchSuggestions");
 let searchTimer;
 
@@ -100,20 +100,27 @@ function addToCart(productId, variantId = null) {
     return;
   }
 
-  fetch("/WEB_GR4/api/add-to-cart.php", {
+  fetch("/WEB_GR4/cart/add", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ product_id: productId, variant_id: variantId, quantity: 1 }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      product_id: productId,
+      variant_id: variantId,
+    }),
   })
-    .then((r) => r.json())
+    .then((res) => res.json())
     .then((data) => {
-      if (data.success) {
-        showToast(" Đã thêm vào giỏ hàng!");
-      } else {
-        showToast(data.message || "Có lỗi xảy ra!", "error");
+      if (data.login) {
+        window.location.href = "/WEB_GR4/login";
+        return;
       }
-    })
-    .catch(() => showToast("Lỗi kết nối server!", "error"));
+
+      if (data.success) {
+        showToast("Đã thêm vào giỏ hàng!");
+      }
+    });
 }
 
 // ===== TOAST NOTIFICATION =====
@@ -141,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Đóng menu khi click vào link
     const navLinks = navContainer.querySelectorAll("a");
-    navLinks.forEach(link => {
+    navLinks.forEach((link) => {
       link.addEventListener("click", function () {
         navContainer.classList.remove("active");
       });

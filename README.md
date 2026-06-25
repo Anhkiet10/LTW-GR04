@@ -18,24 +18,44 @@ WEB_GR4/
 │   │   └── HomeController.php
 │   │   └── AuthController.php
 │   │   └── AdminController.php
+│   │   └── AdminUserController.php
+│   │   └── OrderController.php
 │   ├── models/                 # Xử lý dữ liệu và tương tác với Database
 │   │   ├── ProductModel.php
 │   │   ├── ProductModelAdmin.php
 │   │   ├── OrderModel.php
 │   │   └── UserModel.php
+│   │   └── UserModelAdmin.php
+│   │   └── CartModel.php
 │   └── views/  # Giao diện hiển thị (HTML/PHP)
 │       ├── admin/
 │       │   ├──  home.php
 │       │   └──  Products.php
 │       │   └──  Orders.php
 │       │   └──  OrderDetail.php
+│       │   └──  User.php
+│       │   └──  UserDetail.php
+│       │   └──  UserForm.php
+│       │
+│       ├── auth/
+│       │   ├── forgot-password.php
+│       │   └── login.php
+│       │   └── register.php
+│       │
+│       ├── cart/
+│       │   └── index.php
+│       │
+│       ├── orders/
+│       │   └── checkout.php
+│       │   └── detail.php
+│       │   └── history.php
 │       │
 │       ├── layouts/            # Thành phần giao diện chung
 │       │   ├── header.php
 │       │   └── footer.php
 │       │   └── product-card.php
 │       │   └── admin_sidebar.php
-│       │   └──
+│       │
 │       ├── products/           # Giao diện liên quan đến sản phẩm
 │       │   ├── index.php       # Trang danh sách sản phẩm
 │       │   └── detail.php      # Trang chi tiết sản phẩm
