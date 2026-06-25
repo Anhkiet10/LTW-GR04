@@ -27,9 +27,19 @@ class ProductModelAdmin extends Model {
         return implode('_', $ids);
     }
 
-    // ─── Danh sách sản phẩm admin ─────────────────────────────────────────────
+    // ─── Danh sách sản phẩm admin (có lọc + phân trang) ───────────────────────
 
-    public function getAllForAdmin(): array {
+    /**
+     * @param array $filters ['search' => string, 'category' => int|string, 'status' => '0'|'1'|'']
+     * @param int   $page    trang hiện tại (bắt đầu từ 1)
+     * @param int   $perPage số sản phẩm mỗi trang
+     */
+    public function getAllForAdmin(array $filters = [], int $page = 1, int $perPage = 8): array {
+        $where   = $this->buildAdminWhere($filters);
+        $page    = max(1, $page);
+        $perPage = max(1, $perPage);
+        $offset  = ($page - 1) * $perPage;
+
         return $this->fetchAll("
             SELECT
                 p.product_id,
@@ -55,9 +65,64 @@ class ProductModelAdmin extends Model {
             LEFT JOIN categories c  ON c.category_id  = p.category_id
             LEFT JOIN categories pc ON pc.category_id = c.parent_id
             LEFT JOIN product_variants pv ON pv.product_id = p.product_id
+            $where
             GROUP  BY p.product_id
             ORDER  BY p.created_at DESC
+            LIMIT  $perPage OFFSET $offset
         ");
+    }
+
+    /**
+     * Đếm tổng số sản phẩm thỏa điều kiện lọc — dùng để tính $totalPages.
+     */
+    public function countForAdmin(array $filters = []): int {
+        $where = $this->buildAdminWhere($filters);
+
+        $row = $this->fetchOne("
+            SELECT COUNT(DISTINCT p.product_id) AS cnt
+            FROM   products p
+            LEFT JOIN categories c  ON c.category_id  = p.category_id
+            LEFT JOIN categories pc ON pc.category_id = c.parent_id
+            $where
+        ");
+        return (int)($row['cnt'] ?? 0);
+    }
+
+    /**
+     * Build mệnh đề WHERE dùng chung cho getAllForAdmin() và countForAdmin().
+     * search   → khớp tên sản phẩm HOẶC sku của bất kỳ biến thể nào.
+     * category → khớp category_id của sản phẩm HOẶC category cha của nó
+     *            (cho phép chọn 1 danh mục cha để lấy luôn các danh mục con).
+     * status   → 0 hoặc 1, để trống = không lọc.
+     */
+    private function buildAdminWhere(array $filters): string {
+        $conditions = [];
+
+        $search = trim($filters['search'] ?? '');
+        if ($search !== '') {
+            $kw = $this->escape($search);
+            $conditions[] = "(
+                p.product_name LIKE '%$kw%'
+                OR EXISTS (
+                    SELECT 1 FROM product_variants pvs
+                    WHERE  pvs.product_id = p.product_id AND pvs.sku LIKE '%$kw%'
+                )
+            )";
+        }
+
+        $category = $filters['category'] ?? '';
+        if ($category !== '' && $category !== null) {
+            $catId = (int)$category;
+            $conditions[] = "(p.category_id = $catId OR pc.category_id = $catId)";
+        }
+
+        $status = $filters['status'] ?? '';
+        if ($status !== '' && $status !== null) {
+            $statusVal = (int)$status;
+            $conditions[] = "p.is_active = $statusVal";
+        }
+
+        return $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
     }
 
     // ─── Thống kê nhanh ───────────────────────────────────────────────────────
@@ -461,6 +526,57 @@ class ProductModelAdmin extends Model {
             ORDER  BY a.attribute_id
         ");
         return implode(', ', array_column($rows, 'value_name'));
+    }
+
+    // ─── Lấy ảnh theo variant_id ─────────────────────────────────────────────
+    public function getImagesByVariant(int $productId): array {
+        $pid = (int)$productId;
+        $rows = $this->fetchAll("
+            SELECT image_id, product_id, variant_id, image_url, is_primary, sort_order
+            FROM   product_images
+            WHERE  product_id = $pid
+            ORDER  BY variant_id IS NULL DESC,
+                      variant_id,
+                      is_primary DESC,
+                      sort_order
+        ");
+
+        $grouped = ['_common' => []];
+        foreach ($rows as $row) {
+            $key = $row['variant_id'] !== null ? (int)$row['variant_id'] : '_common';
+            $grouped[$key][] = $row;
+        }
+        return $grouped;
+    }
+
+    // ─── Lưu ảnh gắn với variant cụ thể ─────────────────────────────────────
+    public function saveVariantImage(int $productId, int $variantId, string $url): void {
+        $pid    = (int)$productId;
+        $vid    = (int)$variantId;
+        $urlEsc = $this->escape($url);
+
+        $this->query("
+            UPDATE product_images
+            SET    is_primary = 0
+            WHERE  product_id = $pid AND variant_id = $vid
+        ");
+
+        $exist = $this->fetchOne("
+            SELECT image_id FROM product_images
+            WHERE  product_id = $pid AND variant_id = $vid AND image_url = '$urlEsc'
+        ");
+
+        if ($exist) {
+            $this->query("
+                UPDATE product_images SET is_primary = 1
+                WHERE  image_id = {$exist['image_id']}
+            ");
+        } else {
+            $this->query("
+                INSERT INTO product_images (product_id, variant_id, image_url, is_primary, sort_order)
+                VALUES ($pid, $vid, '$urlEsc', 1, 0)
+            ");
+        }
     }
 
     private function makeSlug(string $name): string {

@@ -38,7 +38,11 @@ $router->post('/profile/set-default-address','ProfileController', 'setDefaultAdd
 $router->get('/cart',          'CartController', 'index');
 $router->post('/cart/update',  'CartController', 'update');
 $router->post('/cart/delete',  'CartController', 'delete');
-$router->post('/cart/add',     'CartController', 'addAjax');
+$router->post('/cart/add',     'CartController', 'add');
+$router->get('/cart/checkInfo', 'CartController', 'checkInfo');
+$router->post('/cart/saveAddress', 'CartController', 'saveAddress');
+
+$router->post('/cart/placeOrder', 'CartController', 'placeOrder');
 
 // ===== ĐƠN HÀNG =====
 $router->get('/checkout',       'OrderController', 'checkout');
@@ -81,6 +85,9 @@ $router->post('/admin/users/store',         'AdminUserController', 'store');
 $router->post('/admin/users/update',        'AdminUserController', 'update');
 $router->post('/admin/users/delete',        'AdminUserController', 'delete');
 $router->post('/admin/users/toggle-status', 'AdminUserController', 'toggleStatus');
+
+$router->get('/admin/backup',          'AdminController', 'backup');
+$router->post('/admin/backup/download','AdminController', 'downloadBackup');
 
 $router->dispatch();
 ?>

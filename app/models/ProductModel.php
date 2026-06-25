@@ -337,6 +337,7 @@ class ProductModel extends Model {
         return $this->fetchAll("
             SELECT hp.id, hp.product_id, hp.category_id, hp.sort_order,
                    p.product_name, pi.image_url,
+                   MIN(pv.price) AS price, 
                    MIN(pv.price) AS min_price, MAX(pv.price) AS max_price
             FROM   homepage_products hp
             JOIN   products p ON p.product_id = hp.product_id
@@ -378,6 +379,7 @@ class ProductModel extends Model {
                        pc.category_name  AS prod_cat_name,
                        pc.parent_id      AS prod_parent_id,
                        ppc.category_name AS parent_cat_name,
+                       MIN(pv.price)          AS price,
                        MIN(pv.price)          AS min_price,
                        MAX(pv.price)          AS max_price,
                        SUM(pv.stock_quantity) AS total_stock
@@ -438,6 +440,7 @@ class ProductModel extends Model {
     public function getAvailableProducts(): array {
         return $this->fetchAll("
             SELECT p.product_id, p.product_name, pi.image_url,
+                    MIN(pv.price) AS price,
                    MIN(pv.price) AS min_price, MAX(pv.price) AS max_price
             FROM   products p
             LEFT JOIN product_images pi

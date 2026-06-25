@@ -984,22 +984,3 @@ body::before {
 .dropdown-user {
   position: relative;
 }
-
-.dropdown-menu-user {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-
-  min-width: 220px;
-  background: #f6ece7;
-  border-radius: 16px;
-  padding: 10px 0;
-
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  z-index: 9999;
-}
-
-.dropdown-user.active .dropdown-menu-user {
-  display: block;
-}
