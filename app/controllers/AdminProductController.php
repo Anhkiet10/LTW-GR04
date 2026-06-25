@@ -7,10 +7,23 @@ class AdminProductController extends Controller {
     private ProductModelAdmin $model;
 
     public function __construct() {
+        $this->requireAdmin();// kiểm tra đã login với admin chưa.
         ob_start(); // bắt mọi output rác (warning/notice) trước khi echo JSON
         $this->model = new ProductModelAdmin();
     }
-
+    private function requireAdmin(): void {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /WEB_GR4/login');
+        exit;
+    }
+    if ($_SESSION['role'] !== 'admin') {
+        header('Location: /WEB_GR4/');
+        exit;
+    }
+}
     /**
      * Xóa buffer rác, set header JSON, và echo response — dùng thay cho mọi echo json_encode().
      */
@@ -23,8 +36,21 @@ class AdminProductController extends Controller {
 
     // ─── GET /admin/products ──────────────────────────────────────────────────────
     public function index(): void {
-        $stats      = $this->model->getStats();
-        $products   = $this->model->getAllForAdmin();
+        $perPage = 8;
+        $page    = max(1, (int)($_GET['page'] ?? 1));
+
+        $filters = [
+            'search'   => trim($_GET['search'] ?? ''),
+            'category' => $_GET['category'] ?? '',
+            'status'   => $_GET['status'] ?? '',
+        ];
+
+        $totalFiltered = $this->model->countForAdmin($filters);
+        $totalPages    = max(1, (int)ceil($totalFiltered / $perPage));
+        $page          = min($page, $totalPages); // tránh page vượt quá totalPages khi lọc làm giảm số kết quả
+
+        $stats      = $this->model->getStats(); // thống kê tổng quát, KHÔNG bị ảnh hưởng bởi filter
+        $products   = $this->model->getAllForAdmin($filters, $page, $perPage);
         $categories = $this->model->getAllCategories();
 
         $this->render('admin/Products', [
@@ -35,32 +61,35 @@ class AdminProductController extends Controller {
             'products'       => $products,
             'categories'     => $categories,
             'attributeTypes' => $this->model->getAllAttributeValues(),
+            'filters'        => $filters,
+            'page'           => $page,
+            'totalPages'     => $totalPages,
         ]);
     }
 
     // ─── GET /admin/products/getProduct?id=X ─────────────────────────────────────
-    public function getProduct(): void {
-        $id = (int)($_GET['id'] ?? 0);
-        if ($id <= 0) {
-            $this->json(['success' => false, 'message' => 'ID không hợp lệ.']);
-            return;
-        }
-
-        $product = $this->model->getById($id);
-        if (!$product) {
-            $this->json(['success' => false, 'message' => 'Không tìm thấy sản phẩm.']);
-            return;
-        }
-
-        $this->json([
-            'success'        => true,
-            'product'        => $product,
-            'variants'       => $this->model->getVariants($id),
-            'images'         => $this->model->getImages($id),
-            'attributeTypes' => $this->model->getAllAttributeValues(),
-        ]);
+public function getProduct(): void {
+    $id = (int)($_GET['id'] ?? 0);
+    if ($id <= 0) {
+        $this->json(['success' => false, 'message' => 'ID không hợp lệ.']);
+        return;
     }
 
+    $product = $this->model->getById($id);
+    if (!$product) {
+        $this->json(['success' => false, 'message' => 'Không tìm thấy sản phẩm.']);
+        return;
+    }
+
+    $this->json([
+        'success'        => true,
+        'product'        => $product,
+        'variants'       => $this->model->getVariants($id),
+        'images'         => $this->model->getImages($id),           // toàn bộ (giữ nguyên cho backward compat)
+        'imagesByVariant'=> $this->model->getImagesByVariant($id),  // ← MỚI: phân loại theo variant
+        'attributeTypes' => $this->model->getAllAttributeValues(),
+    ]);
+}
     // ─── POST /admin/products/store ───────────────────────────────────────────────
     public function store(): void {
         $name = trim($_POST['product_name'] ?? '');
@@ -71,8 +100,9 @@ class AdminProductController extends Controller {
 
         try {
             $productId = $this->model->create($_POST);
-            $this->saveVariants($productId);
+            $indexMap  = $this->saveVariants($productId);
             $this->handleImageUpload($productId);
+            $this->saveVariantImages($productId, $indexMap);
 
             $this->json([
                 'success'    => true,
@@ -103,8 +133,9 @@ class AdminProductController extends Controller {
 
         try {
             $this->model->update($id, $_POST);
-            $this->saveVariants($id);
+            $indexMap  = $this->saveVariants($id);
             $this->handleImageUpload($id);
+            $this->saveVariantImages($id, $indexMap);
 
             $this->json(['success' => true, 'message' => 'Cập nhật sản phẩm thành công!']);
         } catch (\Throwable $e) {
@@ -277,8 +308,30 @@ class AdminProductController extends Controller {
         }
     }
 
+    // ─── POST /admin/products/uploadVariantImage ──────────────────────────────────
+    public function uploadVariantImage(): void {
+        $productId = (int)($_POST['product_id'] ?? 0);
+        $variantId = (int)($_POST['variant_id'] ?? 0);
+
+        if ($productId <= 0 || $variantId <= 0) {
+            $this->json(['success' => false, 'message' => 'ID không hợp lệ.']);
+            return;
+        }
+
+        try {
+            $this->handleImageUpload($productId, $variantId);
+            $this->json([
+                'success' => true,
+                'message' => 'Đã cập nhật ảnh cho biến thể.',
+                'images'  => $this->model->getImagesByVariant($productId),
+            ]);
+        } catch (\Throwable $e) {
+            $this->json(['success' => false, 'message' => 'Lỗi upload: ' . $e->getMessage()]);
+        }
+    }
+
     // ─── Helper: lưu danh sách variants từ POST ───────────────────────────────────
-    private function saveVariants(int $productId): void {
+    private function saveVariants(int $productId): array {
         $variantIds = $_POST['variant_id'] ?? [];
         $skus       = $_POST['sku']        ?? [];
         $prices     = $_POST['price']      ?? [];
@@ -292,6 +345,7 @@ class AdminProductController extends Controller {
         $isActives = $_POST['is_active'] ?? [];
 
         $count = count($prices);
+        $indexToVariantId = [];
         for ($i = 0; $i < $count; $i++) {
             $valueIds = [];
             foreach ($attrValues as $values) {
@@ -308,34 +362,69 @@ class AdminProductController extends Controller {
                 'is_active'  => isset($isActives[$i]) ? (int)$isActives[$i] : 1,
                 'value_ids'  => $valueIds,
             ];
-            $this->model->upsertVariant($productId, $variantData);
+            $savedVid = $this->model->upsertVariant($productId, $variantData);
+            $indexToVariantId[$i] = $savedVid;
         }
+        return $indexToVariantId;
     }
 
-    // ─── Helper: upload ảnh đại diện ─────────────────────────────────────────────
-    private function handleImageUpload(int $productId): void {
-        $file = $_FILES['image'] ?? null;
-        if (!$file || $file['error'] !== UPLOAD_ERR_OK || $file['size'] === 0) {
-            return;
-        }
+    // ─── Helper: xử lý ảnh variant gửi lên cùng form (variant_image[rowIndex]) ──
+    private function saveVariantImages(int $productId, array $indexToVariantId): void {
+        $files = $_FILES['variant_image'] ?? [];
+        if (empty($files) || empty($files['name'])) return;
 
         $allowed = ['image/jpeg', 'image/png', 'image/webp'];
-        if (!in_array($file['type'], $allowed)) {
-            return;
-        }
-
         $uploadDir = __DIR__ . '/../../public/assets/upload/img-product/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
 
-        $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $fileName = 'product_' . $productId . '_' . time() . '.' . $ext;
-        $destPath = $uploadDir . $fileName;
+        foreach ($files['name'] as $idx => $fileName) {
+            if (empty($fileName) || ($files['error'][$idx] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) continue;
+            $variantId = (int)($indexToVariantId[$idx] ?? 0);
+            if ($variantId <= 0) continue;
 
-        if (move_uploaded_file($file['tmp_name'], $destPath)) {
-            $urlPath = '/assets/upload/img-product/' . $fileName;
+            $type = $files['type'][$idx] ?? '';
+            if (!in_array($type, $allowed)) continue;
+
+            $ext      = pathinfo($fileName, PATHINFO_EXTENSION);
+            $dest     = $uploadDir . "product_{$productId}_v{$variantId}_" . time() . '.' . $ext;
+            if (move_uploaded_file($files['tmp_name'][$idx], $dest)) {
+                $urlPath = '/assets/upload/img-product/' . basename($dest);
+                $this->model->saveVariantImage($productId, $variantId, $urlPath);
+            }
+        }
+    }
+
+    // ─── Helper: upload ảnh đại diện ─────────────────────────────────────────────
+    private function handleImageUpload(int $productId, int $variantId = 0): void {
+    $file = $_FILES['image'] ?? null;
+    if (!$file || $file['error'] !== UPLOAD_ERR_OK || $file['size'] === 0) {
+        return;
+    }
+
+    $allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!in_array($file['type'], $allowed)) {
+        return;
+    }
+
+    $uploadDir = __DIR__ . '/../../public/assets/upload/img-product/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $suffix   = $variantId > 0 ? "_v{$variantId}" : '';
+    $fileName = 'product_' . $productId . $suffix . '_' . time() . '.' . $ext;
+    $destPath = $uploadDir . $fileName;
+
+    if (move_uploaded_file($file['tmp_name'], $destPath)) {
+        $urlPath = '/assets/upload/img-product/' . $fileName;
+        if ($variantId > 0) {
+            $this->model->saveVariantImage($productId, $variantId, $urlPath);
+        } else {
             $this->model->savePrimaryImage($productId, $urlPath);
         }
     }
+}
 }

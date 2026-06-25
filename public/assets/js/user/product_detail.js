@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ── Đọc data từ HTML ──────────────────────────────────────────────
   const PRODUCT_VARIANTS = JSON.parse(wrap.dataset.variants || "[]");
+  const PRODUCT_IMAGES = JSON.parse(wrap.dataset.images || "[]");
   const HAS_ATTRIBUTES = wrap.dataset.hasAttributes === "1";
   const ATTRIBUTE_ROW_COUNT = parseInt(wrap.dataset.attributeRowCount, 10) || 0;
   const DEFAULT_PRICE_TEXT = wrap.dataset.defaultPrice || "—";
@@ -115,10 +116,44 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // ── Cập nhật ảnh theo variant ─────────────────────────────────────
+  // Ưu tiên: ảnh gắn với variant_id → ảnh is_primary → ảnh đầu tiên
+  function updateImage(variantId) {
+    const imgEl = document.getElementById("mainProductImage");
+    if (!imgEl || !imgEl.tagName || imgEl.tagName.toLowerCase() !== "img")
+      return;
+
+    let found = null;
+
+    if (variantId) {
+      // Ưu tiên 1: ảnh gắn đúng variant_id này
+      found =
+        PRODUCT_IMAGES.find((img) => img.variant_id === variantId) || null;
+    }
+
+    if (!found) {
+      // Ưu tiên 2: ảnh gốc của sản phẩm (is_primary = 1, variant_id = null)
+      found =
+        PRODUCT_IMAGES.find(
+          (img) => img.is_primary === 1 && img.variant_id === null,
+        ) || null;
+    }
+
+    if (!found) {
+      // Ưu tiên 3: ảnh đầu tiên bất kỳ
+      found = PRODUCT_IMAGES[0] || null;
+    }
+
+    if (found) {
+      imgEl.src = "/WEB_GR4/public" + found.image_url;
+    }
+  }
+
   function onSelectionChange() {
     updateAttributeAvailability();
     const exact = findExactVariant(getSelectedValueIds());
     updatePriceAndStock(exact);
+    updateImage(exact ? exact.variant_id : null);
   }
 
   // ── Nút thêm giỏ hàng ────────────────────────────────────────────
@@ -136,6 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
       PRODUCT_VARIANTS.find((x) => x.variant_key === "default") ||
       PRODUCT_VARIANTS[0];
     updatePriceAndStock(v);
+    updateImage(v ? v.variant_id : null);
   }
 
   document.querySelectorAll(".attr-value-btn").forEach((btn) => {

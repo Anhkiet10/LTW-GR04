@@ -38,32 +38,32 @@
     </div>
 
     <!-- ── Filter bar ── -->
-    <div class="filter-bar">
+    <form class="filter-bar" id="filterForm" method="GET" action="/WEB_GR4/admin/products">
         <div class="search-wrap">
             <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Tìm tên sản phẩm, SKU...">
+            <input type="text" id="searchInput" name="search" placeholder="Tìm tên sản phẩm, SKU..." value="<?= htmlspecialchars($filters['search'] ?? '') ?>">
         </div>
-            <select id="filterCategory">
+            <select id="filterCategory" name="category">
                 <option value="">Tất cả danh mục</option>
                 <?php
                 // Tách danh mục cha và con
                 $parents = array_filter($categories, fn($c) => !$c['parent_id']);
                 foreach ($parents as $parent):
                 ?>
-                    <option value="<?= $parent['category_id'] ?>"><?= htmlspecialchars($parent['category_name']) ?></option>
+                    <option value="<?= $parent['category_id'] ?>" <?= (string)($filters['category'] ?? '') === (string)$parent['category_id'] ? 'selected' : '' ?>><?= htmlspecialchars($parent['category_name']) ?></option>
                     <?php foreach ($categories as $child): ?>
                         <?php if ($child['parent_id'] == $parent['category_id']): ?>
-                            <option value="<?= $child['category_id'] ?>">&nbsp;&nbsp;&nbsp;&nbsp;↳ <?= htmlspecialchars($child['category_name']) ?></option>
+                            <option value="<?= $child['category_id'] ?>" <?= (string)($filters['category'] ?? '') === (string)$child['category_id'] ? 'selected' : '' ?>>&nbsp;&nbsp;&nbsp;&nbsp;↳ <?= htmlspecialchars($child['category_name']) ?></option>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             </select>
-        <select id="filterStatus">
+        <select id="filterStatus" name="status">
             <option value="">Tất cả trạng thái</option>
-            <option value="1">Đang bán</option>
-            <option value="0">Đã ẩn</option>
+            <option value="1" <?= (string)($filters['status'] ?? '') === '1' ? 'selected' : '' ?>>Đang bán</option>
+            <option value="0" <?= (string)($filters['status'] ?? '') === '0' ? 'selected' : '' ?>>Đã ẩn</option>
         </select>
-    </div>
+    </form>
 
     <!-- ── Product table ── -->
     <div class="table-wrap">
@@ -163,6 +163,34 @@
             </tbody>
         </table>
     </div>
+
+    <?php if ($totalPages > 1): ?>
+        <div class="pagination">
+            <?php
+            $qs = http_build_query(array_filter([
+                'search'   => $filters['search']   ?? '',
+                'category' => $filters['category'] ?? '',
+                'status'   => $filters['status']   ?? '',
+            ], fn($v) => $v !== ''));
+            $qs = $qs !== '' ? '&' . $qs : '';
+            ?>
+
+            <?php if ($page > 1): ?>
+                <a href="/WEB_GR4/admin/products?page=<?= $page - 1 ?><?= $qs ?>" class="page-btn">‹ Trước</a>
+            <?php endif; ?>
+
+            <?php for ($p = max(1, $page - 2); $p <= min($totalPages, $page + 2); $p++): ?>
+                <a
+                    href="/WEB_GR4/admin/products?page=<?= $p ?><?= $qs ?>"
+                    class="page-btn <?= $p === $page ? 'active' : '' ?>"
+                ><?= $p ?></a>
+            <?php endfor; ?>
+
+            <?php if ($page < $totalPages): ?>
+                <a href="/WEB_GR4/admin/products?page=<?= $page + 1 ?><?= $qs ?>" class="page-btn">Sau ›</a>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
 
 </main>
 
@@ -278,6 +306,7 @@
                                     <th data-col="price">Giá (₫)</th>
                                     <th>Tồn kho</th>
                                     <th>Bán</th>
+                                    <th style="width:52px;text-align:center;" data-col="img">Ảnh</th>
                                     <th style="width:36px"></th>
                                 </tr>
                             </thead>

@@ -5,6 +5,13 @@
         <a href="/WEB_GR4/products" class="btn btn-secondary">Quay lại</a>
 
         <div class="detail-wrap"
+             data-images="<?php echo htmlspecialchars(json_encode(array_map(function ($img) {
+                 return [
+                     'variant_id' => isset($img['variant_id']) ? (int)$img['variant_id'] : null,
+                     'image_url'  => $img['image_url'],
+                     'is_primary' => (int)$img['is_primary'],
+                 ];
+             }, $images ?? []), JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'); ?>"
              data-variants="<?php echo htmlspecialchars(json_encode(array_map(function ($v) {
                  $keyIds = ($v['variant_key'] ?? '') === 'default'
                      ? []
@@ -29,10 +36,11 @@
              data-product-id="<?php echo (int)$product['product_id']; ?>">
 
             <?php if (!empty($product['image_url'])): ?>
-                <img src="/WEB_GR4/public<?php echo htmlspecialchars($product['image_url']); ?>"
+                <img id="mainProductImage"
+                     src="/WEB_GR4/public<?php echo htmlspecialchars($product['image_url']); ?>"
                      alt="<?php echo htmlspecialchars($product['product_name']); ?>">
             <?php else: ?>
-                <div class="no-img-large"><i class="fa-solid fa-box-open" style="color: rgb(177, 151, 252);"></i></div>
+                <div class="no-img-large" id="mainProductImage"><i class="fa-solid fa-box-open" style="color: rgb(177, 151, 252);"></i></div>
             <?php endif; ?>
 
             <div class="detail-info">

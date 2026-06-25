@@ -28,7 +28,23 @@
                 <li><a href="/WEB_GR4/"><i class="fas fa-home" style="color: rgb(177, 151, 252);"></i>Trang chủ</a></li>
                 <li class="cart-link"><a href="/WEB_GR4/cart"><i class="fas fa-shopping-cart" style="color: rgb(177, 151, 252);"></i> Giỏ hàng</a></li>
                 <li class="order-link"><a href="/WEB_GR4/orders"> <i class="fa-solid fa-clipboard-list" style="color: rgb(177, 151, 252);"></i> Đơn hàng</a></li>
-                <li><a href="/WEB_GR4/login"><i class="fa-solid fa-user" style="color: rgb(177, 151, 252);"></i> Đăng nhập</a></li>
+                <?php if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') !== 'admin'): ?>
+                    <li>
+                        <a href="/WEB_GR4/profile"><i class="fa-solid fa-gear" style="color: rgb(226, 13, 91);"></i>
+                        <?php echo htmlspecialchars($_SESSION['full_name']); ?>
+                        </a>
+                    </li>
+                <?php elseif (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'admin'): ?>
+                    <li>
+                        <a href="/WEB_GR4/admin"><i class="fa-solid fa-user-shield" style="color: rgb(226, 13, 91);"></i>
+                        Quản trị viên
+                        </a>
+                    </li>
+                    <?php else: ?>
+                    <li><a href="/WEB_GR4/login" class ="btn-logout-pill">
+                        <i class="fa-solid fa-user" style="color: rgb(177, 151, 252);"></i> Đăng nhập
+                    </a></li>
+                <?php endif; ?>
             </ul>
         </nav>
 

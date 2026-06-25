@@ -83,8 +83,28 @@
                         <span class="info-label">Trạng thái TT:</span>
                         <span class="info-value"><?php echo ucfirst($order['payment_status'] ?? 'N/A'); ?></span>
                     </div>
+                    <?php if (!empty($order['paid_at'])): ?>
+                    <div class="info-row">
+                        <span class="info-label">Ngày thanh toán:</span>
+                        <span class="info-value"><?php echo date('d/m/Y H:i', strtotime($order['paid_at'])); ?></span>
+                    </div>
+                    <?php endif; ?>
+                    <?php if (!empty($order['transaction_id'])): ?>
+                    <div class="info-row">
+                        <span class="info-label">Mã giao dịch:</span>
+                        <span class="info-value"><?php echo htmlspecialchars($order['transaction_id']); ?></span>
+                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
+
+            <?php if (!empty($order['note'])): ?>
+            <!-- Order Note -->
+            <div class="info-section" style="margin-bottom: 24px;">
+                <h3><i class="fas fa-sticky-note"></i>Ghi chú đơn hàng</h3>
+                <p style="color: #374151; font-size: 14px; margin: 0;"><?php echo nl2br(htmlspecialchars($order['note'])); ?></p>
+            </div>
+            <?php endif; ?>
 
             <!-- Order Items -->
             <div class="items-section">
@@ -114,6 +134,12 @@
                                         </div>
                                         <div>
                                             <div class="item-name"><?php echo htmlspecialchars($item['product_name'] ?? 'Sản phẩm đã bị xóa'); ?></div>
+                                            <?php if (!empty($item['attributes'])): ?>
+                                                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;"><?php echo htmlspecialchars($item['attributes']); ?></div>
+                                            <?php endif; ?>
+                                            <?php if (!empty($item['sku'])): ?>
+                                                <div style="font-size: 11px; color: #9ca3af; margin-top: 2px;">SKU: <?php echo htmlspecialchars($item['sku']); ?></div>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </td>
@@ -139,10 +165,6 @@
                     <span class="summary-value">
                         <?php echo array_sum(array_column($items, 'quantity')); ?> cái
                     </span>
-                </div>
-                <div class="summary-row">
-                    <span class="summary-label">Giảm giá:</span>
-                    <span class="summary-value"><?php echo number_format($order['discount_amount'] ?? 0, 0, ',', '.'); ?> ₫</span>
                 </div>
                 <div class="summary-row total">
                     <span>Tổng cộng:</span>
