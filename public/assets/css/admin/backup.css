@@ -1,0 +1,254 @@
+.admin-content {
+  flex: 1;
+  padding: 32px 36px;
+  background: #f5f6fa;
+  min-height: 100vh;
+}
+.admin-header {
+  margin-bottom: 28px;
+}
+.admin-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1e1e2f;
+  margin: 0 0 6px;
+}
+.admin-title i {
+  color: #7c6cf0;
+  margin-right: 8px;
+}
+.admin-subtitle {
+  color: #6b7280;
+  margin: 0;
+  font-size: 0.95rem;
+}
+.admin-subtitle code {
+  background: #ede9fe;
+  color: #6d28d9;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Alert */
+.backup-alert {
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+.backup-alert.success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+.backup-alert.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* Grid */
+.backup-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .backup-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cards */
+.backup-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+}
+.backup-card-header {
+  padding: 18px 22px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1e1e2f;
+  border-bottom: 1px solid #f0f0f5;
+}
+.backup-card-header i {
+  color: #7c6cf0;
+  margin-right: 8px;
+}
+.backup-card-body {
+  padding: 20px 22px;
+}
+
+/* Select all/none */
+.backup-select-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.btn-link {
+  background: none;
+  border: none;
+  color: #7c6cf0;
+  cursor: pointer;
+  font-size: 0.88rem;
+  padding: 0;
+  font-weight: 500;
+}
+.btn-link:hover {
+  text-decoration: underline;
+}
+.divider {
+  color: #d1d5db;
+}
+
+/* Table list */
+.table-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 420px;
+  overflow-y: auto;
+}
+.table-list-item {
+  border-bottom: 1px solid #f5f5f8;
+}
+.table-list-item:last-child {
+  border-bottom: none;
+}
+.table-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.table-checkbox-label:hover {
+  background: #faf9ff;
+}
+.table-checkbox {
+  accent-color: #7c6cf0;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.table-icon {
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+.table-name {
+  flex: 1;
+  font-size: 0.92rem;
+  color: #374151;
+}
+.table-row-count {
+  font-size: 0.82rem;
+  color: #9ca3af;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* Info box */
+.backup-info-box {
+  background: #faf9ff;
+  border: 1px solid #ede9fe;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+.backup-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+.backup-info-row:not(:last-child) {
+  border-bottom: 1px solid #ede9fe;
+}
+.backup-info-row i {
+  margin-right: 6px;
+  color: #a78bfa;
+}
+.backup-info-row strong {
+  color: #1e1e2f;
+}
+
+/* Note */
+.backup-note {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  color: #1d4ed8;
+  margin-bottom: 20px;
+}
+.backup-note i {
+  margin-right: 6px;
+}
+.backup-note code {
+  background: #dbeafe;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* Download button */
+.btn-backup {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7c6cf0, #a78bfa);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition:
+    opacity 0.2s,
+    transform 0.1s;
+}
+.btn-backup:hover {
+  opacity: 0.9;
+}
+.btn-backup:active {
+  transform: scale(0.98);
+}
+.btn-backup:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Progress */
+.backup-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  color: #7c6cf0;
+  font-size: 0.9rem;
+}
+.backup-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #ede9fe;
+  border-top-color: #7c6cf0;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

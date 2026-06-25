@@ -40,7 +40,7 @@ class Router {
             if ($route['httpMethod'] === $httpMethod && $this->match($route['path'], $url, $params)) {
                 $controllerFile = __DIR__ . '/../app/controllers/' . $route['controller'] . '.php';
                 require_once $controllerFile;
-                $ctrl = new $route['controller']();
+                $ctrl = new $route['controller']();// để khởi tạo __construct (PHP được thiết kế)
                 call_user_func_array([$ctrl, $route['method']], $params);
                 return;
             }

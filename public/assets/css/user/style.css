@@ -31,7 +31,7 @@ html {
 }
 
 body {
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: "Be Vietnam Pro", sans-serif;
   background: var(--cream);
   color: var(--soil);
   overflow-x: clip;
@@ -72,7 +72,7 @@ body::before {
   border-radius: 50px;
   font-size: 14px;
   font-weight: 600;
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: "Be Vietnam Pro", sans-serif;
   text-decoration: none;
   letter-spacing: 0.02em;
   transition: all 0.25s ease;
@@ -107,13 +107,14 @@ body::before {
 
 /* --- Đăng xuất --- */
 .btn-logout-pill {
-  background: rgba(255, 59, 113, 0.12);
-  color: #ff6f91;
+  background: rgba(95, 24, 106, 0.12);
+  color: var(--cream);
   border-color: rgba(255, 59, 113, 0.45);
+  text-decoration: none;
 }
 
 .btn-logout-pill:hover {
-  background: #ff3b71;
+  background: #ca5576;
   border-color: #ff3b71;
   color: #fff;
   box-shadow: 0 5px 18px rgba(255, 59, 113, 0.4);
@@ -524,7 +525,6 @@ body::before {
 .no-products p {
   margin: 0;
 }
-
 
 /* ===== FOOTER ===== */
 .footer {
@@ -958,7 +958,6 @@ body::before {
   }
 }
 
-
 /* ===== AUTH WRAP — MOBILE OVERRIDE ===== */
 @media (max-width: 768px) {
   .nav-auth-wrap {
@@ -981,4 +980,7 @@ body::before {
   .nav-auth-btn span {
     display: none; /* chỉ hiện icon trên mobile để tiết kiệm chỗ */
   }
+}
+.dropdown-user {
+  position: relative;
 }

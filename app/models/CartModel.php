@@ -3,101 +3,224 @@
 require_once __DIR__ . '/../../core/Model.php';
 
 class CartModel extends Model{
-    public function addToCart($productId, $variantId){
-        $productId= (int)$productId;
-        $variantId= (int)$variantId;
-        
-        //tạm dùng user_id=2
-        $cart= $this->fetchOne("
-        SELECT cart_id
-        FROM cart
-        WHERE user_id=2
-        ");
-        $cartId = $cart['cart_id'];
 
-        $variant = $this->fetchOne("
-        SELECT price
-        FROM product_variants
-        WHERE variant_id= $variantId
+    public function getCartByUser($userId)
+    {
+        $cart = $this->fetchOne("
+            SELECT *
+            FROM cart
+            WHERE user_id = $userId
         ");
-        $price =$variant['price'];
-        
-        // Kiểm tra sản phẩm đã có trong giỏ chưa
-        $exists=$this->fetchOne("
+
+        if (!$cart) {
+
+            $this->query("
+                INSERT INTO cart(user_id)
+                VALUES($userId)
+            ");
+
+            $cart = $this->fetchOne("
+                SELECT *
+                FROM cart
+                WHERE user_id = $userId
+            ");
+        }
+
+        return $cart;
+    }
+    public function addToCart($cartId,$productId,$variantId)
+    {
+        $exist = $this->fetchOne("
             SELECT cart_item_id, quantity
             FROM cart_items
-            WHERE cart_id= $cartId
-            AND variant_id=$variantId
+            WHERE cart_id = $cartId
+            AND variant_id = $variantId
         ");
 
-        if($exists){
-            //Nếu đã có thì thêm vào
-            $this->query("
-            UPDATE cart_items
-            SET quantity=quantity +1
-            WHERE cart_item_id={$exists['cart_item_id']}
+        // Nếu đã có trong giỏ
+        if($exist){
+
+            $newQty = $exist['quantity'] + 1;
+
+            return $this->query("
+                UPDATE cart_items
+                SET quantity = $newQty
+                WHERE cart_item_id = {$exist['cart_item_id']}
             ");
-        }else{
-            //Nếu chưa có thì thêm mới
-        $this->query("
+        }
+
+        // Nếu chưa có thì INSERT
+        $variant = $this->fetchOne("
+            SELECT price
+            FROM product_variants
+            WHERE variant_id = $variantId
+        ");
+
+        $price = $variant['price'];
+
+        return $this->query("
             INSERT INTO cart_items
             (
-            cart_id,
-            product_id,
-            variant_id,
-            quantity,
-            price_snapshot
+                cart_id,
+                product_id,
+                variant_id,
+                quantity,
+                price_snapshot
             )
             VALUES
             (
-            $cartId,
-            $productId,
-            $variantId,
-            1,
-            $price
+                $cartId,
+                $productId,
+                $variantId,
+                1,
+                $price
             )
         ");
-        }
     }
-    public function getCartItems(){
-        return $this->fetchAll("
+
+    public function getCartItems($cartId){
+    $sql=("
         SELECT 
             ci.cart_item_id,
+            ci.product_id,
+            ci.variant_id,
             ci.quantity,
             ci.price_snapshot,
 
             p.product_name,
             p.description,
 
-            pv.variant_id,
-            pv.sku
+            pv.variant_key
+            
         FROM cart_items ci
 
-        JOIN products p
+        INNER JOIN products p
             ON ci.product_id = p.product_id
 
         LEFT JOIN product_variants pv
             ON ci.variant_id = pv.variant_id
         
-        WHERE ci.cart_id=1
+        WHERE ci.cart_id=$cartId
+        ORDER BY ci.cart_item_id DESC
     ");
+        $items = $this->fetchAll($sql);
+
+        foreach($items as &$item){
+            $ids=str_replace("_",",",$item['variant_key']);
+
+            $result=$this->fetchAll("
+            SELECT value_name
+            FROM attribute_values
+            WHERE value_id IN($ids)
+            ");
+
+            $item['variant_key']=implode("-", array_column($result,"value_name"));
+        }
+        return $items;
     }
 
-    public function updateQuantity($cartItemId,$quantity)
+    public function updateQuantity($cartItemId,$quantity,$cartId)
     {
-        $cartItemId=(int) $cartItemId;
-        $quantity = (int) $quantity;
+    $sql="
+        UPDATE cart_items
+        SET quantity=$quantity
+        WHERE cart_item_id=$cartItemId
+        AND cart_id=$cartId
+    ";
 
-        $this->query(
-            "UPDATE cart_items
-            SET quantity = $quantity
-            WHERE cart_item_id = $cartItemId"
-        );
+    return $this->query($sql);
     }
-    public function deleteItem($cartItemId) {
+   public function deleteItem($cartItemId,$cartId)
+    {
+        $sql="
+            DELETE FROM cart_items
+            WHERE cart_item_id=$cartItemId
+            AND cart_id=$cartId
+        ";
+
+        return $this->query($sql);
+    }
+
+
+    //đặt hàng
+    public function getUserInfo($userId)
+    {
+        return $this->fetchOne("
+            SELECT *
+            FROM users
+            WHERE user_id = $userId
+        ");
+    }
+
+    public function getDefaultAddress($userId)
+    {
+        return $this->fetchOne("
+            SELECT *
+            FROM addresses
+            WHERE user_id = $userId
+            AND is_default = 1
+            LIMIT 1
+        ");
+    }
+    public function saveUserPhone($userId,$phone)
+    {
+        return $this->query("
+            UPDATE users
+            SET phone = '$phone'
+            WHERE user_id = $userId
+        ");
+    }
+    public function saveAddress(
+        $userId,
+        $fullAddress,
+        $city
+    )
+    {
+        return $this->query("
+            INSERT INTO addresses
+            (
+                user_id,
+                label,
+                full_address,
+                city,
+                is_default
+            )
+            VALUES
+            (
+                $userId,
+                'Nhà',
+                '$fullAddress',
+                '$city',
+                1
+            )
+        ");
+    }
+    public function clearCart($cartId)
+    {
         return $this->query("
             DELETE FROM cart_items
-            WHERE cart_item_id = $cartItemId
-    ");
+            WHERE cart_id = $cartId
+        ");
     }
-}
+
+    public function getStockByVariant($variantId)
+    {
+        $result = $this->fetchOne("
+            SELECT stock_quantity
+            FROM product_variants
+            WHERE variant_id = $variantId
+        ");
+        return $result ? (int)$result['stock_quantity'] : 0;
+    }
+
+    public function reduceStock($variantId, $quantity)
+    {
+        return $this->query("
+            UPDATE product_variants
+            SET stock_quantity = stock_quantity - $quantity
+            WHERE variant_id = $variantId
+            AND stock_quantity >= $quantity
+        ");
+    }
+
+}  

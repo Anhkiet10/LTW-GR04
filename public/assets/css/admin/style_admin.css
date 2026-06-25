@@ -52,7 +52,7 @@ body {
 }
 
 .admin-menu li:last-child {
-  margin-top: auto;
+  margin-top: 80px;
   background: rgba(232, 39, 39, 0.61);
 }
 
@@ -330,6 +330,43 @@ body {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   animation: modalIn 0.22s ease;
+}
+.admin-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-avatar {
+  font-size: 36px;
+  color: var(--lavender);
+  flex-shrink: 0;
+}
+
+.admin-user-text {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.admin-user-name {
+  color: var(--linen);
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-user-role {
+  color: var(--sand);
+  font-size: 11px;
+  margin-top: 2px;
 }
 @keyframes modalIn {
   from {
