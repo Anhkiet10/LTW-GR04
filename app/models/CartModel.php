@@ -79,45 +79,51 @@ class CartModel extends Model{
     }
 
     public function getCartItems($cartId){
-    $sql=("
-        SELECT 
-            ci.cart_item_id,
-            ci.product_id,
-            ci.variant_id,
-            ci.quantity,
-            ci.price_snapshot,
+        $sql=("
+            SELECT 
+                ci.cart_item_id,
+                ci.product_id,
+                ci.variant_id,
+                ci.quantity,
+                ci.price_snapshot,
+                p.product_name,
+                p.description,
+                pv.variant_key
+            FROM cart_items ci
+            INNER JOIN products p ON ci.product_id = p.product_id
+            LEFT JOIN product_variants pv ON ci.variant_id = pv.variant_id
+            WHERE ci.cart_id=$cartId
+            ORDER BY ci.cart_item_id DESC
+        ");
 
-            p.product_name,
-            p.description,
-
-            pv.variant_key
-            
-        FROM cart_items ci
-
-        INNER JOIN products p
-            ON ci.product_id = p.product_id
-
-        LEFT JOIN product_variants pv
-            ON ci.variant_id = pv.variant_id
-        
-        WHERE ci.cart_id=$cartId
-        ORDER BY ci.cart_item_id DESC
-    ");
         $items = $this->fetchAll($sql);
 
         foreach($items as &$item){
-            $ids=str_replace("_",",",$item['variant_key']);
+            $variantKey = $item['variant_key'] ?? '';
 
-            $result=$this->fetchAll("
-            SELECT value_name
-            FROM attribute_values
-            WHERE value_id IN($ids)
+            if(empty($variantKey) || $variantKey === 'default'){
+                $item['variant_key'] = '';
+                continue;
+            }
+
+            $ids = str_replace("_", ",", $variantKey);
+
+            if(!preg_match('/^[\d,]+$/', $ids)){
+                $item['variant_key'] = '';
+                continue;
+            }
+
+            $result = $this->fetchAll("
+                SELECT value_name
+                FROM attribute_values
+                WHERE value_id IN($ids)
             ");
 
-            $item['variant_key']=implode("-", array_column($result,"value_name"));
+            $item['variant_key'] = implode("-", array_column($result, "value_name"));
         }
-        return $items;
-    }
+
+        return $items; 
+    }                   
 
     public function updateQuantity($cartItemId,$quantity,$cartId)
     {
