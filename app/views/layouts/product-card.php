@@ -39,7 +39,7 @@
     </a>
     <?php if (!isset($p['total_stock']) || $p['total_stock'] > 0): ?>
         <button class="btn btn-add-cart"
-            onclick="window.location.href='/WEB_GR4/products/<?php echo $p['product_id']; ?>'">+ Thêm vào giỏ</button>
+            onclick="window.location.href='/WEB_GR4/products/<?php echo $p['product_id']; ?>'">Xem chi tiết</button>
     <?php else: ?>
         <button class="btn btn-disabled" disabled>Hết hàng</button>
     <?php endif; ?>

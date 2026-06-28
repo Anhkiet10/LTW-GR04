@@ -20,16 +20,25 @@ WEB_GR4/
 │   │   └── AdminController.php
 │   │   └── AdminUserController.php
 │   │   └── OrderController.php
+│   │   └── ProfileController.php
+│   │   └── Admincategorycontroller.php
 │   ├── models/                 # Xử lý dữ liệu và tương tác với Database
 │   │   ├── ProductModel.php
+│   │   ├── Backupmodel.php
 │   │   ├── ProductModelAdmin.php
 │   │   ├── OrderModel.php
 │   │   └── UserModel.php
 │   │   └── UserModelAdmin.php
 │   │   └── CartModel.php
+│   │   └── CategoryModelAdmin.php
+│   │   └── ProfileModel.php
+│   │   └── OrderModelAdmin.php
 │   └── views/  # Giao diện hiển thị (HTML/PHP)
 │       ├── admin/
 │       │   ├──  home.php
+│       │   ├──  Backup.php
+│       │   ├──  Category.php
+│       │   ├──  Categoryform.php
 │       │   └──  Products.php
 │       │   └──  Orders.php
 │       │   └──  OrderDetail.php
@@ -49,6 +58,8 @@ WEB_GR4/
 │       │   └── checkout.php
 │       │   └── detail.php
 │       │   └── history.php
+│       │   └── payment.php
+│       │   └── guest_checkout.php
 │       │
 │       ├── layouts/            # Thành phần giao diện chung
 │       │   ├── header.php

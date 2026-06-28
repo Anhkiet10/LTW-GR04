@@ -88,12 +88,20 @@
                 <?php endif; ?>
 
                 <?php if ($product['total_stock'] > 0): ?>
-                    <button class="btn btn-add-cart" id="btnAddCart">
-                        <i class="fas fa-shopping-cart" style="color: rgb(255, 255, 255);"></i> Thêm vào giỏ hàng
-                    </button>
+                    <div class="detail-btn-group">
+                        <button class="btn-add-cart" id="btnAddCart">
+                            <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+                        </button>
+                        <button class="btn-buy" id="btnBuyNow"
+                            data-product-id="<?php echo (int)$product['product_id']; ?>"
+                            data-product-name="<?php echo htmlspecialchars($product['product_name'], ENT_QUOTES, 'UTF-8'); ?>"
+                            data-image-url="<?php echo htmlspecialchars($product['image_url'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                            <i class="fas fa-bolt"></i> Mua ngay
+                        </button>
+                    </div>
                 <?php else: ?>
-                    <button class="btn btn-disabled" disabled>
-                        <i class="fas fa-exclamation-circle" style="color: rgb(255, 255, 255);"></i> Hết hàng
+                    <button class="btn-disabled" disabled>
+                        <i class="fas fa-exclamation-circle"></i> Hết hàng
                     </button>
                 <?php endif; ?>
             </div>
@@ -102,5 +110,5 @@
 </section>
 
 <script src="/WEB_GR4/public/assets/js/user/product_detail.js"></script>
-
+<script src="/WEB_GR4/public/assets/js/user/Detailbuynow.js"></script>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

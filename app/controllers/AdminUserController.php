@@ -98,7 +98,7 @@ private function checkAdminAuth(): void
         $this->userModel->create($data);
 
         $this->setFlash('success', 'Thêm người dùng thành công!');
-        header('Location: /WEB_GR4/admin/users'); // ✅ Fix Bug 4
+        header('Location: /WEB_GR4/admin/users'); 
         exit;
     }
 
@@ -133,7 +133,7 @@ private function checkAdminAuth(): void
 
         if (!$user) {
             $this->setFlash('error', 'Người dùng không tồn tại.');
-            header('Location: /WEB_GR4/admin/users'); // ✅ Fix Bug 4
+            header('Location: /WEB_GR4/admin/users');
             exit;
         }
 
@@ -170,7 +170,7 @@ private function checkAdminAuth(): void
         $this->userModel->update($id, $data);
 
         $this->setFlash('success', 'Cập nhật người dùng thành công!');
-        header('Location: /WEB_GR4/admin/users'); // ✅ Fix Bug 4
+        header('Location: /WEB_GR4/admin/users'); 
         exit;
     }
 
@@ -247,7 +247,7 @@ private function checkAdminAuth(): void
     {
         return [
             'id'        => (int)($post['id']        ?? 0),
-            'full_name' => trim($post['full_name']   ?? ''),  // ✅ Fix Bug 1: form gửi full_name
+            'full_name' => trim($post['full_name']   ?? ''),  //  form gửi full_name
             'email'     => trim($post['email']       ?? ''),
             'phone'     => trim($post['phone']       ?? ''),
             'role'      => in_array($post['role'] ?? '', ['customer', 'admin']) ? $post['role'] : 'customer', // ✅ Fix Bug 2: DB dùng 'customer' không phải 'user'
@@ -260,7 +260,7 @@ private function checkAdminAuth(): void
     {
         $errors = [];
 
-        // ✅ Fix Bug 3: key phải là 'full_name' cho khớp với sanitizeInput
+        // key phải là 'full_name' cho khớp với sanitizeInput
         if (empty($data['full_name'])) {
             $errors['full_name'] = 'Họ tên không được để trống.';
         } elseif (mb_strlen($data['full_name']) < 2) {

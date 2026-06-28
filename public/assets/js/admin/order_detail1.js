@@ -1,5 +1,3 @@
-let currentOrderId = null;
-
 /* ── Toast ── */
 function showToast(msg, type = "success") {
   const icon = type === "success" ? "fa-circle-check" : "fa-circle-xmark";
@@ -18,7 +16,6 @@ function showConfirm({
   confirmClass = "btn-primary",
   onConfirm,
 }) {
-  // Xoá modal cũ nếu còn
   const old = document.getElementById("confirmModal");
   if (old) old.remove();
 
@@ -51,46 +48,6 @@ function showConfirm({
     onConfirm();
   };
 }
-
-/* ── Status modal ── */
-function openStatusModal(orderId, currentStatus) {
-  currentOrderId = orderId;
-  document.getElementById("statusSelect").value = currentStatus;
-  document.getElementById("statusModal").classList.add("active");
-}
-
-function closeStatusModal() {
-  document.getElementById("statusModal").classList.remove("active");
-  currentOrderId = null;
-}
-
-function updateOrderStatus() {
-  const status = document.getElementById("statusSelect").value;
-  if (!status) {
-    showToast("Vui lòng chọn trạng thái", "error");
-    return;
-  }
-
-  fetch("/WEB_GR4/admin/update-order-status", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ orderId: currentOrderId, status }),
-  })
-    .then((r) => r.json())
-    .then((data) => {
-      if (data.success) {
-        showToast("Cập nhật trạng thái thành công", "success");
-        setTimeout(() => location.reload(), 1000);
-      } else {
-        showToast("Lỗi: " + data.message, "error");
-      }
-    })
-    .catch(() => showToast("Có lỗi xảy ra", "error"));
-}
-
-document.getElementById("statusModal").addEventListener("click", function (e) {
-  if (e.target === this) closeStatusModal();
-});
 
 /* ── Payment actions ── */
 function approvePayment(orderId) {

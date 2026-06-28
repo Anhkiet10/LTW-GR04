@@ -278,18 +278,26 @@
 }
 
 /* ===== PRODUCT BUTTONS ===== */
+
+/* Wrapper 2 nút */
+.detail-btn-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* Nút Thêm vào giỏ hàng */
 .btn-add-cart {
-  background: linear-gradient(90deg, var(--plum), var(--lavender));
+  background: linear-gradient(135deg, var(--plum), var(--lavender));
   color: #fff;
-  width: 100%;
-  margin-top: 8px;
-  border-radius: 0 0 8px 8px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
   border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   cursor: pointer;
-  padding: 10px 24px;
-  font-size: 10px;
+  padding: 13px 18px;
+  font-size: 14px;
   font-family: "Lato", sans-serif;
   transition:
     transform 0.2s,
@@ -297,29 +305,77 @@
     opacity 0.2s;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  width: 100%;
 }
 
 .btn-add-cart:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(155, 142, 199, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.3);
 }
 
-.btn-disabled {
-  background: var(--accent);
-  color: var(--wood);
-  width: 100%;
-  margin-top: 8px;
-  cursor: not-allowed;
+.btn-add-cart:active {
+  transform: translateY(0);
+}
+
+/* Nút Mua ngay */
+.btn-buy {
+  background: linear-gradient(135deg, #e53935, #ef5350);
+  color: #fff;
   border: none;
-  border-radius: 0 0 8px 8px;
-  padding: 10px 24px;
-  font-size: 10px;
-  font-family: "Lato", sans-serif;
+  border-radius: 10px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  padding: 13px 18px;
+  font-size: 14px;
+  font-family: "Lato", sans-serif;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    opacity 0.2s;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.btn-buy:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(229, 57, 53, 0.35);
+}
+
+.btn-buy:active {
+  transform: translateY(0);
+}
+
+.btn-buy:disabled,
+.btn-buy[disabled] {
+  background: #bbb;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Nút hết hàng — full width */
+.btn-disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  width: 100%;
+  margin-top: 16px;
+  cursor: not-allowed;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 24px;
+  font-size: 14px;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 
@@ -379,6 +435,11 @@
   .attr-value-btn {
     padding: 6px 12px;
     font-size: 12px;
+  }
+
+  .detail-btn-group {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 }
 

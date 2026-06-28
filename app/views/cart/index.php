@@ -111,5 +111,6 @@
         <?php endif;?>
     </div>
 
-<script src="/WEB_GR4/public/assets/js/user/Cart.js"></script>
+<script src="/WEB_GR4/public/assets/js/user/Cart1.js"></script>
+<script src="/WEB_GR4/public/assets/js/user/Detailbuynow.js"></script>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

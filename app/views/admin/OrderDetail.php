@@ -9,14 +9,18 @@
             <div class="order-header">
                 <div class="order-title">
                     <i class="fas fa-receipt"></i>
-                    <h1>Đơn hàng #<?php echo $order['order_id']; ?></h1>
+                    <h1>Đơn hàng #<?php echo $order['order_id']; ?>
+                        <?php if (!empty($order['is_guest'])): ?>
+                            <span style="font-size:13px;background:#fef3c7;color:#92400e;padding:2px 10px;border-radius:12px;margin-left:8px;font-weight:600;vertical-align:middle;">Khách vãng lai</span>
+                        <?php endif; ?>
+                    </h1>
                 </div>
                 <span class="status-badge status-<?php echo $order['status']; ?>">
                     <?php
                         $statusMap = [
-                            'pending' => 'Chờ xử lý',
-                            'paid' => 'Đã thanh toán',
-                            'shipping' => 'Đang giao',
+                            'pending'   => 'Chờ xử lý',
+                            'confirmed' => 'Đã xác nhận',
+                            'shipping'  => 'Đang giao',
                             'completed' => 'Hoàn thành',
                             'cancelled' => 'Đã hủy'
                         ];
@@ -41,6 +45,12 @@
                         <span class="info-label">Điện thoại:</span>
                         <span class="info-value"><?php echo htmlspecialchars($order['phone'] ?? 'N/A'); ?></span>
                     </div>
+                    <?php if (!empty($order['is_guest'])): ?>
+                    <div class="info-row" style="margin-top:8px;padding-top:8px;border-top:1px dashed #e5e7eb;">
+                        <span class="info-label" style="color:#92400e;"><i class="fas fa-user-clock"></i> Loại:</span>
+                        <span class="info-value" style="color:#92400e;font-weight:600;">Khách vãng lai (chưa có tài khoản)</span>
+                    </div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Shipping Address -->
@@ -174,6 +184,22 @@
 
             <!-- Actions -->
             <div class="action-bar">
+                <?php if (($order['payment_status'] ?? '') === 'processing'): ?>
+                <div style="display:flex;gap:10px;align-items:center;padding:14px 18px;background:#fef9c3;border:1.5px solid #eab308;border-radius:10px;margin-bottom:16px;">
+                    <span style="font-weight:600;color:#92400e;flex:1;">
+                        Khách đã báo chuyển khoản — vui lòng kiểm tra app ngân hàng trước khi duyệt.
+                    </span>
+                    <button onclick="approvePayment(<?php echo $order['order_id']; ?>)"
+                        style="padding:8px 18px;background:#16a34a;color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;">
+                        Duyệt (Đã nhận tiền)
+                    </button>
+                    <button onclick="rejectPayment(<?php echo $order['order_id']; ?>)"
+                        style="padding:8px 18px;background:#dc2626;color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;">
+                        Từ chối
+                    </button>
+                </div>
+                <?php endif; ?>
+
                 <button class="btn-primary" onclick="window.print()">
                     <i class="fas fa-print"></i> In đơn hàng
                 </button>
@@ -181,9 +207,10 @@
                     <i class="fas fa-arrow-left"></i> Quay lại
                 </a>
             </div>
+
         </div>
     </main>
 </div>
-
+<script src="/WEB_GR4/public/assets/js/admin/order_detail1.js"></script>
 </body>
 </html>

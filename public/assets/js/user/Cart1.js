@@ -1,69 +1,32 @@
 // add to cart
 
-// function addToCart(productId, variantId = null) {
-//   if (!variantId) {
-//     alert("Vui lòng chọn phiên bản");
-//     return;
-//   }
-
-//   fetch("/WEB_GR4/cart/add", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       product_id: productId,
-//       variant_id: variantId,
-//     }),
-//   })
-//     .then((res) => res.json())
-//     .then((data) => {
-//       if (data.login) {
-//         window.location.href = "/WEB_GR4/login";
-//         return;
-//       }
-
-//       if (data.success) {
-//         showToast("Đã thêm vào giỏ hàng thành công!");
-//       } else {
-//         showToast("Có lỗi xảy ra!", "error");
-//       }
-//     });
-// }
-
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".cart-check").forEach((checkbox) => {
     checkbox.addEventListener("change", function () {
       updateTotal();
     });
   });
+
   // ADD +
   document.querySelectorAll(".plus").forEach((button) => {
     button.addEventListener("click", function () {
       let row = this.closest("tr");
       let quantity = row.querySelector(".quantity");
-
       let qty = parseInt(quantity.innerText) + 1;
-
       let cartItemId = this.dataset.id;
 
       fetch("/WEB_GR4/cart/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cart_item_id: cartItemId,
-          quantity: qty,
-        }),
+        body: JSON.stringify({ cart_item_id: cartItemId, quantity: qty }),
       })
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
             quantity.innerText = qty;
-
             let price = parseInt(
               row.querySelector(".price-cart").dataset.price,
             );
-
             row.querySelector(".subtotal").innerText =
               (price * qty).toLocaleString("vi-VN") + "đ";
             updateTotal();
@@ -77,11 +40,9 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
       let row = this.closest("tr");
       let quantity = row.querySelector(".quantity");
-
       let qty = parseInt(quantity.innerText);
 
       if (qty <= 1) return;
-
       qty--;
 
       let cartItemId = this.dataset.id;
@@ -89,23 +50,17 @@ document.addEventListener("DOMContentLoaded", function () {
       fetch("/WEB_GR4/cart/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cart_item_id: cartItemId,
-          quantity: qty,
-        }),
+        body: JSON.stringify({ cart_item_id: cartItemId, quantity: qty }),
       })
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
             quantity.innerText = qty;
-
             let price = parseInt(
               row.querySelector(".price-cart").dataset.price,
             );
-
             row.querySelector(".subtotal").innerText =
               (price * qty).toLocaleString("vi-VN") + "đ";
-
             updateTotal();
           }
         });
@@ -116,8 +71,6 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".btn-delete").forEach((button) => {
     button.addEventListener("click", function (e) {
       e.preventDefault();
-
-      // KHÔNG confirm nữa
 
       let cartItemId = this.dataset.id;
       let row = this.closest("tr");
@@ -142,20 +95,18 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
   });
+
   updateTotal();
 });
+
 function updateTotal() {
   let total = 0;
 
   document.querySelectorAll("tbody tr").forEach((row) => {
     let check = row.querySelector(".cart-check");
-
-    if (check.checked) {
+    if (check && check.checked) {
       let subtotal = row.querySelector(".subtotal").innerText;
-
-      subtotal = subtotal.replace(/\./g, "");
-      subtotal = subtotal.replace("đ", "").trim();
-
+      subtotal = subtotal.replace(/\./g, "").replace("đ", "").trim();
       total += Number(subtotal);
     }
   });
@@ -164,13 +115,14 @@ function updateTotal() {
     total.toLocaleString("vi-VN") + "đ";
 }
 
+// ===== NÚT ĐẶT HÀNG =====
 document
   .getElementById("btnOrder")
   .addEventListener("click", async function () {
     const checked = document.querySelectorAll(".cart-check:checked");
 
     if (checked.length === 0) {
-      alert("Vui lòng chọn ít nhất một sản phẩm!");
+      alert("Vui lòng chọn đầy đủ phiên bản sản phẩm trước khi mua");
       return;
     }
 
@@ -189,20 +141,17 @@ document
       return;
     }
 
-    // Đặt hàng luôn nếu đã có địa chỉ
-    const orderRes = await fetch("/WEB_GR4/cart/placeOrder", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ selected_ids: selectedIds }),
-    });
-    const order = await orderRes.json();
-
-    if (order.success) {
-      window.location.href = "/WEB_GR4/orders/" + order.order_id;
-    } else {
-      alert(order.message || "Có lỗi xảy ra!");
-    }
+    // Chuyển sang trang preview - CHƯA tạo đơn
+    goToPreview(selectedIds);
   });
+
+function goToPreview(selectedIds) {
+  // Truyền selected_ids qua sessionStorage (dùng ở payment.php) VÀ qua URL (dùng ở preview())
+  sessionStorage.setItem("pendingCartIds", JSON.stringify(selectedIds));
+  window.location.href = "/WEB_GR4/orders/preview?ids=" + selectedIds.join(",");
+}
+
+// ===== FORM ĐỊA CHỈ =====
 document.getElementById("addressForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -213,28 +162,13 @@ document.getElementById("addressForm").addEventListener("submit", function (e) {
     body: formData,
   })
     .then((res) => res.json())
-    .then(async (data) => {
+    .then((data) => {
       if (data.success) {
         showToast("Thêm thông tin thành công!");
         document.getElementById("addressModal").style.display = "none";
 
-        // Dùng lại selectedIds đã lưu trước đó
         const selectedIds = window._pendingSelectedIds || [];
-
-        setTimeout(async () => {
-          const orderRes = await fetch("/WEB_GR4/cart/placeOrder", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ selected_ids: selectedIds }),
-          });
-          const order = await orderRes.json();
-
-          if (order.success) {
-            window.location.href = "/WEB_GR4/orders/" + order.order_id;
-          } else {
-            alert(order.message || "Có lỗi xảy ra!");
-          }
-        }, 1000);
+        setTimeout(() => goToPreview(selectedIds), 800);
       }
     });
 });
