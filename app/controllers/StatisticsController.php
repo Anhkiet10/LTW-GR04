@@ -43,8 +43,8 @@ class StatisticsController extends Controller {
         $this->requireAdmin();
 
         // Lấy khoảng thời gian (mặc định là tháng này)
-        $from = $_GET['from'] ?? date('Y-m-01');
-        $to = $_GET['to'] ?? date('Y-m-t');
+        $from = $_GET['from'] ?? date('Y-01-01');  // Toàn bộ năm
+        $to = $_GET['to'] ?? date('Y-12-31');
 
         // Lấy dữ liệu thống kê
         $dashboardStats = [
