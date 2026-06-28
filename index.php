@@ -56,6 +56,21 @@ $router->get('/admin/orders',       'AdminController', 'orders');
 $router->get('/admin/order-detail', 'AdminController', 'orderDetail');
 $router->post('/admin/save-homepage',       'AdminController', 'saveHomepage');
 $router->post('/admin/update-order-status', 'AdminController', 'updateOrderStatus');
+
+// ===== ADMIN - THỐNG KÊ  =====
+$router->get('/admin/statistics', 'StatisticsController', 'index');
+$router->get('/admin/api/statistics/stats', 'StatisticsController', 'getStats');
+$router->get('/admin/api/statistics/monthly-chart', 'StatisticsController', 'getMonthlyChart');
+$router->get('/admin/api/statistics/top-products', 'StatisticsController', 'getTopProductsChart');
+$router->get('/admin/api/statistics/category', 'StatisticsController', 'getCategoryChart');
+$router->get('/admin/api/statistics/order-status', 'StatisticsController', 'getOrderStatusChart');
+// ----------------
+// $router->get('/admin/statistics', 'DashboardController', 'index');
+// $router->get('/admin/api/stats', 'DashboardController', 'getStats');
+// $router->get('/admin/api/monthly-chart', 'DashboardController', 'getMonthlyChart');
+// $router->get('/admin/api/top-products-chart', 'DashboardController', 'getTopProductsChart');
+// $router->get('/admin/api/category-chart', 'DashboardController', 'getCategoryChart');
+
 // thể loại admin
 $router->get('/admin/categories',         'AdminCategoryController', 'index');
 $router->get('/admin/categories/create',  'AdminCategoryController', 'create');
@@ -63,6 +78,7 @@ $router->get('/admin/categories/edit',    'AdminCategoryController', 'edit');
 $router->post('/admin/categories/store',  'AdminCategoryController', 'store');
 $router->post('/admin/categories/update', 'AdminCategoryController', 'update');
 $router->post('/admin/categories/delete', 'AdminCategoryController', 'delete');
+
 // ===== ADMIN - SẢN PHẨM =====
 $router->get('/admin/products',                      'AdminProductController', 'index');
 $router->get('/admin/products/getProduct',           'AdminProductController', 'getProduct');
@@ -86,6 +102,7 @@ $router->post('/admin/users/update',        'AdminUserController', 'update');
 $router->post('/admin/users/delete',        'AdminUserController', 'delete');
 $router->post('/admin/users/toggle-status', 'AdminUserController', 'toggleStatus');
 
+// ===== ADMIN - SAO LƯU =====
 $router->get('/admin/backup',          'AdminController', 'backup');
 $router->post('/admin/backup/download','AdminController', 'downloadBackup');
 
