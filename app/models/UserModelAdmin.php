@@ -108,9 +108,9 @@ class UserModelAdmin extends Model
             VALUES (:full_name, :email, :password_hash, :phone, :role, NOW())";
 
     $this->execute($sql, [
-        ':full_name'     => $data['full_name'] ?? $data['name'],        // ✅ Fix Bug 2
+        ':full_name'     => $data['full_name'] ?? $data['name'],        
         ':email'         => $data['email'],
-        ':password_hash' => $data['password'] ?? $data['password_hash'], // ✅ Fix Bug 1
+        ':password_hash' => $data['password'] ?? $data['password_hash'],
         ':phone'         => $data['phone'] ?? null,
         ':role'          => $data['role']  ?? 'customer',
     ]);
@@ -120,7 +120,7 @@ class UserModelAdmin extends Model
 
 public function update(int $id, array $data): void
 {
-    // ✅ Fix Bug 3a: map 'name' → 'full_name' nếu cần
+    //  map 'name' → 'full_name' nếu cần
     if (isset($data['name']) && !isset($data['full_name'])) {
         $data['full_name'] = $data['name'];
     }
@@ -136,7 +136,7 @@ public function update(int $id, array $data): void
         }
     }
 
-    // ✅ Fix Bug 3b: check key 'password' (từ controller) thay vì 'password_hash'
+    // check key 'password' (từ controller) thay vì 'password_hash'
     if (!empty($data['password'])) {
         $set[]                    = 'password_hash = :password_hash';
         $params[':password_hash'] = $data['password'];
@@ -174,7 +174,7 @@ private function buildWhereClause(array $filters): array
         $this->execute($sql, [':id' => $id]);
     }
 
-    // ✅ Fix Bug 5: method này bị thiếu, Controller gọi nhưng không có
+    // method này bị thiếu, Controller gọi nhưng không có
     public function updateStatus(int $id, string $status): void
     {
         $sql = "UPDATE {$this->table} SET status = :status WHERE user_id = :id";

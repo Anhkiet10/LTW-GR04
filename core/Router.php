@@ -23,7 +23,7 @@ class Router {
         // so khớp với route đã đăng ký là /products
         $base = '/WEB_GR4';
         if (strpos($url, $base) === 0) {
-            $url = substr($url, strlen($base));
+            $url = substr($url, strlen($base));// substr(url-đường dẫn,strlen()-lấy chiều dài)-- dùng để cắt đi với số chiều dài 
         }
         // Nếu URL rỗng thì mặc định là /
         // mục đích để khi truy cập vào http://localhost/WEB_GR4/ 
@@ -33,11 +33,13 @@ class Router {
          // Lấy phương thức HTTP hiện tại (GET, POST, etc.)
          // để so khớp với route đã đăng ký, ví dụ nếu truy cập bằng POST thì sẽ chỉ so 
          // khớp với các route có httpMethod là POST
-        $httpMethod = $_SERVER['REQUEST_METHOD'];
+        $httpMethod = $_SERVER['REQUEST_METHOD'];// lấy method được request từ server
 
         // Duyệt qua tất cả route đã đăng ký để tìm route phù hợp với URL và phương thức HTTP
-        foreach ($this->routes as $route) {
+        foreach ($this->routes as $route) { // mảng của class được tạo và truyền ở trên
+        //Với mỗi phần tử nằm trong mảng lớn $this->routes, hãy lôi nó ra và cho nó đóng vai trò là biến $route để xử lý
             if ($route['httpMethod'] === $httpMethod && $this->match($route['path'], $url, $params)) {
+                // so sánh httpMethod lúc đăng ký bên index với có trùng khớp hoàn toàn với phương thức HTTP mà người dùng đang gửi lên
                 $controllerFile = __DIR__ . '/../app/controllers/' . $route['controller'] . '.php';
                 require_once $controllerFile;
                 $ctrl = new $route['controller']();// để khởi tạo __construct (PHP được thiết kế)

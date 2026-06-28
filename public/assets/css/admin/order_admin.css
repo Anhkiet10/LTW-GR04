@@ -148,6 +148,11 @@
   color: #92400e;
 }
 
+.status-confirmed {
+  background: #ede9fe;
+  color: #4c1d95;
+}
+
 .status-paid {
   background: #d1fae5;
   color: #065f46;
@@ -166,6 +171,75 @@
 .status-cancelled {
   background: #fee2e2;
   color: #7f1d1d;
+}
+
+/* ── Nhãn trạng thái thanh toán ── */
+.payment-status-label {
+  font-size: 12px;
+  font-weight: 600;
+}
+.payment-status-label.pending {
+  color: #6b7280;
+}
+.payment-status-label.processing {
+  color: #d97706;
+}
+.payment-status-label.paid {
+  color: #16a34a;
+}
+.payment-status-label.failed {
+  color: #dc2626;
+}
+.payment-status-label.refunded {
+  color: #7c3aed;
+}
+
+.payment-method-label {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+/* ── Nút Duyệt / Từ chối ── */
+.payment-action-btns {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.btn-approve,
+.btn-reject {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    opacity 0.15s,
+    transform 0.1s;
+  white-space: nowrap;
+}
+
+.btn-approve {
+  background: #16a34a;
+  color: #fff;
+}
+.btn-approve:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.btn-reject {
+  background: #dc2626;
+  color: #fff;
+}
+.btn-reject:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
 }
 
 .action-buttons {
