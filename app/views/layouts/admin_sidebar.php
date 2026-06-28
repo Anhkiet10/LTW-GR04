@@ -1,3 +1,12 @@
+<?php
+function getMenuActiveClass($pagePath) {
+    $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $requestUri = rtrim($requestUri, '/');
+    $pagePath = rtrim($pagePath, '/');
+    
+    return ($requestUri === $pagePath || strpos($requestUri, $pagePath . '/') === 0) ? 'active' : '';
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -5,7 +14,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang chủ Admin</title>
     <link rel="stylesheet" href="/WEB_GR4/public/assets/css/admin/style_admin.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,14 +35,31 @@
             </div>
         </div>
         <ul class="admin-menu">
-            <li><a href="/WEB_GR4/admin" ><i class="fas fa-home"></i> Trang chủ</a></li>
+            <li><a href="/WEB_GR4/admin" class="<?php echo getMenuActiveClass('/WEB_GR4/admin'); ?>">
+                <i class="fas fa-home"></i> Trang chủ</a></li>
+            <li><a href="/WEB_GR4/admin/categories" class="<?php echo getMenuActiveClass('/WEB_GR4/admin/categories'); ?>">
+                <i class="fas fa-box"></i> Thể loại</a></li>
+            <li><a href="/WEB_GR4/admin/products" class="<?php echo getMenuActiveClass('/WEB_GR4/admin/products'); ?>">
+                <i class="fas fa-box-open"></i> Sản phẩm</a></li>
+            <li><a href="/WEB_GR4/admin/orders" class="<?php echo getMenuActiveClass('/WEB_GR4/admin/orders'); ?>">
+                <i class="fas fa-shopping-cart"></i> Đơn hàng</a></li>
+            <li><a href="/WEB_GR4/admin/users" class="<?php echo getMenuActiveClass('/WEB_GR4/admin/users'); ?>">
+                <i class="fas fa-users"></i> Người dùng</a></li>
+            <li><a href="/WEB_GR4/admin/statistics" class="<?php echo getMenuActiveClass('/WEB_GR4/admin/statistics'); ?>">
+                <i class="fas fa-chart-bar"></i> Thống kê</a></li>
+            <li><a href="/WEB_GR4/admin/backup" class="<?php echo getMenuActiveClass('/WEB_GR4/admin/backup'); ?>">
+                <i class="fa-solid fa-copy"></i> Sao lưu</a></li>
+
+
+            <!-- <li><a href="/WEB_GR4/admin" ><i class="fas fa-home"></i> Trang chủ</a></li>
             <li><a href="/WEB_GR4/admin/categories"><i class="fas fa-box"></i> Thể loại</a></li>
             <li><a href="/WEB_GR4/admin/products"><i class="fas fa-box-open"></i> Sản phẩm</a></li>
             <li><a href="/WEB_GR4/admin/orders"><i class="fas fa-shopping-cart"></i> Đơn hàng</a></li>
             <li><a href="/WEB_GR4/admin/users"><i class="fas fa-users"></i> Người dùng</a></li>
-            <li><a href="#"><i class="fas fa-chart-bar"></i> Thống kê</a></li>
-            <li><a href="/WEB_GR4/admin/backup"><i class="fa-solid fa-copy" style="color: rgb(177,151,252);"></i> Sao lưu</a></li>
+            <li><a href="/WEB_GR4/admin/statistics"><i class="fas fa-chart-bar"></i> Thống kê</a></li>
+            <li><a href="/WEB_GR4/admin/backup"><i class="fa-solid fa-copy" style="color: rgb(177,151,252);"></i> Sao lưu</a></li> -->
             <li><a href="/WEB_GR4/logout" class="logout-link"><i class="fa-solid fa-sign-out-alt" style="color: rgb(177, 151, 252);"></i> Đăng xuất</a></li>
         </ul>
     </aside>
-        
+    
+</body>
