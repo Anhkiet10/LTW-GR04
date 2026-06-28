@@ -49,13 +49,15 @@ class AdminController extends Controller {
 
         $orderModel = new OrderModel();
 
-        $page    = isset($_GET['page'])   ? max(1, (int)$_GET['page']) : 1;
-        $status  = isset($_GET['status']) ? $_GET['status']            : null;
-        $perPage = 15;
-        $offset  = ($page - 1) * $perPage;
+        $page      = isset($_GET['page'])   ? max(1, (int)$_GET['page']) : 1;
+        $status    = isset($_GET['status']) ? trim($_GET['status'])       : null;
+        $guestOnly = isset($_GET['guest'])  && $_GET['guest'] === '1';
+        $search    = isset($_GET['search']) ? trim($_GET['search'])       : '';
+        $perPage   = 15;
+        $offset    = ($page - 1) * $perPage;
 
-        $orders      = $orderModel->getAllOrders($perPage, $offset, $status);
-        $totalOrders = $orderModel->getTotalOrders($status);
+        $orders      = $orderModel->getAllOrders($perPage, $offset, $status, $guestOnly, $search);
+        $totalOrders = $orderModel->getTotalOrders($status, $guestOnly, $search);
         $stats       = $orderModel->getOrderStats();
         $totalPages  = ceil($totalOrders / $perPage);
 
@@ -67,6 +69,8 @@ class AdminController extends Controller {
             'totalPages'    => $totalPages,
             'totalOrders'   => $totalOrders,
             'currentStatus' => $status,
+            'guestOnly'     => $guestOnly,
+            'search'        => $search,
         ]);
     }
 

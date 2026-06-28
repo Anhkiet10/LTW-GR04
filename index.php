@@ -34,6 +34,14 @@ $router->post('/profile/update-address',     'ProfileController', 'updateAddress
 $router->post('/profile/delete-address',     'ProfileController', 'deleteAddress');
 $router->post('/profile/set-default-address','ProfileController', 'setDefaultAddress');
 
+// khách vãng lai
+$router->get('/orders/guest-checkout', 'OrderController', 'guestCheckout');
+$router->post('/orders/guest-place',   'OrderController', 'guestPlace');
+$router->post('/products/buy-now',     'ProductController', 'buyNow');
+
+$router->get('/orders/buynow-preview',  'OrderController',   'buyNowPreview');
+$router->post('/orders/buynow-place',   'OrderController',   'buyNowPlace');
+
 // ===== GIỎ HÀNG =====
 $router->get('/cart',          'CartController', 'index');
 $router->post('/cart/update',  'CartController', 'update');
@@ -43,13 +51,16 @@ $router->get('/cart/checkInfo', 'CartController', 'checkInfo');
 $router->post('/cart/saveAddress', 'CartController', 'saveAddress');
 
 $router->post('/cart/placeOrder', 'CartController', 'placeOrder');
+$router->get('/orders/preview',  'CartController', 'preview');   // 
 
 // ===== ĐƠN HÀNG =====
 $router->get('/checkout',       'OrderController', 'checkout');
 $router->post('/place-order',   'OrderController', 'placeOrder');
 $router->get('/orders',         'OrderController', 'history');
-$router->get('/orders/{id}',    'OrderController', 'detail');
-
+$router->get('/orders/pay/{id}',        'OrderController', 'pay');         
+$router->post('/orders/confirmPayment', 'OrderController', 'confirmPayment');
+$router->get('/orders/{id}',    'OrderController', 'detail');      
+$router->post('/orders/updatePaymentStatus', 'OrderController', 'updatePaymentStatus');
 // ===== ADMIN =====
 $router->get('/admin',              'AdminController', 'home');
 $router->get('/admin/orders',       'AdminController', 'orders');
