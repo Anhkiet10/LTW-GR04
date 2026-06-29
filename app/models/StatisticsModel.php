@@ -2,6 +2,7 @@
 /**
  * app/models/StatisticsModel.php
  * Model xử lý tất cả logic lấy dữ liệu thống kê từ database
+ * ✅ FIXED: Tính TẤT CẢ đơn hàng (không filter status)
  */
 
 require_once __DIR__ . '/../../config/database.php';
@@ -25,7 +26,7 @@ class StatisticsModel {
     public function getTotalRevenue($from = null, $to = null) {
         $query = "SELECT COALESCE(SUM(total_amount), 0) as total 
                   FROM orders 
-                  WHERE status IN ('paid', 'shipping', 'completed')";
+                  WHERE 1=1";
 
         if ($from && $to) {
             $query .= " AND DATE(order_date) BETWEEN ? AND ?";
@@ -51,7 +52,7 @@ class StatisticsModel {
     public function getTotalOrders($from = null, $to = null) {
         $query = "SELECT COUNT(*) as total 
                   FROM orders 
-                  WHERE status IN ('paid', 'shipping', 'completed')";
+                  WHERE 1=1";
 
         if ($from && $to) {
             $query .= " AND DATE(order_date) BETWEEN ? AND ?";
@@ -83,7 +84,7 @@ class StatisticsModel {
                   FROM order_items oi
                   JOIN products p ON oi.product_id = p.product_id
                   JOIN orders o ON oi.order_id = o.order_id
-                  WHERE o.status IN ('paid', 'shipping', 'completed')";
+                  WHERE 1=1";
 
         if ($from && $to) {
             $query .= " AND DATE(o.order_date) BETWEEN ? AND ?";
@@ -129,7 +130,6 @@ class StatisticsModel {
                     COUNT(*) as order_count
                   FROM orders
                   WHERE YEAR(order_date) = ?
-                  AND status IN ('paid', 'shipping', 'completed')
                   GROUP BY MONTH(order_date)
                   ORDER BY MONTH(order_date) ASC";
 
@@ -172,7 +172,7 @@ class StatisticsModel {
                   FROM order_items oi
                   JOIN products p ON oi.product_id = p.product_id
                   JOIN orders o ON oi.order_id = o.order_id
-                  WHERE o.status IN ('paid', 'shipping', 'completed')";
+                  WHERE 1=1";
 
         if ($from && $to) {
             $query .= " AND DATE(o.order_date) BETWEEN ? AND ?";
@@ -212,15 +212,11 @@ class StatisticsModel {
                   FROM categories c
                   LEFT JOIN products p ON c.category_id = p.category_id
                   LEFT JOIN order_items oi ON p.product_id = oi.product_id
-                  LEFT JOIN orders o ON oi.order_id = o.order_id";
+                  LEFT JOIN orders o ON oi.order_id = o.order_id
+                  WHERE 1=1";
 
         if ($from && $to) {
-            $query .= " WHERE (o.status IN ('paid', 'shipping', 'completed') 
-                              AND DATE(o.order_date) BETWEEN ? AND ?)
-                            OR o.order_id IS NULL";
-        } else {
-            $query .= " WHERE (o.status IN ('paid', 'shipping', 'completed') 
-                              OR o.order_id IS NULL)";
+            $query .= " AND DATE(o.order_date) BETWEEN ? AND ?";
         }
 
         $query .= " GROUP BY c.category_id, c.category_name
@@ -297,6 +293,26 @@ class StatisticsModel {
         $start = date('Y-01-01');
         $end = date('Y-12-31');
         return $this->getTotalRevenue($start, $end);
+    }
+    public function getOrdersByStatus($status, $from = null, $to = null) {
+        $query = "SELECT COUNT(*) as total 
+                FROM orders 
+                WHERE status = ?";
+
+        if ($from && $to) {
+            $query .= " AND DATE(order_date) BETWEEN ? AND ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param('sss', $status, $from, $to);
+            $stmt->execute();
+        } else {
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param('s', $status);
+            $stmt->execute();
+        }
+
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return (int)($result['total'] ?? 0);
     }
 }
 ?>
