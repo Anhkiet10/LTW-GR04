@@ -55,6 +55,10 @@ class StatisticsController extends Controller {
             'week_revenue' => $this->statisticsModel->getWeekRevenue(),
             'month_revenue' => $this->statisticsModel->getMonthRevenue(),
             'year_revenue' => $this->statisticsModel->getYearRevenue(),
+            'completed_orders' => $this->statisticsModel->getOrdersByStatus('completed', $from, $to),
+            'pending_orders' => $this->statisticsModel->getOrdersByStatus('pending', $from, $to),   
+            'shipping_orders' => $this->statisticsModel->getOrdersByStatus('shipping', $from, $to),
+            'confirmed_orders' => $this->statisticsModel->getOrdersByStatus('confirmed', $from, $to),
         ];
 
         // Lấy dữ liệu biểu đồ
@@ -306,19 +310,17 @@ class StatisticsController extends Controller {
     private function prepareOrderStatusChartData($orderStatus) {
         $labels = [
             'pending' => 'Chờ xử lý',
-            'paid' => 'Đã thanh toán',
             'shipping' => 'Đang vận chuyển',
             'completed' => 'Hoàn thành',
             'cancelled' => 'Đã hủy',
         ];
 
-        $orderedStatuses = ['pending', 'paid', 'shipping', 'completed', 'cancelled'];
+        $orderedStatuses = ['pending','shipping', 'completed', 'cancelled'];
         $orderedLabels = [];
         $orderedData = [];
         $statusColors = [];
         $colorMap = [
             'pending' => 'rgba(255, 193, 7, 0.8)',
-            'paid' => 'rgba(59, 130, 246, 0.8)',
             'shipping' => 'rgba(34, 197, 94, 0.8)',
             'completed' => 'rgba(34, 197, 94, 0.8)',
             'cancelled' => 'rgba(239, 68, 68, 0.8)',

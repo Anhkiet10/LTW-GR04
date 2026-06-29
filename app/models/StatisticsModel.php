@@ -294,5 +294,25 @@ class StatisticsModel {
         $end = date('Y-12-31');
         return $this->getTotalRevenue($start, $end);
     }
+    public function getOrdersByStatus($status, $from = null, $to = null) {
+        $query = "SELECT COUNT(*) as total 
+                FROM orders 
+                WHERE status = ?";
+
+        if ($from && $to) {
+            $query .= " AND DATE(order_date) BETWEEN ? AND ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param('sss', $status, $from, $to);
+            $stmt->execute();
+        } else {
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param('s', $status);
+            $stmt->execute();
+        }
+
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return (int)($result['total'] ?? 0);
+    }
 }
 ?>
