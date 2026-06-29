@@ -1,3 +1,11 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.main-content {
+  flex: 1;
+}
 .cart-container {
   max-width: 1100px;
   margin: 30px auto;
@@ -128,7 +136,7 @@
   background: #f5f5f5;
 }
 
-/* EMPTY CART */
+/* nhập thông tin đơn hàng */
 .cart-container h2 {
   text-align: center;
   margin-top: 40px;
@@ -155,7 +163,14 @@
   width: 450px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
-
+.address-content .close {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
 .address-content h3 {
   text-align: center;
   margin-bottom: 20px;
