@@ -156,4 +156,8 @@ class AuthController extends Controller
         header('Location: /WEB_GR4/login');
         exit;
     }
+    public function forgotPassword()
+    {
+        require_once __DIR__ . '/../views/auth/forgot-password.php';
+    }
 }
