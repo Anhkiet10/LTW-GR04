@@ -1,8 +1,4 @@
 <?php
-// app/views/admin/User.php
-// Nhận: $users, $total, $page, $totalPages, $filters
-
-// Flash message
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 ?>
@@ -11,7 +7,6 @@ unset($_SESSION['flash']);
 <link rel="stylesheet" href="/WEB_GR4/public/assets/css/admin/User.css">
 <div class="admin-content">
 
-  <!-- ── Header ─────────────────────────────────────────── -->
   <div class="page-header">
     <div>
       <h1 class="page-title">Quản lý người dùng</h1>
@@ -22,7 +17,6 @@ unset($_SESSION['flash']);
     </a>
   </div>
 
-  <!-- ── Flash ───────────────────────────────────────────── -->
   <?php if ($flash): ?>
     <div class="alert alert-<?= $flash['type'] === 'success' ? 'success' : 'danger' ?> alert-dismissible">
       <?= htmlspecialchars($flash['message']) ?>
@@ -30,7 +24,6 @@ unset($_SESSION['flash']);
     </div>
   <?php endif; ?>
 
-  <!-- ── Bộ lọc ──────────────────────────────────────────── -->
   <div class="filter-card">
     <form method="GET" action="/WEB_GR4/admin/users" class="filter-form">
       <input
@@ -54,7 +47,6 @@ unset($_SESSION['flash']);
     </form>
   </div>
 
-  <!-- ── Bảng danh sách ──────────────────────────────────── -->
   <div class="table-card">
     <?php if (empty($users)): ?>
       <div class="empty-state">
@@ -109,7 +101,6 @@ unset($_SESSION['flash']);
         </tbody>
       </table>
 
-      <!-- ── Phân trang ──────────────────────────────────── -->
       <?php if ($totalPages > 1): ?>
         <div class="pagination">
           <?php
@@ -139,9 +130,8 @@ unset($_SESSION['flash']);
   </div>
 </div>
 
-<!-- ── Modal xác nhận xoá ────────────────────────────────── -->
-<div id="deleteModal" class="modal" style="display:none">
-  <div class="modal-box">
+<div id="deleteModal" class="confirm-overlay" style="display:none">
+  <div class="confirm-box">
     <h3>Xác nhận xóa</h3>
     <p>Bạn có chắc muốn xóa người dùng <strong id="deleteUserName"></strong>?<br>
        Hành động này không thể hoàn tác.</p>
@@ -156,24 +146,3 @@ unset($_SESSION['flash']);
 </div>
 
 <script src="/WEB_GR4/public/assets/js/admin/User.js"></script>
-
-<!-- <script>
-// ── Xoá user ───────────────────────────────────────────────
-const modal = document.getElementById('deleteModal');
-
-document.querySelectorAll('.delete-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.getElementById('deleteUserId').value   = btn.dataset.id;
-    document.getElementById('deleteUserName').textContent = btn.dataset.name;
-    modal.style.display = 'flex';
-  });
-});
-
-document.getElementById('cancelDelete').addEventListener('click', () => {
-  modal.style.display = 'none';
-});
-
-modal.addEventListener('click', e => {
-  if (e.target === modal) modal.style.display = 'none';
-});
-</script> -->

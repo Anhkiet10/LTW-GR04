@@ -402,12 +402,6 @@
     gap: 12px;
   }
 }
-/* =======================================================
-   PATCH: orders_extra.css
-   Dán vào cuối file /public/assets/css/user/orders.css
-   ======================================================= */
-
-/* --- Order status badges (đồng bộ với DB enum) --- */
 .badge {
   display: inline-block;
   padding: 3px 10px;
@@ -437,7 +431,6 @@
   color: #721c24;
 }
 
-/* --- Payment status badges --- */
 .payment-badge {
   display: inline-block;
   padding: 2px 8px;
@@ -462,12 +455,10 @@
   color: #4a235a;
 }
 
-/* --- Stat cards thêm confirmed --- */
 .stat-confirmed {
   border-top: 3px solid #3d8bcd;
 }
 
-/* --- Payment info block --- */
 .order-payment-info {
   margin-top: 16px;
 }
@@ -476,7 +467,6 @@
   font-size: 14px;
 }
 
-/* --- Cancelled notice --- */
 .order-cancelled-notice {
   text-align: center;
   padding: 12px;
@@ -486,8 +476,6 @@
   font-weight: 600;
   margin: 12px 0;
 }
-
-/* --- Order total row --- */
 .order-total-row {
   display: flex;
   justify-content: flex-end;
@@ -501,7 +489,6 @@
   font-size: 20px;
 }
 
-/* --- Pay now button in table --- */
 .pay-now-btn {
   display: inline-block;
   padding: 4px 10px;
@@ -516,7 +503,6 @@
   background: #c0392b;
 }
 
-/* --- Product names cell truncation --- */
 .product-names-cell {
   max-width: 180px;
   overflow: hidden;
@@ -524,7 +510,6 @@
   white-space: nowrap;
 }
 
-/* --- text-muted --- */
 .text-muted {
   color: #999;
   font-size: 13px;

@@ -70,5 +70,3 @@
     </div>
 </div>
 </header>
-
-<!-- CATEGORIES BAR -->

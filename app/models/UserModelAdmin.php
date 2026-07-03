@@ -5,11 +5,6 @@ require_once __DIR__ . '/../../core/Model.php';
 class UserModelAdmin extends Model
 {
     protected string $table = 'users';
-
-    // ------------------------------------------------------------------ //
-    //  READ                                                                //
-    // ------------------------------------------------------------------ //
-
     /**
      * Lấy danh sách user có lọc + phân trang
      *
@@ -91,11 +86,6 @@ class UserModelAdmin extends Model
         $row = $this->queryOne($sql, [':uid' => $userId]);
         return (int)($row['cnt'] ?? 0);
     }
-
-    // ------------------------------------------------------------------ //
-    //  WRITE                                                               //
-    // ------------------------------------------------------------------ //
-
     /**
      * Tạo user mới
      *

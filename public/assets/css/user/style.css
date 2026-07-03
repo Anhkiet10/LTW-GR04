@@ -7,27 +7,25 @@
 }
 
 :root {
-  /* === LINEN · MIST · LAVENDER PALETTE === */
-  --linen: #f2eae0; /* warm linen — page background */
-  --mist: #b4d3d9; /* soft teal-mist — accents, borders */
-  --lavender: #bda6ce; /* mid lavender — secondary, tags */
-  --plum: #9b8ec7; /* deep lavender-plum — primary CTA */
+  --linen: #f2eae0;
+  --mist: #b4d3d9;
+  --lavender: #bda6ce;
+  --plum: #9b8ec7;
 
-  /* Derived tones */
-  --forest: #4a3f72; /* darkened plum — navbar bg */
-  --leaf: #9b8ec7; /* plum = primary buttons */
-  --sage: #bda6ce; /* lavender = borders */
-  --mint: #e8dff4; /* pale lavender = card borders */
-  --bark: #3a3050; /* deep purple-grey = footer */
-  --wood: #7a6baa; /* mid plum = hover, badges */
-  --sand: #c8bcd8; /* muted lavender = footer text */
-  --cream: #f2eae0; /* linen = page bg */
-  --soil: #2c2640; /* near-black purple = body text */
-  --accent: #d4c8e8; /* lightest lavender = disabled */
+  --forest: #4a3f72;
+  --leaf: #9b8ec7;
+  --sage: #bda6ce;
+  --mint: #e8dff4;
+  --bark: #3a3050;
+  --wood: #7a6baa;
+  --sand: #c8bcd8;
+  --cream: #f2eae0;
+  --soil: #2c2640;
+  --accent: #d4c8e8;
 }
 
 html {
-  overflow-x: clip; /* clip thay hidden — không phá vỡ position: sticky */
+  overflow-x: clip;
 }
 
 body {
@@ -56,7 +54,6 @@ body::before {
   z-index: 1;
 }
 
-/* ===== AUTH BUTTONS (Login / Logout) ===== */
 .nav-auth-wrap {
   display: flex;
   align-items: center;
@@ -89,7 +86,6 @@ body::before {
   transform: scale(1.15);
 }
 
-/* --- Đăng nhập --- */
 .btn-login-pill {
   background: var(--plum);
   color: #fff;
@@ -105,7 +101,6 @@ body::before {
   color: #fff;
 }
 
-/* --- Đăng xuất --- */
 .btn-logout-pill {
   background: rgba(95, 24, 106, 0.12);
   color: var(--cream);
@@ -120,7 +115,7 @@ body::before {
   box-shadow: 0 5px 18px rgba(255, 59, 113, 0.4);
   transform: translateY(-2px);
 }
-/* ===== NAVBAR ===== */
+
 .navbar {
   background: var(--forest);
   background-image: linear-gradient(135deg, var(--forest) 0%, var(--bark) 100%);
@@ -150,7 +145,6 @@ body::before {
   opacity: 0.85;
 }
 
-/* ===== CATEGORIES BAR ===== */
 .categories-bar {
   background: var(--forest);
   border-bottom: 1px solid var(--mint);
@@ -212,7 +206,6 @@ body::before {
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
 }
 
-/* ===== SEARCH BAR ===== */
 .search-wrap {
   position: relative;
   flex: 1;
@@ -251,7 +244,6 @@ body::before {
   background: var(--forest);
 }
 
-/* SUGGESTIONS */
 .search-suggestions {
   display: none;
   position: absolute;
@@ -314,7 +306,6 @@ body::before {
   font-size: 10px;
 }
 
-/* ===== NAV LINKS ===== */
 .nav-container {
   display: flex;
   align-items: center;
@@ -349,7 +340,6 @@ body::before {
   opacity: 1;
 }
 
-/* ===== DROPDOWN ===== */
 .has-dropdown {
   position: relative;
 }
@@ -404,7 +394,6 @@ body::before {
   color: var(--plum);
 }
 
-/* ===== HERO ===== */
 .hero {
   background:
     linear-gradient(
@@ -452,7 +441,6 @@ body::before {
   margin-right: auto;
 }
 
-/* ===== BUTTONS ===== */
 .btn {
   display: inline-block;
   padding: 10px 24px;
@@ -494,7 +482,6 @@ body::before {
   color: #fff;
 }
 
-/* ===== CATEGORY SECTION ===== */
 .category-section {
   padding: 40px 0 12px;
 }
@@ -526,7 +513,6 @@ body::before {
   margin: 0;
 }
 
-/* ===== FOOTER ===== */
 .footer {
   background: var(--forest);
   background-image: linear-gradient(180deg, var(--forest) 0%, var(--bark) 100%);
@@ -594,7 +580,6 @@ body::before {
   color: var(--sand);
 }
 
-/* ===== ZALO BUBBLE ===== */
 .zalo-bubble {
   position: fixed;
   bottom: 80px;
@@ -617,7 +602,6 @@ body::before {
   object-fit: cover;
 }
 
-/* ===== BACK TO TOP ===== */
 .back-to-top {
   display: none;
   position: fixed;
@@ -645,7 +629,6 @@ body::before {
   transform: translateY(-2px);
 }
 
-/* ===== TOAST ===== */
 .toast {
   position: fixed;
   bottom: 30px;
@@ -672,13 +655,11 @@ body::before {
   background: #9b6b8e;
 }
 
-/* ===== ADMIN LAYOUT ===== */
 .admin-layout {
   display: flex;
   min-height: 100vh;
 }
 
-/* ===== SIDEBAR ===== */
 .admin-sidebar {
   width: 260px;
   background: linear-gradient(180deg, var(--forest), var(--bark));
@@ -689,7 +670,6 @@ body::before {
   box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
 }
 
-/* LOGO */
 .admin-logo {
   color: var(--linen);
   font-size: 24px;
@@ -697,7 +677,6 @@ body::before {
   font-family: "Playfair Display", serif;
 }
 
-/* MENU */
 .admin-menu {
   list-style: none;
   padding: 0;
@@ -722,19 +701,16 @@ body::before {
   transform: translateX(4px);
 }
 
-/* ===== CONTENT ===== */
 .admin-content {
   flex: 1;
   background: var(--cream);
 }
 
-/* ===== ADMIN LAYOUT ===== */
 .admin-layout {
   display: flex;
   min-height: 100vh;
 }
 
-/* ===== SIDEBAR ===== */
 .admin-sidebar {
   width: 260px;
   background: linear-gradient(180deg, var(--forest) 0%, var(--bark) 100%);
@@ -752,7 +728,6 @@ body::before {
   z-index: 10;
 }
 
-/* ===== LOGO ===== */
 .admin-logo {
   color: var(--linen);
   font-size: 28px;
@@ -760,7 +735,6 @@ body::before {
   font-family: "Playfair Display", serif;
 }
 
-/* ===== MENU ===== */
 .admin-menu {
   list-style: none;
   padding: 0;
@@ -771,7 +745,6 @@ body::before {
   margin-bottom: 10px;
 }
 
-/* ===== MENU LINK ===== */
 .admin-menu a {
   display: flex;
   align-items: center;
@@ -790,19 +763,16 @@ body::before {
   transition: all 0.25s ease;
 }
 
-/* HOVER */
 .admin-menu a:hover {
   background: rgba(255, 255, 255, 0.12);
   transform: translateX(5px);
 }
 
-/* ===== CONTENT ===== */
 .admin-content {
   flex: 1;
   background: var(--cream);
 }
 
-/* ===== ADMIN HERO ===== */
 .admin-content .hero {
   min-height: 320px;
 
@@ -814,19 +784,15 @@ body::before {
 }
 
 .menu-toggle {
-  display: none; /* Trên Laptop/PC thì ẩn nút 3 gạch đi */
+  display: none;
   background: none;
   border: none;
   color: var(--linen);
   font-size: 20px;
   cursor: pointer;
 }
-/* ==========================================================================
-   BỔ SUNG CSS RESPONSIVE CHO MOBILE & TABLET (MÀN HÌNH DƯỚI 768PX)
-   ========================================================================== */
 
 @media (max-width: 768px) {
-  /* ── Navbar: dùng flexbox dọc, padding đủ chỗ cho logo + toggle ── */
   .navbar {
     padding: 0;
   }
@@ -840,7 +806,6 @@ body::before {
     box-sizing: border-box;
   }
 
-  /* Hàng đầu: toggle (trái) + logo (phải), chiều cao cố định */
   .nav-inner .logo,
   .menu-toggle {
     position: static;
@@ -856,13 +821,11 @@ body::before {
 
   .logo {
     order: 2;
-    /* đẩy logo sang phải bằng margin-left auto trên search-wrap */
     position: absolute;
     right: 16px;
     top: 14px;
   }
 
-  /* Search wrap xuống dòng thứ hai, full width */
   .search-wrap {
     order: 3;
     width: 100%;
@@ -871,7 +834,6 @@ body::before {
     box-sizing: border-box;
   }
 
-  /* Nav links: ẩn, khi .active thì hiện dưới search */
   .nav-container {
     display: none;
     order: 4;
@@ -906,12 +868,10 @@ body::before {
     white-space: normal;
   }
 
-  /* ── Categories bar: padding mobile ── */
   .categories-bar {
     padding: 10px 0;
   }
 
-  /* Categories list: wrap, không tràn ngang */
   .categories-list {
     display: flex;
     flex-wrap: wrap;
@@ -929,7 +889,6 @@ body::before {
     white-space: nowrap;
   }
 
-  /* ── Hero ── */
   .hero {
     padding: 50px 16px;
   }
@@ -942,14 +901,12 @@ body::before {
     font-size: 15px;
   }
 
-  /* ── Footer ── */
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 24px;
     text-align: center;
   }
 
-  /* ── Floating elements ── */
   .zalo-bubble {
     bottom: 70px;
     right: 15px;
@@ -958,7 +915,6 @@ body::before {
   }
 }
 
-/* ===== AUTH WRAP — MOBILE OVERRIDE ===== */
 @media (max-width: 768px) {
   .nav-auth-wrap {
     position: absolute;
@@ -978,7 +934,7 @@ body::before {
   }
 
   .nav-auth-btn span {
-    display: none; /* chỉ hiện icon trên mobile để tiết kiệm chỗ */
+    display: none;
   }
 }
 .dropdown-user {

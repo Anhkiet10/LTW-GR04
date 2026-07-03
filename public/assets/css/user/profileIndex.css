@@ -1,8 +1,3 @@
-/* =============================================
-   PROFILE PAGE
-   Palette: Linen · Mist · Lavender
-============================================= */
-
 .profile-page {
   min-height: 100vh;
   background: var(--cream);
@@ -315,7 +310,6 @@
   border-color: #b43f5e;
 }
 
-/* Ẩn display:inline trên form wrapper để layout đúng */
 .address-actions form {
   display: block !important;
 }
@@ -332,9 +326,6 @@
     gap: 6px;
   }
 }
-/* --- CSS BỔ SUNG CHO TRANG THÊM & SỬA ĐỊA CHỈ --- */
-
-/* Căn giữa và bọc khung trắng cho form địa chỉ */
 .profile-page .profile-section[style*="max-width:600px"] {
   background: #ffffff;
   border-radius: 16px;
@@ -344,10 +335,9 @@
   margin-bottom: 20px !important;
 }
 
-/* Định dáng riêng cho hàng Checkbox (Đặt làm mặc định) */
 .form-group--checkbox {
   display: flex;
-  flex-direction: row !important; /* Ghi đè cấu trúc cột của form-group thông thường */
+  flex-direction: row !important;
   align-items: center;
   margin-top: 15px;
   margin-bottom: 25px;
@@ -356,7 +346,7 @@
 .form-group--checkbox label {
   display: flex;
   align-items: center;
-  gap: 10px; /* Tạo khoảng cách giữa ô vuông và chữ */
+  gap: 10px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
@@ -364,24 +354,21 @@
   user-select: none;
 }
 
-/* Custom ô Checkbox cho mượt và hợp màu tím */
 .form-group--checkbox input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #6c3483; /* Màu tím thương hiệu khi được tích chọn */
+  accent-color: #6c3483;
   cursor: pointer;
   border-radius: 4px;
   border: 1px solid #dcdcdc;
 }
 
-/* Tùy biến lại placeholder cho chữ gợi ý nhạt đi dễ nhìn */
 .form-group input::placeholder {
   color: #b0b0b0;
   font-size: 14px;
   font-style: italic;
 }
 
-/* Điều chỉnh responsive cho nút bấm trên thiết bị di động */
 @media (max-width: 480px) {
   .profile-page .profile-section[style*="max-width:600px"] {
     padding: 20px;
@@ -397,70 +384,63 @@
     box-sizing: border-box;
   }
 }
-/* --- ĐỊNH DẠNG CẤU TRÚC CÁC Ô NHẬP LIỆU (FORM CHUNG) --- */
 
 .form-group {
   display: flex;
-  flex-direction: column; /* Đưa nhãn lên trên, input xuống dưới */
-  gap: 8px; /* Khoảng cách giữa nhãn và input */
-  margin-bottom: 20px; /* Khoảng cách giữa các hàng với nhau */
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
   text-align: left;
 }
 
 .form-group label {
   font-size: 14px;
   font-weight: 700;
-  color: var(--forest); /* Màu xanh Forest đồng bộ hệ thống */
+  color: var(--forest);
 }
 
 .form-group label .required {
-  color: #b43f5e; /* Màu đỏ cảnh báo trùng màu nút Đăng xuất */
+  color: #b43f5e;
   margin-left: 3px;
 }
 
-/* Định dáng cho các ô nhập liệu text/email/password */
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="tel"],
 .form-group input[type="password"] {
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid var(--mint); /* Viền mint nhẹ nhàng giống khung section */
-  border-radius: 10px; /* Bo góc đồng bộ với nút bấm */
+  border: 1px solid var(--mint);
+  border-radius: 10px;
   font-size: 14px;
   color: var(--soil);
   background-color: #ffffff;
-  box-sizing: border-box; /* Tránh tràn viền */
+  box-sizing: border-box;
   outline: none;
   transition: all 0.2s ease;
 }
 
-/* Hiệu ứng khi click chọn vào ô nhập liệu */
 .form-group input[type="text"]:focus,
 .form-group input[type="email"]:focus,
 .form-group input[type="tel"]:focus,
 .form-group input[type="password"]:focus {
   border-color: var(--plum);
-  box-shadow: 0 0 0 3px rgba(155, 142, 199, 0.15); /* Hiệu ứng đổ bóng mờ nhẹ */
+  box-shadow: 0 0 0 3px rgba(155, 142, 199, 0.15);
 }
-
-/* --- ĐỊNH DẠNG NÚT BẤM VÀ HÀNH ĐỘNG --- */
 
 .form-actions {
   display: flex;
   gap: 12px;
   margin-top: 28px;
-  justify-content: flex-start; /* Căn các nút sang bên trái */
+  justify-content: flex-start;
 }
 
-/* Nút chính (Thêm địa chỉ / Lưu thay đổi) */
 .profile-btn--primary {
   background: linear-gradient(135deg, var(--plum), var(--forest)) !important;
   color: white !important;
   cursor: pointer;
 }
 
-/* Nút phụ (Hủy) */
 .profile-btn--secondary {
   background: var(--linen) !important;
   color: var(--bark) !important;
@@ -471,8 +451,6 @@
   background: var(--lavender) !important;
   color: white !important;
 }
-
-/* --- THÔNG BÁO (ALERT) --- */
 
 .alert {
   padding: 14px 18px;
@@ -502,7 +480,6 @@
   border: 1px solid #f5c6d0;
 }
 
-/* Trạng thái khi alert chuẩn bị bị JS xóa khỏi DOM */
 .alert--hiding {
   opacity: 0;
   max-height: 0;
@@ -511,8 +488,6 @@
   padding-bottom: 0;
   border-width: 0;
 }
-
-/* --- TRẠNG THÁI LOADING / DISABLED CHO NÚT --- */
 
 .addr-btn:disabled,
 .profile-btn:disabled {
@@ -530,9 +505,6 @@
 .addr-btn--default:disabled {
   background: linear-gradient(135deg, var(--plum), var(--forest));
 }
-/* =============================================
-   CUSTOM CONFIRM MODAL (Hộp thoại xác nhận xóa)
-============================================= */
 
 .custom-modal {
   position: fixed;
@@ -540,7 +512,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4); /* Làm tối nền phía sau */
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -552,12 +524,11 @@
 .custom-modal-content {
   background: #ffffff;
   padding: 30px;
-  border-radius: 20px; /* Bo góc đồng bộ với profile-section */
+  border-radius: 20px;
   border: 1px solid var(--mint);
   width: 100%;
   max-width: 400px;
   text-align: center;
-  /* Đổ bóng đồng bộ với hệ thống của bạn */
   box-shadow:
     0 4px 6px rgba(155, 142, 199, 0.08),
     0 16px 40px rgba(155, 142, 199, 0.15);
@@ -566,15 +537,14 @@
 
 .custom-modal-content h3 {
   margin-top: 0;
-  color: var(--forest); /* Màu chữ xanh Forest */
+  color: var(--forest);
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 12px;
 }
 
 .custom-modal-content p {
-  color: var(--wood); /* Màu chữ gỗ nhạt */
-  font-size: 15px;
+  color: var(--wood);
   margin-bottom: 24px;
   line-height: 1.5;
 }
@@ -585,7 +555,6 @@
   gap: 12px;
 }
 
-/* Hiệu ứng xuất hiện mượt mà */
 @keyframes modalFadeIn {
   from {
     opacity: 0;

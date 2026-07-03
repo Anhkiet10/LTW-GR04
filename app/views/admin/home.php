@@ -2,7 +2,6 @@
 <link rel="stylesheet" href="/WEB_GR4/public/assets/css/admin/dashboard.css">
 <main class="admin-content home-builder">
     <div class="page-header">
-        <!-- ═══ DASHBOARD STATS - CHỈ HIỂN THỊ NẾU CÓ DATA ═══ -->
         <?php
             $stats = $dashboardStats ?? null;
             $chartData = $chartData ?? null;
@@ -15,7 +14,7 @@
                     <p>Tổng quan về doanh số, đơn hàng và sản phẩm bán chạy</p>
                 </div>
 
-                <!-- Filter theo ngày -->
+
                 <div class="filter-date">
                     <form method="GET" action="/WEB_GR4/admin" class="date-range-form">
                         <input type="date" name="from" value="<?= htmlspecialchars($from ?? '') ?>" class="date-input">
@@ -28,7 +27,6 @@
                 </div>
             </div>
 
-            <!-- ═══ STAT CARDS ═══ -->
             <div class="dashboard-stats">
 
                 <div class="stat-card stat-revenue">
@@ -78,7 +76,6 @@
 
             </div>
 
-            <!-- ═══ CHARTS SECTION ═══ -->
             <div class="charts-grid">
 
                 <!-- Biểu đồ doanh thu theo tháng -->
@@ -115,12 +112,12 @@
 
             </div>
 
-            <!-- ═══ DIVIDER ═══ -->
+
             <hr style="margin: 40px 0; border: none; border-top: 1px solid #e5e7eb;">
         <?php endif; ?>
     </div>
 
-    <!-- ═══ HOMEPAGE BUILDER ═══ -->
+
     <div class="page-header">
         <h1><i class="fas fa-edit" style="color:#7c3aed; margin-right:8px;"></i>Chỉnh sửa trang chủ</h1>
         <p>Thêm danh mục và sản phẩm sẽ hiển thị với khách hàng. Kéo thả để sắp xếp thứ tự.</p>
@@ -147,7 +144,7 @@
 </main>
 </div>
 
-<!-- ── Modal: chọn danh mục ── -->
+<!--  Modal: chọn danh mục  -->
 <div class="modal-overlay" id="catModal">
     <div class="modal">
         <div class="modal-header">
@@ -161,7 +158,7 @@
     </div>
 </div>
 
-<!-- ── Modal: chọn sản phẩm ── -->
+<!--  Modal: chọn sản phẩm  -->
 <div class="modal-overlay" id="prodModal">
     <div class="modal">
         <div class="modal-header">

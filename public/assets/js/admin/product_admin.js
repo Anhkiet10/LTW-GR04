@@ -1,9 +1,9 @@
-// ─── State ───────────────────────────────────────────────────────────────────
+//  State
 let currentDeleteId = null;
 let allAttributes = window.PRODUCT_ATTRIBUTES || [];
 let selectedAttrColumns = [];
 
-// ─── Filter / Search (server-side: điều hướng URL kèm query string) ──────────
+//  Filter / Search (server-side: điều hướng URL kèm query string)
 const searchInput = document.getElementById("searchInput");
 const filterCat = document.getElementById("filterCategory");
 const filterStatus = document.getElementById("filterStatus");
@@ -19,7 +19,7 @@ function navigateWithFilters() {
   window.location.href = `/WEB_GR4/admin/products${qs ? "?" + qs : ""}`;
 }
 
-// Đổi select (danh mục / trạng thái) → điều hướng ngay
+// Đổi select (danh mục / trạng thái) -> điều hướng ngay
 [filterCat, filterStatus].forEach((el) =>
   el?.addEventListener("change", navigateWithFilters),
 );
@@ -31,14 +31,14 @@ searchInput?.addEventListener("input", () => {
   searchDebounce = setTimeout(navigateWithFilters, 500);
 });
 
-// Nhấn Enter trong ô search → submit ngay, không cần chờ debounce
+// Nhấn Enter trong ô search -> submit ngay, không cần chờ debounce
 filterForm?.addEventListener("submit", (e) => {
   e.preventDefault();
   clearTimeout(searchDebounce);
   navigateWithFilters();
 });
 
-// ─── Modal helpers ────────────────────────────────────────────────────────────
+//  Modal helpers
 function openModal(id) {
   document.getElementById(id).classList.add("active");
 }
@@ -53,7 +53,7 @@ document.querySelectorAll(".modal-overlay").forEach((el) => {
   });
 });
 
-// ─── Open Add ────────────────────────────────────────────────────────────────
+//  Open Add
 document.getElementById("btnAddProduct")?.addEventListener("click", openAdd);
 
 function openAdd() {
@@ -70,7 +70,7 @@ function openAdd() {
   openModal("productModal");
 }
 
-// ─── Open Edit ────────────────────────────────────────────────────────────────
+//  Open Edit
 async function openEdit(id) {
   document.getElementById("modalTitle").textContent = "Chỉnh sửa sản phẩm";
   document.getElementById("btnSubmit").dataset.action = "update";
@@ -137,7 +137,7 @@ function closeModal() {
   closeOverlay("productModal");
 }
 
-// ─── Toggle label ─────────────────────────────────────────────────────────────
+//  Toggle label
 document
   .getElementById("fIsActive")
   ?.addEventListener("change", updateToggleLabel);
@@ -149,7 +149,7 @@ function updateToggleLabel() {
     : "Đã ẩn";
 }
 
-// ─── Image upload preview ─────────────────────────────────────────────────────
+//  Image upload preview
 document.getElementById("imagePreview")?.addEventListener("click", () => {
   document.getElementById("fImage").click();
 });
@@ -179,7 +179,7 @@ function resetImagePreview() {
   }
 }
 
-// ─── Attribute columns ────────────────────────────────────────────────────────
+//  Attribute columns
 function getAttributeById(attrId) {
   return allAttributes.find((a) => a.attribute_id == attrId);
 }
@@ -324,7 +324,7 @@ function refreshVariantAttributeSelects() {
   });
 }
 
-// ─── Custom confirm (thay thế window.confirm) ────────────────────────────────
+//  Custom confirm (thay thế window.confirm)
 function showConfirm(msg, okLabel = "Xác nhận xóa") {
   return new Promise((resolve) => {
     const overlay = document.getElementById("confirmModal");
@@ -359,7 +359,7 @@ function showConfirm(msg, okLabel = "Xác nhận xóa") {
   });
 }
 
-// ─── Attribute manage modal ───────────────────────────────────────────────────
+//  Attribute manage modal
 function openAttributeManageModal() {
   renderAttributeManageList();
   openModal("attributeManageModal");
@@ -623,7 +623,7 @@ document
     }
   });
 
-// ─── Variant rows ─────────────────────────────────────────────────────────────
+//  Variant rows
 function addVariantRow(v = null) {
   const tbody = document.getElementById("variantRows");
   const tr = document.createElement("tr");
@@ -683,7 +683,7 @@ function addVariantRow(v = null) {
         <td data-col="price"><input type="number" name="price[]" value="${price}" placeholder="0" min="0" class="v-input" required></td>
         <td><input type="number" name="stock[]" value="${stock}" placeholder="0" min="0" class="v-input"></td>
         <td class="text-center">
-            <input type="hidden" name="is_active[]" value="${active ? 1 : 0}" class="v-active-hidden">
+            <input type="hidden" name="variant_is_active[]" value="${active ? 1 : 0}" class="v-active-hidden">
             <input type="checkbox" value="1" ${active ? "checked" : ""} class="v-checkbox"
                    onchange="this.previousElementSibling.value = this.checked ? 1 : 0">
         </td>
@@ -786,7 +786,7 @@ function removeVariantRow(btn, vid) {
   }
 }
 
-// ─── Validate variants trước khi submit ──────────────────────────────────────
+//  Validate variants trước khi submit
 function validateVariants() {
   const rows = document.querySelectorAll("#variantRows tr");
   const keysSeen = new Set();
@@ -815,7 +815,7 @@ function validateVariants() {
   return null; // OK
 }
 
-// ─── Form submit ──────────────────────────────────────────────────────────────
+//  Form submit
 document
   .getElementById("productForm")
   ?.addEventListener("submit", async function (e) {
@@ -878,7 +878,7 @@ document
     }
   });
 
-// ─── Delete ───────────────────────────────────────────────────────────────────
+//  Delete
 function confirmDelete(id, name) {
   currentDeleteId = id;
   document.getElementById("deleteProductName").textContent = name;
@@ -927,7 +927,7 @@ document
     }
   });
 
-// ─── Upload ảnh biến thể ──────────────────────────────────────────────────────
+//  Upload ảnh biến thể
 function triggerVariantImageUpload(imgEl, variantId) {
   const productId = window._currentProductId ?? 0;
   if (!productId || !variantId) return;
@@ -976,7 +976,7 @@ function triggerVariantImageUpload(imgEl, variantId) {
   input.click();
 }
 
-// ─── Toast ────────────────────────────────────────────────────────────────────
+//  Toast
 function showToast(msg, type = "success") {
   const toast = document.getElementById("toast");
   if (!toast) return;

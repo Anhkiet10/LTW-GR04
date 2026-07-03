@@ -1,27 +1,10 @@
 <?php
 require_once __DIR__ . '/../../core/Model.php';
 
-/**
- * ProductModel — Frontend + Admin CRUD
- *
- * Thay đổi so với phiên bản cũ (schema v2):
- *  - Bỏ toàn bộ JOIN với variant_attribute_values (bảng đã bị DROP)
- *  - getVariants() / getVariantById() đọc variant_key rồi parse ra value_id
- *    để JOIN attribute_values, thay vì qua bảng trung gian
- *  - createVariant() / updateVariant() nhận thêm mảng value_ids để tự
- *    tạo variant_key (sort tăng dần, join bằng '_')
- *  - Thêm getVariantByKey() — lookup nhanh bằng (product_id, variant_key)
- *  - getAttributesForProduct() — trả về cấu trúc nhóm attribute cho trang detail
- */
 class ProductModel extends Model {
-
-    // =========================================================================
-    // HELPER: tạo variant_key từ mảng value_id
-    // =========================================================================
-
     /**
      * Nhận vào mảng value_id bất kỳ thứ tự, trả về chuỗi đã sort tăng dần.
-     * Ví dụ: [16, 7, 13] → '7_13_16'
+     * Ví dụ: [16, 7, 13] ->'7_13_16'
      */
     private function buildVariantKey(array $valueIds): string {
         if (empty($valueIds)) return 'default';
@@ -29,10 +12,6 @@ class ProductModel extends Model {
         sort($ids, SORT_NUMERIC);
         return implode('_', $ids);
     }
-
-    // =========================================================================
-    // FRONTEND
-    // =========================================================================
 
     /** Tất cả sản phẩm active, kèm giá và ảnh đại diện */
     public function getAll(?int $limit = null): array {
@@ -133,9 +112,6 @@ class ProductModel extends Model {
     public function getFeatured(int $limit = 8): array {
         return $this->getAll($limit);
     }
-
-    // ─── Ảnh ──────────────────────────────────────────────────────────────────
-
     public function getImages(int $productId): array {
         return $this->fetchAll("
             SELECT * FROM product_images
@@ -144,20 +120,7 @@ class ProductModel extends Model {
         ");
     }
 
-    // ─── Variants (frontend) ──────────────────────────────────────────────────
 
-    /**
-     * Lấy tất cả variants của sản phẩm, kèm tên attribute đọc được.
-     *
-     * Cách hoạt động với schema v2 (không có variant_attribute_values):
-     *   1. Lấy hàng từ product_variants → có cột variant_key (vd '7_13_16')
-     *   2. Parse variant_key thành danh sách value_id
-     *   3. JOIN attribute_values để lấy tên (GROUP_CONCAT trong subquery)
-     *
-     * Vì MariaDB không thể join động trên chuỗi variant_key một cách gọn,
-     * ta dùng FIND_IN_SET với separator thay bằng dấu phẩy — nên ta dùng
-     * REPLACE để đổi '_' → ',' rồi dùng FIND_IN_SET.
-     */
     public function getVariants(int $productId): array {
         $pid = (int)$productId;
         // Lấy raw variants trước
@@ -189,7 +152,7 @@ class ProductModel extends Model {
 
     /**
      * Lookup nhanh variant bằng (product_id + mảng value_id được chọn).
-     * Dùng trên trang detail khi user click chọn option: build key → query.
+     * Dùng trên trang detail khi user click chọn option: build key ->query.
      *
      * @param int   $productId
      * @param int[] $selectedValueIds  Mảng value_id user đã chọn (bất kỳ thứ tự)
@@ -206,19 +169,6 @@ class ProductModel extends Model {
         return $row;
     }
 
-    /**
-     * Trả về attributes + values thực sự xuất hiện trong variant_key của sản phẩm.
-     * Đọc tất cả variant_key từ DB → parse value_id → nhóm theo loại attribute.
-     *
-     * Output:
-     * [
-     *   ['attribute_id' => 1, 'attribute_name' => 'Màu sắc', 'values' => [
-     *       ['value_id' => 6, 'value_name' => 'Đen'],
-     *       ['value_id' => 7, 'value_name' => 'Bạc'],
-     *   ]],
-     *   ...
-     * ]
-     */
     public function getAttributesForProduct(int $productId): array {
         $pid = (int)$productId;
 
@@ -290,9 +240,6 @@ class ProductModel extends Model {
         ");
         return implode(', ', array_column($rows, 'value_name'));
     }
-
-    // ─── Danh mục ─────────────────────────────────────────────────────────────
-
     public function getAllCategories(): array {
         return $this->fetchAll("
             SELECT category_id, category_name
@@ -330,8 +277,6 @@ class ProductModel extends Model {
             ORDER  BY COALESCE(c.parent_id, c.category_id), c.category_id
         ");
     }
-
-    // ─── Homepage featured ─────────────────────────────────────────────────────
 
     public function getHomepageProducts(): array {
         return $this->fetchAll("
@@ -463,9 +408,6 @@ class ProductModel extends Model {
         ");
     }
 
-    // =========================================================================
-    // ADMIN — Product CRUD
-    // =========================================================================
 
     /** Tất cả sản phẩm (kể cả inactive) cho trang danh sách admin */
     public function getAllAdmin(): array {
@@ -553,9 +495,6 @@ class ProductModel extends Model {
         ");
         return (int)($row['cnt'] ?? 0) > 0;
     }
-
-    // ─── Admin: Variants ──────────────────────────────────────────────────────
-
     /**
      * Lấy variants của sản phẩm cho trang admin (bao gồm inactive).
      * Trả về attribute_label đọc được để hiển thị trong bảng.
@@ -630,9 +569,6 @@ class ProductModel extends Model {
     public function deleteVariant(int $variantId): void {
         $this->query("DELETE FROM product_variants WHERE variant_id = $variantId");
     }
-
-    // ─── Admin: Images ────────────────────────────────────────────────────────
-
     public function addProductImage(int $productId, string $url, int $isPrimary = 0): void {
         $url       = $this->escape($url);
         $sortOrder = $isPrimary ? 1 : 99;
@@ -658,8 +594,6 @@ class ProductModel extends Model {
             $this->addProductImage($productId, $url, 1);
         }
     }
-
-    // ─── Helper: slug ─────────────────────────────────────────────────────────
 
     public function makeSlug(string $name): string {
         $map = [

@@ -1,7 +1,4 @@
 <?php
-// app/views/admin/UserDetail.php
-// Nhận: $user, $orderCount
-
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 ?>
@@ -9,8 +6,6 @@ unset($_SESSION['flash']);
 <?php include __DIR__ . '/../layouts/admin_sidebar.php'; ?>
 <link rel="stylesheet" href="/WEB_GR4/public/assets/css/admin/UserDetail.css">
 <div class="admin-content">
-
-  <!-- ── Header ─────────────────────────────────────────── -->
   <div class="page-header">
     <div>
       <h1 class="page-title">Chi tiết người dùng</h1>
@@ -32,7 +27,6 @@ unset($_SESSION['flash']);
     </div>
   </div>
 
-  <!-- ── Flash ───────────────────────────────────────────── -->
   <?php if ($flash): ?>
     <div class="alert alert-<?= $flash['type'] === 'success' ? 'success' : 'danger' ?> alert-dismissible">
       <?= htmlspecialchars($flash['message']) ?>
@@ -42,7 +36,6 @@ unset($_SESSION['flash']);
 
   <div class="detail-grid">
 
-    <!-- ── Thông tin cơ bản ────────────────────────────── -->
     <div class="table-card detail-card">
       <div class="detail-card-header">
         <i class="fas fa-user"></i> Thông tin tài khoản
@@ -80,7 +73,6 @@ unset($_SESSION['flash']);
       </table>
     </div>
 
-    <!-- ── Thống kê ─────────────────────────────────────── -->
     <div class="detail-card">
 
       <div class="table-card stat-card">
@@ -98,7 +90,6 @@ unset($_SESSION['flash']);
   </div>
 </div>
 
-<!-- ── Modal xác nhận xoá ────────────────────────────────── -->
 <div id="deleteModal" class="modal" style="display:none">
   <div class="modal-box">
     <h3>Xác nhận xóa</h3>
@@ -113,109 +104,4 @@ unset($_SESSION['flash']);
     </div>
   </div>
 </div>
-
-<style>
-.detail-grid {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 20px;
-  align-items: start;
-}
-@media (max-width: 768px) {
-  .detail-grid { grid-template-columns: 1fr; }
-}
-
-.detail-card-header {
-  font-weight: 600;
-  font-size: 15px;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-primary, #111827);
-}
-
-.detail-avatar {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px;
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
-}
-
-.avatar-circle {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--primary, #6366f1);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-.detail-name {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: var(--text-primary, #111827);
-}
-
-.info-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.info-table tr td {
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--border-color, #f3f4f6);
-  font-size: 14px;
-  color: var(--text-primary, #374151);
-}
-.info-table tr:last-child td { border-bottom: none; }
-.info-label {
-  color: var(--text-secondary, #6b7280) !important;
-  width: 160px;
-  font-weight: 500;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.stat-card {
-  text-align: center;
-  padding: 28px 20px !important;
-}
-.stat-icon { font-size: 28px; color: var(--primary, #6366f1); margin-bottom: 8px; }
-.stat-value { font-size: 36px; font-weight: 700; color: var(--text-primary, #111827); line-height: 1; }
-.stat-label { font-size: 13px; color: var(--text-secondary, #6b7280); margin-top: 4px; }
-
-.back-link { color: var(--text-secondary, #6b7280); font-size: 14px; text-decoration: none; }
-.back-link:hover { color: var(--primary, #6366f1); }
-
-.btn-sm { padding: 6px 12px; font-size: 13px; }
-</style>
-
-<script>
-// ── Xoá user ───────────────────────────────────────────────
-const modal = document.getElementById('deleteModal');
-
-document.querySelectorAll('.delete-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.getElementById('deleteUserId').value        = btn.dataset.id;
-    document.getElementById('deleteUserName').textContent = btn.dataset.name;
-    modal.style.display = 'flex';
-  });
-});
-
-document.getElementById('cancelDelete').addEventListener('click', () => {
-  modal.style.display = 'none';
-});
-
-modal.addEventListener('click', e => {
-  if (e.target === modal) modal.style.display = 'none';
-});
-</script>
+<script src="/WEB_GR4/public/assets/js/admin/user_detail.js"></script>

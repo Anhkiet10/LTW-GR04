@@ -1,7 +1,4 @@
 <?php
-// app/views/admin/CategoryForm.php
-// Nhận: $category (array|null), $errors (array), $mode ('create'|'edit'), $parentList (array)
-
 $isEdit = $mode === 'edit';
 $title  = $isEdit ? 'Chỉnh sửa danh mục' : 'Thêm danh mục mới';
 $action = $isEdit
@@ -16,7 +13,6 @@ $val = fn(string $k, string $default = '') => htmlspecialchars($category[$k] ?? 
 
 <div class="admin-content">
 
-  <!-- ── Header ─────────────────────────────────────────────── -->
   <div class="page-header">
     <div>
       <a href="/WEB_GR4/admin/categories" class="back-link">
@@ -26,7 +22,6 @@ $val = fn(string $k, string $default = '') => htmlspecialchars($category[$k] ?? 
     </div>
   </div>
 
-  <!-- ── Form ────────────────────────────────────────────────── -->
   <div class="form-card">
     <form method="POST" action="<?= $action ?>">
       <?php if ($isEdit): ?>

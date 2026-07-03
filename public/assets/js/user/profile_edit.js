@@ -95,8 +95,6 @@ const ProfileModel = (() => {
   return { validate, passwordStrength };
 })();
 
-// ─── View ─────────────────────────────────────────────────────────────────────
-
 const ProfileView = (() => {
   // Cache các phần tử DOM
   const form = document.querySelector('form[action*="profile/update"]');
@@ -209,11 +207,9 @@ const ProfileView = (() => {
   };
 })();
 
-// ─── Controller ───────────────────────────────────────────────────────────────
-
 const ProfileController = (() => {
   function init() {
-    if (!ProfileView.form) return; // không ở trang edit → bỏ qua
+    if (!ProfileView.form) return; // không ở trang edit -> bỏ qua
 
     _setupRealtimeValidation();
     _setupPasswordStrength();
@@ -273,15 +269,13 @@ const ProfileController = (() => {
         return;
       }
 
-      // Nếu hợp lệ → hiển thị loading
+      // Nếu hợp lệ -> hiển thị loading
       ProfileView.setSubmitting(true);
     });
   }
 
   return { init };
 })();
-
-// ─── Boot ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener("DOMContentLoaded", () => {
   ProfileController.init();

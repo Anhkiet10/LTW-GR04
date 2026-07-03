@@ -6,11 +6,16 @@
 (function () {
   "use strict";
 
-  /* ─────────────────── State ─────────────────── */
   let guestInfo = {};
   let currentMethod = "cod";
 
-  /* ─────────────────── Elements ─────────────────── */
+  // Đơn hàng CHỈ được tạo khi người dùng bấm nút xác nhận (ở bước 2),
+  // không tạo sẵn lúc load trang hay lúc chuyển tab phương thức.
+  // orderCreationPromise/createdOrderId dùng để cache, tránh tạo trùng
+  // đơn nếu người dùng bấm nút nhiều lần hoặc đổi qua lại giữa 2 tab.
+  let orderCreationPromise = null;
+  let createdOrderId = null;
+
   const panel1 = document.getElementById("panel-step-1");
   const panel2 = document.getElementById("panel-step-2");
   const panelSuccess = document.getElementById("panel-success");
@@ -28,12 +33,12 @@
   const methodPanels = document.querySelectorAll(".gc-method-panel");
 
   const gcAddressConfirm = document.getElementById("gcAddressConfirm");
+  const gcQrLoading = document.getElementById("gcQrLoading");
   const gcQrNote = document.getElementById("gcQrNote");
   const gcQrImage = document.getElementById("gcQrImage");
   const gcSuccessMsg = document.getElementById("gcSuccessMsg");
   const gcSuccessDetail = document.getElementById("gcSuccessDetail");
 
-  /* ─────────────────── Helpers ─────────────────── */
   function showPanel(panel) {
     [panel1, panel2, panelSuccess].forEach(function (p) {
       p.classList.add("hidden");
@@ -80,7 +85,6 @@
         : '<i class="fa-solid fa-qrcode"></i> Xác nhận đặt hàng & Chuyển khoản';
   }
 
-  /* ─────────────────── Bước 1: Validate form ─────────────────── */
   function validateForm() {
     clearErrors();
     let ok = true;
@@ -133,8 +137,6 @@
 
     return ok;
   }
-
-  /* ─────────────────── Bước 1 → 2 ─────────────────── */
   infoForm.addEventListener("submit", function (e) {
     e.preventDefault();
     if (!validateForm()) return;
@@ -168,15 +170,11 @@
     setStepActive(2);
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
-
-  /* ─────────────────── Bước 2 → 1 ─────────────────── */
   btnBackStep.addEventListener("click", function () {
     showPanel(panel1);
     setStepActive(1);
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
-
-  /* ─────────────────── Chuyển tab thanh toán ─────────────────── */
   methodTabs.forEach(function (tab) {
     tab.addEventListener("click", function () {
       const method = this.dataset.method;
@@ -195,17 +193,13 @@
     });
   });
 
-  /* ─────────────────── Gửi đơn hàng ─────────────────── */
-  function placeOrder(method) {
-    const btn = method === "cod" ? btnConfirmCOD : btnConfirmQR;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...';
+  function ensureOrderCreated() {
+    if (createdOrderId) return Promise.resolve(createdOrderId);
+    if (orderCreationPromise) return orderCreationPromise;
 
     // Kiểm tra GC_ITEMS và GC_TOTAL được truyền từ PHP
     if (!Array.isArray(GC_ITEMS) || GC_ITEMS.length === 0) {
-      alert("Giỏ hàng trống, vui lòng thử lại.");
-      resetBtn(btn, method);
-      return;
+      return Promise.reject(new Error("Giỏ hàng trống, vui lòng thử lại."));
     }
 
     const payload = {
@@ -215,12 +209,11 @@
       guest_city: guestInfo.city,
       guest_address: guestInfo.address,
       note: guestInfo.note || "",
-      payment_method: method,
       items: GC_ITEMS,
       total: GC_TOTAL,
     };
 
-    fetch("/WEB_GR4/orders/guest-place", {
+    orderCreationPromise = fetch("/WEB_GR4/orders/guest-place", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -233,39 +226,58 @@
         return res.json();
       })
       .then(function (data) {
-        if (data.success) {
-          onOrderSuccess(data, method);
-        } else {
-          alert(data.message || "Có lỗi xảy ra, vui lòng thử lại.");
-          resetBtn(btn, method);
+        if (!data.success) {
+          orderCreationPromise = null; // cho phép thử lại
+          throw new Error(data.message || "Có lỗi khi tạo đơn hàng!");
         }
+        createdOrderId = data.order_id;
+        return createdOrderId;
       })
       .catch(function (err) {
-        console.error("placeOrder error:", err);
-        alert("Lỗi kết nối, vui lòng thử lại.");
-        resetBtn(btn, method);
+        orderCreationPromise = null;
+        throw err;
+      });
+
+    return orderCreationPromise;
+  }
+
+  function updateQrForOrder(orderId) {
+    const qrNote = "DATHANG " + orderId;
+    if (gcQrNote) gcQrNote.textContent = qrNote;
+    if (gcQrImage) {
+      gcQrImage.src =
+        "https://img.vietqr.io/image/MB-0973469734-print.png" +
+        "?amount=" +
+        parseInt(GC_TOTAL, 10) +
+        "&addInfo=" +
+        encodeURIComponent(qrNote);
+      gcQrImage.classList.remove("hidden");
+    }
+    if (gcQrLoading) gcQrLoading.classList.add("hidden");
+  }
+
+  function confirmPayment(orderId, method) {
+    return fetch("/WEB_GR4/orders/confirmPayment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ order_id: orderId, method: method }),
+    })
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (data) {
+        if (!data.success) {
+          throw new Error(data.message || "Có lỗi khi xác nhận thanh toán!");
+        }
+        return data;
       });
   }
 
-  /* ─────────────────── Sau khi đặt hàng thành công ─────────────────── */
   function onOrderSuccess(data, method) {
     const orderId = data.order_id;
+    // Mã QR thật đã được vẽ trước đó bởi updateQrForOrder() ngay khi tạo
+    // đơn; ở đây chỉ cần dùng lại cùng nội dung để hiển thị trong tóm tắt.
     const qrNote = "DATHANG " + orderId;
-
-    // Cập nhật QR với nội dung chuyển khoản chứa mã đơn hàng thật
-    if (method === "bank_transfer") {
-      if (gcQrNote) gcQrNote.textContent = qrNote;
-      if (gcQrImage) {
-        // Xây dựng lại URL QR hoàn toàn để tránh lỗi replace chuỗi động
-        const amount = parseInt(panel2.dataset.total || GC_TOTAL, 10);
-        gcQrImage.src =
-          "https://img.vietqr.io/image/MB-0973469734-print.png" +
-          "?amount=" +
-          amount +
-          "&addInfo=" +
-          encodeURIComponent(qrNote);
-      }
-    }
 
     // Nội dung panel thành công
     gcSuccessMsg.textContent =
@@ -306,11 +318,160 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  /* ─────────────────── Bind confirm buttons ─────────────────── */
-  btnConfirmCOD.addEventListener("click", function () {
-    placeOrder("cod");
+  btnConfirmCOD.addEventListener("click", async function () {
+    const btn = btnConfirmCOD;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...';
+
+    try {
+      const orderId = await ensureOrderCreated();
+      await confirmPayment(orderId, "cod");
+      onOrderSuccess({ order_id: orderId }, "cod");
+    } catch (err) {
+      console.error("COD error:", err);
+      showToast(err.message || "Có lỗi xảy ra, vui lòng thử lại.", "error");
+      resetBtn(btn, "cod");
+    }
   });
-  btnConfirmQR.addEventListener("click", function () {
-    placeOrder("bank_transfer");
+
+  btnConfirmQR.addEventListener("click", async function () {
+    const btn = this;
+
+    // Lần bấm thứ 2 trở đi (đã khoá) -> không xử lý lại ở đây,
+    // logic đã được gắn lại vào nút mới bên dưới.
+    if (btn.dataset.locked) return;
+
+    btn.disabled = true;
+    btn.dataset.locked = "1";
+    btn.innerHTML =
+      '<i class="fa-solid fa-spinner fa-spin"></i> Đang tạo đơn hàng...';
+    if (gcQrLoading) gcQrLoading.classList.remove("hidden");
+
+    try {
+      const orderId = await ensureOrderCreated();
+      updateQrForOrder(orderId);
+
+      btn.disabled = false;
+      btn.innerHTML =
+        '<i class="fa-solid fa-check"></i> Tôi đã chuyển khoản xong';
+
+      // Thay sự kiện cũ để tránh double-submit
+      const newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+
+      newBtn.addEventListener("click", async function () {
+        newBtn.disabled = true;
+        newBtn.innerHTML =
+          '<i class="fa-solid fa-spinner fa-spin"></i> Đang ghi nhận...';
+
+        try {
+          await confirmPayment(orderId, "bank_transfer");
+          onOrderSuccess({ order_id: orderId }, "bank_transfer");
+        } catch (e) {
+          showToast(e.message || "Lỗi kết nối hệ thống!", "error");
+          newBtn.disabled = false;
+          newBtn.innerHTML =
+            '<i class="fa-solid fa-check"></i> Tôi đã chuyển khoản xong';
+        }
+      });
+    } catch (error) {
+      showToast(error.message || "Có lỗi khi tạo đơn hàng!", "error");
+      btn.disabled = false;
+      btn.dataset.locked = "";
+      btn.innerHTML =
+        '<i class="fa-solid fa-qrcode"></i> Tạo đơn hàng & lấy mã QR';
+      if (gcQrLoading) gcQrLoading.classList.add("hidden");
+    }
   });
+})();
+/**
+ * toast.js
+ * Toast notification nhẹ, dùng chung cho các trang thanh toán,
+ * thay cho alert() (tránh hộp thoại "localhost says" xấu xí).
+ * Cách dùng: showToast("Nội dung", "error" | "success" | "info");
+ */
+(function () {
+  "use strict";
+
+  if (window.showToast) return; // đã có sẵn, tránh nạp trùng
+
+  const STYLE_ID = "appToastStyle";
+  const CONTAINER_ID = "appToastContainer";
+
+  function ensureStyle() {
+    if (document.getElementById(STYLE_ID)) return;
+    const style = document.createElement("style");
+    style.id = STYLE_ID;
+    style.textContent = [
+      "#" + CONTAINER_ID + "{position:fixed;top:20px;right:20px;z-index:99999;",
+      "display:flex;flex-direction:column;gap:10px;max-width:340px;}",
+      ".app-toast{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;",
+      "border-radius:10px;font-size:14px;line-height:1.45;color:#fff;",
+      "box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;transform:translateX(24px);",
+      "transition:opacity .25s ease,transform .25s ease;}",
+      ".app-toast.show{opacity:1;transform:translateX(0);}",
+      ".app-toast i{margin-top:2px;flex-shrink:0;}",
+      ".app-toast span{flex:1;}",
+      ".app-toast.error{background:#e53935;}",
+      ".app-toast.success{background:#16a34a;}",
+      ".app-toast.info{background:#1976d2;}",
+      "@media (max-width:480px){#" +
+        CONTAINER_ID +
+        "{left:16px;right:16px;max-width:none;}}",
+    ].join("");
+    document.head.appendChild(style);
+  }
+
+  function ensureContainer() {
+    let el = document.getElementById(CONTAINER_ID);
+    if (!el) {
+      el = document.createElement("div");
+      el.id = CONTAINER_ID;
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+
+  const ICONS = {
+    error: "fa-solid fa-circle-exclamation",
+    success: "fa-solid fa-circle-check",
+    info: "fa-solid fa-circle-info",
+  };
+
+  /**
+   * @param {string} message
+   * @param {"error"|"success"|"info"} [type="error"]
+   * @param {number} [duration=3500] thời gian hiện (ms)
+   */
+  window.showToast = function (message, type, duration) {
+    type = ICONS[type] ? type : "error";
+    duration = duration || 3500;
+
+    ensureStyle();
+    const container = ensureContainer();
+
+    const toast = document.createElement("div");
+    toast.className = "app-toast " + type;
+
+    const icon = document.createElement("i");
+    icon.className = ICONS[type];
+
+    const text = document.createElement("span");
+    text.textContent = message;
+
+    toast.appendChild(icon);
+    toast.appendChild(text);
+    container.appendChild(toast);
+
+    requestAnimationFrame(function () {
+      toast.classList.add("show");
+    });
+
+    setTimeout(function () {
+      toast.classList.remove("show");
+      setTimeout(function () {
+        toast.remove();
+      }, 250);
+    }, duration);
+  };
 })();

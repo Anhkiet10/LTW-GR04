@@ -172,3 +172,10 @@ document.getElementById("addressForm").addEventListener("submit", function (e) {
       }
     });
 });
+
+const modal = document.getElementById("addressModal");
+const closeBtn = document.querySelector(".close");
+
+closeBtn.addEventListener("click", function () {
+  modal.style.display = "none";
+});

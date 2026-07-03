@@ -41,9 +41,10 @@ class Router {
             if ($route['httpMethod'] === $httpMethod && $this->match($route['path'], $url, $params)) {
                 // so sánh httpMethod lúc đăng ký bên index với có trùng khớp hoàn toàn với phương thức HTTP mà người dùng đang gửi lên
                 $controllerFile = __DIR__ . '/../app/controllers/' . $route['controller'] . '.php';
-                require_once $controllerFile;
-                $ctrl = new $route['controller']();// để khởi tạo __construct (PHP được thiết kế)
-                call_user_func_array([$ctrl, $route['method']], $params);
+                require_once $controllerFile;// nạp vào chương trình hiện tại
+                $ctrl = new $route['controller']();// tạo object của clas controller từ đường dẫn đã đăng ký- với điều kiện khai báo class trùng với tên file controller
+                // khi tạo new object thì php tìm đến __construct từ lớp con đến cha.
+                call_user_func_array([$ctrl, $route['method']], $params);// gọi hàm và truyền tham số params
                 return;
             }
         }
@@ -59,9 +60,9 @@ class Router {
         $pattern = preg_replace('/\{(\w+)\}/', '([^/]+)', $routePath);// Biến {id} thành regex để bắt tham số 
         //(\w+)tìm + lưu dữ liệu để lấy ra sau
         $pattern = '#^' . $pattern . '$#';
-        if (preg_match($pattern, $url, $matches)) {
-            array_shift($matches);
-            $params = $matches;
+        if (preg_match($pattern, $url, $matches)) {//so sánh và gán url gốc và  ([^/]+) vào matches
+            array_shift($matches);//xóa giá trị ban đầu chỉ lấy  ([^/]+)
+            $params = $matches; // mảng params sẽ có các giá trị  ([^/]+)
             return true;
         }
         return false;

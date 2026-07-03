@@ -1,12 +1,8 @@
-// ─── Model ────────────────────────────────────────────────────────────────────
-
 const ProfileIndexModel = (() => {
   const AUTO_HIDE_DELAY = 3500;
 
   return { AUTO_HIDE_DELAY };
 })();
-
-// ─── View ─────────────────────────────────────────────────────────────────────
 
 const ProfileIndexView = (() => {
   const alertEls = document.querySelectorAll(".profile-content .alert");
@@ -75,8 +71,6 @@ const ProfileIndexView = (() => {
   };
 })();
 
-// ─── Controller ───────────────────────────────────────────────────────────────
-
 const ProfileIndexController = (() => {
   function init() {
     _setupAutoHideAlerts();
@@ -119,8 +113,6 @@ const ProfileIndexController = (() => {
 
   return { init };
 })();
-
-// ─── Boot ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener("DOMContentLoaded", () => {
   ProfileIndexController.init();

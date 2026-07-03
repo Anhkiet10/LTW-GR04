@@ -1,9 +1,3 @@
-/* =========================================================
-   style_user.css  —  Trang quản lý danh sách người dùng
-   Dùng kèm style_admin.css (sidebar, layout, body, font)
-   ========================================================= */
-
-/* ── Page header ── */
 .page-header {
   display: flex;
   align-items: flex-start;
@@ -24,7 +18,7 @@
   margin: 0;
 }
 
-/* ── Buttons ── */
+/*  Buttons  */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -75,7 +69,7 @@
   background: #dc2626;
 }
 
-/* ── Alert ── */
+/*  Alert  */
 .alert {
   display: flex;
   align-items: center;
@@ -112,7 +106,7 @@
   opacity: 1;
 }
 
-/* ── Filter card ── */
+/*  Filter card  */
 .filter-card {
   background: #fff;
   border: 1.5px solid #e5e7eb;
@@ -155,7 +149,7 @@
   cursor: pointer;
 }
 
-/* ── Table card ── */
+/*  Table card  */
 .table-card {
   background: #fff;
   border: 1.5px solid #e5e7eb;
@@ -164,7 +158,7 @@
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* ── Data table ── */
+/*  Data table  */
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -212,7 +206,7 @@
   color: #7c3aed;
 }
 
-/* ── Badges ── */
+/*  Badges  */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -231,7 +225,7 @@
   color: #4c1d95;
 }
 
-/* ── Action buttons ── */
+/*  Action buttons  */
 .action-cell {
   white-space: nowrap;
 }
@@ -266,7 +260,7 @@
   border-color: #ef4444;
 }
 
-/* ── Empty state ── */
+/*  Empty state  */
 .empty-state {
   text-align: center;
   padding: 56px 20px;
@@ -282,7 +276,7 @@
   margin: 0;
 }
 
-/* ── Pagination ── */
+/*  Pagination  */
 .pagination {
   display: flex;
   align-items: center;
@@ -321,8 +315,8 @@
   box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
 }
 
-/* ── Modal xóa ── */
-.modal {
+/*  Modal xóa (đổi tên tránh trùng .modal của style_admin.css)  */
+.confirm-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
@@ -331,9 +325,9 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  animation: fadeIn 0.18s ease;
+  animation: confirmFadeIn 0.18s ease;
 }
-@keyframes fadeIn {
+@keyframes confirmFadeIn {
   from {
     opacity: 0;
   }
@@ -342,7 +336,7 @@
   }
 }
 
-.modal-box {
+.confirm-box {
   background: #fff;
   border-radius: 16px;
   padding: 28px 30px;
@@ -380,7 +374,7 @@
   gap: 10px;
 }
 
-/* ── Responsive ── */
+/*  Responsive  */
 @media (max-width: 900px) {
   .admin-content {
     padding: 20px;

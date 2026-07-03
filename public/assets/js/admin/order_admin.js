@@ -1,6 +1,6 @@
 let currentOrderId = null;
 
-/* ── Toast ── */
+/*  Toast  */
 function showToast(msg, type = "success") {
   const icon = type === "success" ? "fa-circle-check" : "fa-circle-xmark";
   const t = document.createElement("div");
@@ -10,7 +10,7 @@ function showToast(msg, type = "success") {
   setTimeout(() => t.remove(), 2800);
 }
 
-/* ── Confirm modal ── */
+/*  Confirm modal  */
 function showConfirm({
   title,
   message,
@@ -52,7 +52,7 @@ function showConfirm({
   };
 }
 
-/* ── Status modal ── */
+/*  Status modal  */
 function openStatusModal(orderId, currentStatus) {
   currentOrderId = orderId;
   document.getElementById("statusSelect").value = currentStatus;
@@ -92,7 +92,7 @@ document.getElementById("statusModal").addEventListener("click", function (e) {
   if (e.target === this) closeStatusModal();
 });
 
-/* ── Payment actions ── */
+/*  Payment actions  */
 function approvePayment(orderId) {
   showConfirm({
     title:

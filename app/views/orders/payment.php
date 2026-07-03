@@ -1,6 +1,5 @@
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
 <link rel="stylesheet" href="/WEB_GR4/public/assets/css/user/Payment.css">
-<style></style>
 
 <div class="payment-container" id="paymentContainer" data-total="<?php echo (int)$total; ?>" data-buynow="<?php echo !empty($isBuyNow) ? '1' : '0'; ?>" data-order-id="<?php echo !empty($order['order_id']) ? (int)$order['order_id'] : 0; ?>">
 
@@ -54,13 +53,16 @@
         </div>
 
         <div class="method-panel" id="panel-bank_transfer">
-            <p class="method-desc">Tạo đơn hàng.</p>
+            <p class="method-desc">Bấm nút bên dưới để tạo đơn hàng và lấy mã QR chuyển khoản.</p>
 
             <div class="qr-wrapper">
-                <img 
-                    src="https://img.vietqr.io/image/MB-0973469734-print.png?amount=<?php echo (int)$total; ?>&addInfo=PREVIEW"
+                <div class="qr-loading hidden" id="qrLoading">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Đang tạo đơn hàng để lấy mã QR...
+                </div>
+                <img
+                    src=""
                     alt="QR thanh toán"
-                    class="qr-image"
+                    class="qr-image hidden"
                     id="qrImage"
                 >
                 <div class="qr-info">
@@ -78,18 +80,18 @@
                     </div>
                     <div class="qr-info-row">
                         <span class="qr-label">Nội dung CK</span>
-                        <span class="qr-value highlight" id="qrNote">Sẽ hiện sau khi đặt hàng</span>
+                        <span class="qr-value highlight" id="qrNote">Chưa tạo đơn hàng</span>
                     </div>
                 </div>
             </div>
 
             <p class="qr-note">
                 <i class="fa-solid fa-circle-info"></i>
-                Nhấn "Xác nhận đặt hàng" bên dưới để tạo đơn, sau đó dùng mã QR để chuyển khoản.
+                Đơn hàng chỉ được tạo khi bạn bấm nút bên dưới. Sau khi mã QR hiện ra, đó là mã đã gắn với đơn hàng thật — dùng để chuyển khoản, rồi bấm lại nút để báo đã chuyển.
             </p>
 
             <button class="btn-confirm" id="btnConfirmQR">
-                Xác nhận đặt hàng & Chuyển khoản
+                Tạo đơn hàng & lấy mã QR
             </button>
         </div>
 
@@ -117,6 +119,7 @@
 
 </div>
 
-<script src="/WEB_GR4/public/assets/js/user/payment1.js"></script>
+
+<script src="/WEB_GR4/public/assets/js/user/payment2.js"></script>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

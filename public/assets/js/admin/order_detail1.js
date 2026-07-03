@@ -1,4 +1,4 @@
-/* ── Toast ── */
+/*  Toast  */
 function showToast(msg, type = "success") {
   const icon = type === "success" ? "fa-circle-check" : "fa-circle-xmark";
   const t = document.createElement("div");
@@ -8,7 +8,7 @@ function showToast(msg, type = "success") {
   setTimeout(() => t.remove(), 2800);
 }
 
-/* ── Confirm modal ── */
+/*  Confirm modal  */
 function showConfirm({
   title,
   message,
@@ -49,7 +49,7 @@ function showConfirm({
   };
 }
 
-/* ── Payment actions ── */
+/*  Payment actions  */
 function approvePayment(orderId) {
   showConfirm({
     title:
