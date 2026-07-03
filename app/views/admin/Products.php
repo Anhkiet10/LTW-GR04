@@ -199,7 +199,7 @@
             <button type="button" class="modal__close" onclick="closeModal()"><i class="fas fa-times"></i></button>
         </div>
 
-        <form id="productForm" enctype="multipart/form-data" style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
+        <form id="productForm" enctype="multipart/form-data" novalidate style="display:flex; flex-direction:column; flex:1; overflow:hidden;">
             <input type="hidden" name="product_id" id="fProductId" value="">
 
             <div class="modal__body" style="flex:1; overflow-y:auto;">

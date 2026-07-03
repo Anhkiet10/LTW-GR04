@@ -786,6 +786,47 @@ function removeVariantRow(btn, vid) {
   }
 }
 
+//  Validate các ô bắt buộc (required) trước khi submit — trả về thông báo lỗi hoặc null nếu OK
+function validateRequiredFields(form) {
+  // Xóa trạng thái lỗi cũ
+  form
+    .querySelectorAll(".field-error")
+    .forEach((el) => el.classList.remove("field-error"));
+
+  const invalidEls = [...form.querySelectorAll("[required]")].filter(
+    (el) => !el.checkValidity(),
+  );
+
+  if (invalidEls.length === 0) return null;
+
+  invalidEls.forEach((el) => {
+    el.classList.add("field-error");
+    el.addEventListener("input", () => el.classList.remove("field-error"), {
+      once: true,
+    });
+  });
+
+  // Cuộn tới và focus ô lỗi đầu tiên
+  invalidEls[0].scrollIntoView({ behavior: "smooth", block: "center" });
+  invalidEls[0].focus();
+
+  // Tên hiển thị dễ hiểu cho từng ô bắt buộc
+  const fieldLabel = (el) => {
+    if (el.id === "fName") return "Tên sản phẩm";
+    if (el.name === "price[]") return "Giá biến thể";
+    return (
+      el
+        .closest(".form-group")
+        ?.querySelector("label")
+        ?.textContent?.replace("*", "")
+        .trim() || "một số trường"
+    );
+  };
+
+  const labels = [...new Set(invalidEls.map(fieldLabel))];
+  return `Vui lòng điền đầy đủ thông tin bắt buộc: ${labels.join(", ")}.`;
+}
+
 //  Validate variants trước khi submit
 function validateVariants() {
   const rows = document.querySelectorAll("#variantRows tr");
@@ -820,6 +861,14 @@ document
   .getElementById("productForm")
   ?.addEventListener("submit", async function (e) {
     e.preventDefault();
+
+    // Validate các ô bắt buộc (tên sản phẩm, giá biến thể...) trước khi gửi lên server
+    const requiredError = validateRequiredFields(this);
+    if (requiredError) {
+      showToast(requiredError, "error");
+      return;
+    }
+
     const action =
       document.getElementById("btnSubmit").dataset.action || "store";
     const btn = document.getElementById("btnSubmit");
@@ -926,55 +975,6 @@ document
       this.innerHTML = '<i class="fas fa-trash"></i> Xác nhận xóa';
     }
   });
-
-//  Upload ảnh biến thể
-function triggerVariantImageUpload(imgEl, variantId) {
-  const productId = window._currentProductId ?? 0;
-  if (!productId || !variantId) return;
-
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = "image/jpeg,image/png,image/webp";
-  input.onchange = async function () {
-    const file = this.files[0];
-    if (!file) return;
-
-    const fd = new FormData();
-    fd.append("product_id", productId);
-    fd.append("variant_id", variantId);
-    fd.append("image", file);
-
-    try {
-      const res = await fetch("/WEB_GR4/admin/products/uploadVariantImage", {
-        method: "POST",
-        body: fd,
-      });
-      const data = await res.json();
-      if (data.success) {
-        window._currentImagesByVariant = data.images || {};
-        // Cập nhật ảnh thumb ngay tại chỗ
-        if (imgEl) {
-          const url = getImageForVariant(
-            window._currentImagesByVariant,
-            variantId,
-          );
-          imgEl.src =
-            url.startsWith("http") ||
-            url.startsWith("data:") ||
-            url.startsWith("/assets/img/no-image")
-              ? url
-              : "/WEB_GR4/public" + url;
-        }
-        showToast(data.message || "Đã cập nhật ảnh biến thể.");
-      } else {
-        showToast(data.message || "Không thể upload ảnh.", "error");
-      }
-    } catch {
-      showToast("Có lỗi xảy ra khi upload ảnh.", "error");
-    }
-  };
-  input.click();
-}
 
 //  Toast
 function showToast(msg, type = "success") {
