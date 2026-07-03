@@ -1,5 +1,3 @@
-// ─── Model ────────────────────────────────────────────────────────────────────
-
 const AddressFormModel = (() => {
   const rules = {
     label(value) {
@@ -41,8 +39,6 @@ const AddressFormModel = (() => {
 
   return { validate };
 })();
-
-// ─── View ─────────────────────────────────────────────────────────────────────
 
 const AddressFormView = (() => {
   // Khớp cả form thêm địa chỉ (store-address) lẫn sửa địa chỉ (update-address)
@@ -111,11 +107,9 @@ const AddressFormView = (() => {
   };
 })();
 
-// ─── Controller ───────────────────────────────────────────────────────────────
-
 const AddressFormController = (() => {
   function init() {
-    if (!AddressFormView.form) return; // không ở trang thêm/sửa địa chỉ → bỏ qua
+    if (!AddressFormView.form) return; // không ở trang thêm/sửa địa chỉ -> bỏ qua
 
     _setupRealtimeValidation();
     _setupFormSubmit();
@@ -162,8 +156,6 @@ const AddressFormController = (() => {
 
   return { init };
 })();
-
-// ─── Boot ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener("DOMContentLoaded", () => {
   AddressFormController.init();

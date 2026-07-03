@@ -4,7 +4,7 @@ require_once __DIR__ . '/../models/ProfileModel.php';
 
 class ProfileController extends Controller
 {
-    // ── Helpers ──────────────────────────────────────────────────────────────
+
 
     private function requireLogin()
     {
@@ -22,7 +22,6 @@ class ProfileController extends Controller
         return (int) $_SESSION['user_id'];
     }
 
-    // ── Profile ──────────────────────────────────────────────────────────────
 
     public function index()
     {
@@ -125,7 +124,6 @@ class ProfileController extends Controller
         exit();
     }
 
-    // ── Addresses ────────────────────────────────────────────────────────────
 
     public function addAddress()
     {

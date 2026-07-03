@@ -1,9 +1,4 @@
-/* =========================================================
-   style_user_detail.css  —  Trang chi tiết người dùng
-   Dùng kèm style_admin.css (sidebar, layout, body, font)
-   ========================================================= */
-
-/* ── Page header ── */
+/*  Page header  */
 .page-header {
   display: flex;
   align-items: flex-start;
@@ -31,7 +26,7 @@
   color: #7c3aed;
 }
 
-/* ── Buttons ── */
+/*  Buttons  */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -78,7 +73,7 @@
   font-size: 13px;
 }
 
-/* ── Alert ── */
+/*  Alert  */
 .alert {
   display: flex;
   align-items: center;
@@ -114,7 +109,7 @@
   opacity: 1;
 }
 
-/* ── Badges ── */
+/*  Badges  */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -133,7 +128,7 @@
   color: #4c1d95;
 }
 
-/* ── Detail grid: info card + stat card ── */
+/*  Detail grid: info card + stat card  */
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 280px;
@@ -146,7 +141,7 @@
   }
 }
 
-/* ── Card shell (shared by both columns) ── */
+/*  Card shell (shared by both columns)  */
 .table-card {
   background: #fff;
   border: 1.5px solid #e5e7eb;
@@ -155,7 +150,7 @@
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* ── Account info card ── */
+/*  Account info card  */
 .detail-card-header {
   font-weight: 600;
   font-size: 14.5px;
@@ -202,7 +197,7 @@
   color: #1a2435;
 }
 
-/* ── Info rows ── */
+/*  Info rows  */
 .info-table {
   width: 100%;
   border-collapse: collapse;
@@ -232,7 +227,7 @@
   text-align: center;
 }
 
-/* ── Stat card ── */
+/*  Stat card  */
 .stat-card {
   text-align: center;
   padding: 32px 20px !important;
@@ -266,7 +261,7 @@
   margin-bottom: 14px;
 }
 
-/* ── Modal xóa ── */
+/*  Modal xóa  */
 .modal {
   position: fixed;
   inset: 0;
@@ -325,7 +320,7 @@
   gap: 10px;
 }
 
-/* ── Responsive ── */
+/*  Responsive  */
 @media (max-width: 900px) {
   .admin-content {
     padding: 20px;

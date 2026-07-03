@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const wrap = document.querySelector(".detail-wrap");
   if (!wrap) return;
 
-  // ── Đọc data từ HTML ──────────────────────────────────────────────
+  //  Đọc data từ HTML
   const PRODUCT_VARIANTS = JSON.parse(wrap.dataset.variants || "[]");
   const PRODUCT_IMAGES = JSON.parse(wrap.dataset.images || "[]");
   const HAS_ATTRIBUTES = wrap.dataset.hasAttributes === "1";
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const DEFAULT_PRICE_TEXT = wrap.dataset.defaultPrice || "—";
   const PRODUCT_ID = parseInt(wrap.dataset.productId, 10);
 
-  // ── Helpers ───────────────────────────────────────────────────────
+  //  Helpers
   function formatPrice(n) {
     return Number(n).toLocaleString("vi-VN") + "đ";
   }
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return exact ? String(exact.variant_id) : "";
   }
 
-  // ── UI update ─────────────────────────────────────────────────────
+  //  UI update
   function updatePriceAndStock(variant) {
     const priceEl = document.getElementById("productPrice");
     const stockEl = document.getElementById("variantStockInfo");
@@ -116,8 +116,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ── Cập nhật ảnh theo variant ─────────────────────────────────────
-  // Ưu tiên: ảnh gắn với variant_id → ảnh is_primary → ảnh đầu tiên
+  //  Cập nhật ảnh theo variant
+  // Ưu tiên: ảnh gắn với variant_id -> ảnh is_primary -> ảnh đầu tiên
   function updateImage(variantId) {
     const imgEl = document.getElementById("mainProductImage");
     if (!imgEl || !imgEl.tagName || imgEl.tagName.toLowerCase() !== "img")
@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateImage(exact ? exact.variant_id : null);
   }
 
-  // ── Nút thêm giỏ hàng ────────────────────────────────────────────
+  //  Nút thêm giỏ hàng
   const btnAddCart = document.getElementById("btnAddCart");
   if (btnAddCart) {
     btnAddCart.addEventListener("click", function () {
@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ── Init ──────────────────────────────────────────────────────────
+  //  Init
   if (!HAS_ATTRIBUTES && PRODUCT_VARIANTS.length > 0) {
     const v =
       PRODUCT_VARIANTS.find((x) => x.variant_key === "default") ||

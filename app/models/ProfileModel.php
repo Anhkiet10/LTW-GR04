@@ -7,9 +7,6 @@ class ProfileModel extends Model
     {
         parent::__construct();
     }
-
-    // ── Users ────────────────────────────────────────────────────────────────
-
     public function getUserById($userId)
     {
         $sql = "
@@ -70,9 +67,6 @@ class ProfileModel extends Model
             ':user_id'   => $userId,
         ]);
     }
-
-    // ── Addresses ────────────────────────────────────────────────────────────
-
     public function getUserAddresses($userId)
     {
         $sql = "
@@ -101,7 +95,7 @@ class ProfileModel extends Model
 
     public function addAddress($userId, $label, $fullAddress, $city, $isDefault)
     {
-        // Nếu thêm mặc định → bỏ mặc định của tất cả địa chỉ cũ
+        // Nếu thêm mặc định ->bỏ mặc định của tất cả địa chỉ cũ
         if ($isDefault) {
             $this->clearDefault($userId);
         }

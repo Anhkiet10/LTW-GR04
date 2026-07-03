@@ -1,16 +1,15 @@
-// ── PHP data injected ──
 const INIT_CATEGORIES = window.W4ShopData.INIT_CATEGORIES;
 const INIT_PRODUCTS = window.W4ShopData.INIT_PRODUCTS;
 const AVAIL_PRODUCTS = window.W4ShopData.AVAIL_PRODUCTS;
 const AVAIL_CATEGORIES = window.W4ShopData.AVAIL_CATEGORIES;
 
-// ── State ──
+// State
 // state: [ { id, category_id, category_name, sort_order, products: [ {id, product_id, product_name, price, image_url, sort_order} ] } ]
 let state = [];
 let changes = 0;
 let currentCatIndexForProd = null; // which category we're adding a product to
 
-// ── Build initial state from PHP data ──
+// Build initial state from PHP data
 function initState() {
   // Sort categories by sort_order
   const cats = [...INIT_CATEGORIES].sort((a, b) => a.sort_order - b.sort_order);
@@ -28,7 +27,7 @@ function initState() {
 
 initState();
 
-// ── Render ──
+// Render
 function render() {
   const canvas = document.getElementById("builderCanvas");
   canvas.innerHTML = "";
@@ -103,7 +102,7 @@ function esc(str) {
     .replace(/"/g, "&quot;");
 }
 
-// ── Category drag-drop ──
+// Category drag-drop
 let draggedCatIdx = null;
 function onCatDragStart(e, idx) {
   draggedCatIdx = idx;
@@ -127,7 +126,7 @@ function onCatDrop(e, idx) {
   render();
 }
 
-// ── Product drag-drop within row ──
+// Product drag-drop within row
 let draggedProd = null; // {catIdx, pIdx}
 function onProdDragStart(e, catIdx, pIdx) {
   draggedProd = { catIdx, pIdx };
@@ -157,7 +156,7 @@ function onProdDrop(e, catIdx) {
   render();
 }
 
-// ── Add / remove category ──
+// Add / remove category
 function openCatModal() {
   document.getElementById("catModal").classList.add("open");
   document.getElementById("catSearch").value = "";
@@ -222,7 +221,7 @@ function removeCategory(catIdx) {
   showToast('Đã xóa danh mục "' + name + '"', "success");
 }
 
-// ── Add / remove product ──
+// Add / remove product
 function openProdModal(catIdx) {
   currentCatIndexForProd = catIdx;
   document.getElementById("prodModal").classList.add("open");
@@ -302,7 +301,7 @@ function updateChangeCount() {
   document.getElementById("changeCount").textContent = changes;
 }
 
-// ── Save all ──
+// Save all
 async function saveAll() {
   const btn = document.getElementById("saveBtn");
   btn.disabled = true;
@@ -353,7 +352,7 @@ async function saveAll() {
   }
 }
 
-// ── Toast ──
+// Toast
 function showToast(msg, type = "success") {
   const t = document.createElement("div");
   t.className = "toast " + type;
@@ -370,5 +369,5 @@ document.getElementById("prodModal").addEventListener("click", function (e) {
   if (e.target === this) closeProdModal();
 });
 
-// ── Init ──
+// Init
 render();

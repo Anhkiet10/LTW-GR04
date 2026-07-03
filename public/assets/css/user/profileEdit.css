@@ -1,4 +1,4 @@
-/* --- Khung Layout Chung --- */
+/*  Khung Layout Chung  */
 .profile-page {
   background-color: #f8f9fa;
   padding: 40px 20px;
@@ -18,7 +18,7 @@
   align-items: start;
 }
 
-/* --- Card Sidebar --- */
+/*  Card Sidebar  */
 .profile-card {
   background: #ffffff;
   border-radius: 16px;
@@ -102,7 +102,7 @@
   background-color: #fdedec;
 }
 
-/* --- Khung Nội Dung Form --- */
+/*  Khung Nội Dung Form  */
 .profile-content {
   background: #ffffff;
   border-radius: 16px;
@@ -218,16 +218,13 @@
   border-left: 4px solid #e74c3c;
 }
 
-/* --- Responsive cho màn hình nhỏ --- */
+/*  Responsive cho màn hình nhỏ  */
 @media (max-width: 768px) {
   .profile-grid {
     grid-template-columns: 1fr;
   }
 }
-/* profileEdit.js – supplemental styles
-   Thêm vào file profileEdit.css hoặc import riêng */
 
-/* ── Field error ─────────────────────────────────────── */
 .field-error {
   display: block;
   margin-top: 4px;
@@ -243,8 +240,6 @@
 .input--error:focus {
   box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2);
 }
-
-/* ── Password wrapper (toggle) ───────────────────────── */
 .pw-wrapper {
   position: relative;
   display: flex;
@@ -273,7 +268,6 @@
   opacity: 1;
 }
 
-/* ── Password strength bar ───────────────────────────── */
 .password-strength {
   margin-top: 6px;
   font-size: 0.78rem;
@@ -296,7 +290,6 @@
   color: #276749;
 }
 
-/* ── Toast notification ──────────────────────────────── */
 .js-toast {
   position: fixed;
   bottom: 1.5rem;

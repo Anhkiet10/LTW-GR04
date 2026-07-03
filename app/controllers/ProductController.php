@@ -112,7 +112,7 @@ class ProductController extends Controller {
             exit;
         }
     
-        // Nếu đã đăng nhập → lưu vào session rồi chuyển thẳng sang trang preview
+        // Nếu đã đăng nhập ->lưu vào session rồi chuyển thẳng sang trang preview
         if (isset($_SESSION['user_id'])) {
             // Lưu tạm vào session để preview() đọc
             $_SESSION['buynow'] = [
@@ -129,7 +129,7 @@ class ProductController extends Controller {
             exit;
         }
     
-        // Khách vãng lai → lưu vào session guest_cart (chỉ 1 sản phẩm)
+        // Khách vãng lai ->lưu vào session guest_cart (chỉ 1 sản phẩm)
         $_SESSION['guest_cart'] = [[
             'product_id'     => $productId,
             'variant_id'     => $variantId,
@@ -137,6 +137,7 @@ class ProductController extends Controller {
             'price_snapshot' => $price,
             'product_name'   => $productName,
             'variant_key'    => $variantKey,
+            'variant_label'  => trim($body['variant_label'] ?? ''),
             'image_url'      => $imageUrl,
         ]];
     

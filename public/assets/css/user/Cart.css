@@ -1,147 +1,224 @@
+/* layout */
 body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
-.main-content {
-  flex: 1;
-}
 .cart-container {
-  max-width: 1100px;
-  margin: 30px auto;
-  padding: 0 15px;
+  flex: 1;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
 }
 
 .cart-container h1 {
-  margin-bottom: 20px;
-  font-size: 28px;
-  font-weight: 600;
-}
+  margin-bottom: 25px;
 
-/* TABLE */
+  margin-bottom: 25px;
+}
+/* table */
 .cart-table {
   width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border-collapse: collapse; /*để cho 2 đường viền kế bên gộp lại thành 1*/
+  background: white;
+  border-radius: 18px;
+  overflow: hidden; /* ẩn nội dung tràn ra ngoài box*/
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
 }
 
 .cart-table thead {
-  background: #f5f5f5;
+  background: linear-gradient(90deg, #0f62fe, #3b82f6);
+  color: white;
 }
 
-.cart-table th,
+.cart-table th {
+  padding: 18px;
+}
+
 .cart-table td {
-  padding: 12px 10px;
+  padding: 18px 15px;
   text-align: center;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
+
+  transition: 0.25s;
 }
 
-/* PRODUCT NAME */
-.cart-table td:nth-child(1) {
-  text-align: left;
-  font-weight: 500;
+.cart-table td:hover {
+  border-bottom: 1px solid #d04d4d;
+}
+.cart-check {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+/*product*/
+.cart-table td:nth-child(2) {
+  font-weight: 600;
+  color: #222;
 }
 
-/* PRICE COLOR */
 .price-cart {
-  color: #e74c3c;
-  font-weight: 600;
+  color: #e53935;
+  font-size: 17px;
+  font-weight: bold;
 }
 
-/* QUANTITY BOX */
-.cart-container .quantity {
-  display: inline-block;
-  min-width: 30px;
+.subtotal {
+  color: #0f62fe;
+  font-size: 17px;
+  font-weight: bold;
+}
+/*quantity*/
+.cart-table td:nth-child(6) {
+  white-space: nowrap;
+}
+
+.quantity {
+  width: 38px;
   text-align: center;
-  font-weight: 600;
+  font-weight: bolder;
+  font-size: 18px;
 }
 
-/* BUTTON + - */
 .plus,
 .btn-min {
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
   font-size: 18px;
-  font-weight: bold;
-  border-radius: 5px;
+  transition: 0.25s;
 }
-
 .plus {
-  background: #2ecc71;
-  color: #fff;
+  background: #16a34a;
+  color: white;
 }
-
+.plus:hover {
+  background: #15803d;
+  transform: scale(1.08);
+}
 .btn-min {
-  background: #f39c12;
-  color: #fff;
+  background: #f59e0b;
+  color: white;
 }
 
-/* DELETE BUTTON */
+.btn-min:hover {
+  background: #d97706;
+  transform: scale(1.08);
+}
+
+/*delete*/
 .btn-delete {
-  background: #e74c3c;
-  color: #fff;
+  white-space: nowrap;
+  background: #ef4444;
+  color: white;
+  border-radius: 8px;
   border: none;
-  padding: 6px 10px;
-  border-radius: 5px;
   cursor: pointer;
-  transition: 0.2s;
+  padding: 9px 15px;
+  font-weight: 600;
+  transition: 0.5s;
+  font-size: 18px;
 }
-
 .btn-delete:hover {
-  opacity: 0.85;
+  background: #dc2626;
+  transform: translateY(-5px);
 }
 
-/* SUBTOTAL */
-.subtotal {
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-/* TOTAL AREA */
+/*total*/
 .cart-total {
-  margin-top: 20px;
-  text-align: right;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-#total-price {
-  color: #e74c3c;
-}
-
-/* ACTION BUTTONS */
-.cart-action {
-  margin-top: 15px;
+  margin-top: 30px;
+  background: white;
+  border-radius: 16px;
+  padding: 25px 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  align-items: center;
+}
+
+.cart-total h2 {
+  margin: 0;
+  font-size: 28px;
+}
+#total-price {
+  color: #ef4444;
+  margin-left: 12px;
+}
+
+/*button*/
+.cart-action {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 25px;
 }
 
 .cart-action .btn {
-  border-radius: 6px;
   text-decoration: none;
-  font-weight: 500;
-  border: 1px solid #ddd;
+  padding: 14px 28px;
+  border-radius: 12px;
   font-size: 16px;
-  padding: 10px 15px;
+  font-weight: 600;
+
+  transition: 0.5s;
+}
+.cart-action a:first-child {
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
 }
 
-.cart-action .btn:hover {
-  background: #f5f5f5;
+.cart-action a:first-child:hover {
+  border: 2px solid blue;
+  font-size: 20px;
+}
+#btnOrder {
+  background: #0f62fe;
+  color: white;
+  cursor: pointer;
+}
+#btnOrder:hover {
+  background: #0043ce;
+  font-size: 20px;
 }
 
-/* nhập thông tin đơn hàng */
-.cart-container h2 {
+/*empty cart*/
+.empty-cart h3 {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 60px;
+  font-size: 34px;
+  color: #e49191;
 }
 
+.empty-cart {
+  background: white;
+  padding: 80px 30px;
+  border-radius: 18px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.empty-cart a {
+  display: inline-block;
+  margin-top: 25px;
+  text-decoration: none;
+  background: #0f62fe;
+  color: white;
+  padding: 14px 30px;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 600;
+  transition: 0.5s;
+}
+.empty-cart a:hover {
+  background: #0043ce;
+}
+
+/*modal*/
 .address-modal {
   position: fixed;
   top: 0;
@@ -163,6 +240,10 @@ body {
   width: 450px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
+.addressForm input,
+.addressForm button {
+  font-size: 18px;
+}
 .address-content .close {
   position: absolute;
   top: 25px;
@@ -175,25 +256,14 @@ body {
   text-align: center;
   margin-bottom: 20px;
 }
-
 .address-content input {
   width: 100%;
   padding: 12px;
   margin-bottom: 12px;
   border: 1px solid #ddd;
   border-radius: 6px;
-  box-sizing: border-box;
 }
 
-.close-modal {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 28px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.close-modal:hover {
+.close:hover {
   color: red;
 }

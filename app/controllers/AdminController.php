@@ -218,20 +218,6 @@ class AdminController extends Controller {
         exit;
     }
 
-
-// ================================================================
-// THÊM VÀO AdminController.php
-// ================================================================
-// 1. Thêm dòng require_once này cùng chỗ với các require_once khác:
-//    require_once __DIR__ . '/../models/BackupModel.php';
-//
-// 2. Thêm 2 method dưới đây vào trong class AdminController
-// ================================================================
-
-    /**
-     * GET /admin/backup
-     * Hiển thị trang quản lý sao lưu.
-     */
     public function backup() {
         $this->requireAdmin();
 
@@ -248,11 +234,6 @@ class AdminController extends Controller {
         ]);
     }
 
-    /**
-     * POST /admin/backup/download
-     * Xuất file SQL và trả về để trình duyệt tải xuống.
-     * Body (JSON): { "tables": ["users","orders",...] }  — null/rỗng = tất cả
-     */
     public function downloadBackup() {
         $this->requireAdmin();
 

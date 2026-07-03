@@ -1,24 +1,10 @@
 <?php
 require_once __DIR__ . '/../../core/Model.php';
-
-/**
- * ProductModelAdmin — Dành riêng cho trang quản trị
- *
- * Thay đổi so với phiên bản cũ (schema v2):
- *  - upsertVariant() nhận thêm value_ids[] để build/rebuild variant_key
- *  - Bỏ toàn bộ tham chiếu đến bảng variant_attribute_values
- *  - Thêm getVariantAttributes() để admin xem được tên attribute của từng variant
- *  - Thêm getAllAttributeValues() để admin có thể chọn attribute khi tạo/sửa variant
- *  - delete() chỉ xóa product_images + product_variants trước (variant_attribute_values không còn)
- */
 class ProductModelAdmin extends Model {
-
-    // ─── Helper: build variant_key ────────────────────────────────────────────
-
     /**
      * Nhận vào mảng value_id bất kỳ thứ tự, trả về chuỗi đã sort tăng dần.
      * Đây là quy tắc duy nhất để tạo key — phải nhất quán ở mọi nơi.
-     * Ví dụ: [16, 7, 13] → '7_13_16'
+     * Ví dụ: [16, 7, 13] ->'7_13_16'
      */
     private function buildVariantKey(array $valueIds): string {
         if (empty($valueIds)) return 'default';
@@ -26,9 +12,6 @@ class ProductModelAdmin extends Model {
         sort($ids, SORT_NUMERIC);
         return implode('_', $ids);
     }
-
-    // ─── Danh sách sản phẩm admin (có lọc + phân trang) ───────────────────────
-
     /**
      * @param array $filters ['search' => string, 'category' => int|string, 'status' => '0'|'1'|'']
      * @param int   $page    trang hiện tại (bắt đầu từ 1)
@@ -90,10 +73,10 @@ class ProductModelAdmin extends Model {
 
     /**
      * Build mệnh đề WHERE dùng chung cho getAllForAdmin() và countForAdmin().
-     * search   → khớp tên sản phẩm HOẶC sku của bất kỳ biến thể nào.
-     * category → khớp category_id của sản phẩm HOẶC category cha của nó
+     * search   ->khớp tên sản phẩm HOẶC sku của bất kỳ biến thể nào.
+     * category ->khớp category_id của sản phẩm HOẶC category cha của nó
      *            (cho phép chọn 1 danh mục cha để lấy luôn các danh mục con).
-     * status   → 0 hoặc 1, để trống = không lọc.
+     * status   ->0 hoặc 1, để trống = không lọc.
      */
     private function buildAdminWhere(array $filters): string {
         $conditions = [];
@@ -125,8 +108,6 @@ class ProductModelAdmin extends Model {
         return $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
     }
 
-    // ─── Thống kê nhanh ───────────────────────────────────────────────────────
-
     public function getStats(): array {
         return $this->fetchOne("
             SELECT
@@ -141,9 +122,6 @@ class ProductModelAdmin extends Model {
             FROM products p
         ");
     }
-
-    // ─── Danh mục ─────────────────────────────────────────────────────────────
-
     public function getAllCategories(): array {
         return $this->fetchAll("
             SELECT category_id, parent_id, category_name
@@ -152,15 +130,11 @@ class ProductModelAdmin extends Model {
         ");
     }
 
-    // ─── Chi tiết sản phẩm ────────────────────────────────────────────────────
-
     public function getById(int $id): ?array {
         return $this->fetchOne("
             SELECT * FROM products WHERE product_id = $id
         ") ?: null;
     }
-
-    // ─── Variants ─────────────────────────────────────────────────────────────
 
     /**
      * Lấy danh sách variants của sản phẩm kèm attribute_label đọc được.
@@ -206,9 +180,6 @@ class ProductModelAdmin extends Model {
             ORDER  BY a.attribute_id
         ");
     }
-
-    // ─── Attributes (cho form tạo/sửa variant) ────────────────────────────────
-
     /**
      * Lấy tất cả attributes kèm danh sách values.
      * Dùng để render các dropdown/checkbox khi admin tạo biến thể mới.
@@ -293,7 +264,6 @@ class ProductModelAdmin extends Model {
         return (bool)$row;
     }
 
-    // ─── Ảnh sản phẩm ─────────────────────────────────────────────────────────
 
     public function getImages(int $productId): array {
         return $this->fetchAll("
@@ -302,15 +272,12 @@ class ProductModelAdmin extends Model {
             ORDER  BY is_primary DESC, sort_order
         ");
     }
-
-    // ─── Tạo sản phẩm ─────────────────────────────────────────────────────────
-
     public function create(array $data): int {
         $name     = $this->escape($data['product_name']);
         $catId    = !empty($data['category_id']) ? (int)$data['category_id'] : 'NULL';
         $desc     = $this->escape($data['description'] ?? '');
         $slug     = $this->escape($this->makeSlug($data['product_name']));
-        $isActive = isset($data['is_active']) ? 1 : 0;
+        $isActive = !empty($data['is_active']) ? 1 : 0;
 
         $this->query("
             INSERT INTO products (product_name, category_id, description, slug, is_active)
@@ -318,15 +285,12 @@ class ProductModelAdmin extends Model {
         ");
         return (int)$this->lastInsertId();
     }
-
-    // ─── Cập nhật sản phẩm ───────────────────────────────────────────────────
-
     public function update(int $id, array $data): void {
         $name     = $this->escape($data['product_name']);
         $catId    = !empty($data['category_id']) ? (int)$data['category_id'] : 'NULL';
         $desc     = $this->escape($data['description'] ?? '');
         $slug     = $this->escape($this->makeSlug($data['product_name']));
-        $isActive = isset($data['is_active']) ? 1 : 0;
+        $isActive = !empty($data['is_active']) ? 1 : 0;
 
         $this->query("
             UPDATE products
@@ -339,7 +303,7 @@ class ProductModelAdmin extends Model {
         ");
     }
 
-    // ─── Xóa sản phẩm ────────────────────────────────────────────────────────
+    //  Xóa sản phẩm 
 
     /**
      * Xóa sản phẩm cùng ảnh và variants.
@@ -351,7 +315,7 @@ class ProductModelAdmin extends Model {
         $this->query("DELETE FROM products         WHERE product_id = $id");
     }
 
-    // ─── Upsert variant ───────────────────────────────────────────────────────
+    //  Upsert variant 
 
     /**
      * Tạo mới hoặc cập nhật variant.
@@ -361,7 +325,7 @@ class ProductModelAdmin extends Model {
      *   - price      : float
      *   - stock      : int
      * Tuỳ chọn:
-     *   - variant_id : int  (> 0 → update, = 0 → insert)
+     *   - variant_id : int  (> 0 ->update, = 0 ->insert)
      *   - sku        : string
      *   - is_active  : bool
      *
@@ -422,13 +386,13 @@ class ProductModelAdmin extends Model {
         return (int)$this->lastInsertId();
     }
 
-    // ─── Xóa variant ─────────────────────────────────────────────────────────
+    //  Xóa variant 
 
     public function deleteVariant(int $variantId): void {
         $this->query("DELETE FROM product_variants WHERE variant_id = $variantId");
     }
 
-    // ─── Xóa thể loại thuộc tính ─────────────────────────────────────────────
+    //  Xóa thể loại thuộc tính 
 
     /**
      * Kiểm tra xem attribute có đang được dùng bởi variant nào không.
@@ -443,7 +407,7 @@ class ProductModelAdmin extends Model {
             SELECT value_id FROM attribute_values
             WHERE  attribute_id = $aid
         ");
-        if (empty($valueRows)) return false; // không có values → không thể đang dùng
+        if (empty($valueRows)) return false; // không có values ->không thể đang dùng
 
         $valueIds = array_map(fn($r) => (int)$r['value_id'], $valueRows);
 
@@ -483,7 +447,7 @@ class ProductModelAdmin extends Model {
         $this->query("DELETE FROM attribute_values WHERE value_id = $vid");
     }
 
-    // ─── Ảnh đại diện ────────────────────────────────────────────────────────
+    //  Ảnh đại diện
 
     public function savePrimaryImage(int $productId, string $url): void {
         $urlEsc = $this->escape($url);
@@ -505,9 +469,6 @@ class ProductModelAdmin extends Model {
             ");
         }
     }
-
-    // ─── Internal helpers ─────────────────────────────────────────────────────
-
     /**
      * Chuyển variant_key ('7_13_16') thành label đọc được ('Bạc, 256GB SSD, 8GB').
      */
@@ -527,8 +488,6 @@ class ProductModelAdmin extends Model {
         ");
         return implode(', ', array_column($rows, 'value_name'));
     }
-
-    // ─── Lấy ảnh theo variant_id ─────────────────────────────────────────────
     public function getImagesByVariant(int $productId): array {
         $pid = (int)$productId;
         $rows = $this->fetchAll("
@@ -548,8 +507,6 @@ class ProductModelAdmin extends Model {
         }
         return $grouped;
     }
-
-    // ─── Lưu ảnh gắn với variant cụ thể ─────────────────────────────────────
     public function saveVariantImage(int $productId, int $variantId, string $url): void {
         $pid    = (int)$productId;
         $vid    = (int)$variantId;

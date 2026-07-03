@@ -33,6 +33,7 @@ WEB_GR4/
 │   │   └── CategoryModelAdmin.php
 │   │   └── ProfileModel.php
 │   │   └── OrderModelAdmin.php
+│   │   └── StatisticsModel.php
 │   └── views/  # Giao diện hiển thị (HTML/PHP)
 │       ├── admin/
 │       │   ├──  home.php
@@ -45,6 +46,7 @@ WEB_GR4/
 │       │   └──  User.php
 │       │   └──  UserDetail.php
 │       │   └──  UserForm.php
+│       │   └──  statistics.php
 │       │
 │       ├── auth/
 │       │   ├── forgot-password.php
@@ -61,6 +63,11 @@ WEB_GR4/
 │       │   └── payment.php
 │       │   └── guest_checkout.php
 │       │
+│       ├── profile/
+│       │   ├── addAddress.php
+│       │   └── edit.php
+│       │   └── editAddress.php
+│       │   └── index.php
 │       ├── layouts/            # Thành phần giao diện chung
 │       │   ├── header.php
 │       │   └── footer.php
@@ -79,8 +86,6 @@ WEB_GR4/
 ├── config/                     # Cấu hình hệ thống
 │   └── database.php            # Cấu hình kết nối cơ sở dữ liệu
 ├── public/                     # Thư mục chứa tài nguyên tĩnh tiếp cận công khai
-│   ├── api/
-│   │   └──add-to-cart.php      # bỏ qua hoàn toàn bước "xếp hàng" và "so khớp" củaRouter
 │   └── assets/                 # Chứa các file CSS, JS, Images, Fonts
 │       └── css/
 │       │   └──  admin/

@@ -3,7 +3,6 @@
 
 <main class="admin-content">
 
-    <!-- ── Page header ── -->
     <div class="page-header">
         <div class="page-header__left">
             <h1><i class="fas fa-box-open"></i> Quản lý sản phẩm</h1>
@@ -17,7 +16,6 @@
         </button>
     </div>
 
-    <!-- ── Stats bar ── -->
     <div class="stats-bar">
         <div class="stat-card">
             <span class="stat-card__num"><?= (int)$total ?></span>
@@ -37,7 +35,6 @@
         </div>
     </div>
 
-    <!-- ── Filter bar ── -->
     <form class="filter-bar" id="filterForm" method="GET" action="/WEB_GR4/admin/products">
         <div class="search-wrap">
             <i class="fas fa-search"></i>
@@ -65,7 +62,7 @@
         </select>
     </form>
 
-    <!-- ── Product table ── -->
+
     <div class="table-wrap">
         <table class="product-table" id="productTable">
             <thead>
@@ -194,9 +191,6 @@
 
 </main>
 
-<!-- ═══════════════════════════════════════════════════════
-     MODAL: Thêm / Sửa sản phẩm
-════════════════════════════════════════════════════════ -->
 <div class="modal-overlay" id="productModal">
     <div class="modal" >
 
@@ -243,7 +237,8 @@
                         <div class="form-group">
                             <label>Trạng thái</label>
                             <label class="toggle" style="margin-top:6px;">
-                                <input type="checkbox" name="is_active" id="fIsActive" checked>
+                                <input type="hidden" name="is_active" value="0">
+                                <input type="checkbox" name="is_active" id="fIsActive" value="1" checked>
                                 <span class="toggle__track"></span>
                                 <span class="toggle__label" id="toggleLabel" style="padding-left:8px;">Đang bán</span>
                             </label>
@@ -319,7 +314,7 @@
             </div><!-- /.modal__body -->
 
             <div class="modal__footer">
-                <button type="button" class="btn btn--ghost" onclick="closeModal()">Huỷ</button>
+                <button type="button" class="btn btn--ghost" onclick="closeModal()">Thoát</button>
                 <button type="submit" class="btn btn--primary" id="btnSubmit">
                     <i class="fas fa-save"></i> Lưu sản phẩm
                 </button>
@@ -329,9 +324,7 @@
     </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     MODAL: Quản lý thuộc tính
-════════════════════════════════════════════════════════ -->
+
 <div class="modal-overlay" id="attributeManageModal">
     <div class="modal modal--attr-manage">
         <div class="modal__header">
@@ -362,9 +355,7 @@
     </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     MODAL: Xác nhận xóa
-════════════════════════════════════════════════════════ -->
+
 <div class="modal-overlay" id="deleteModal">
     <div class="modal" style="max-width:440px;">
         <div class="modal__header">
@@ -384,7 +375,6 @@
     </div>
 </div>
 
-<!-- Toast notification -->
 <div class="toast" id="toast" style="display:none;"></div>
 <div class="modal-overlay" id="confirmModal" style="z-index:1200;">
   <div class="modal" style="max-width:400px;">

@@ -51,13 +51,6 @@ function getMenuActiveClass($pagePath) {
                 <i class="fa-solid fa-copy"></i> Sao lưu</a></li>
 
 
-            <!-- <li><a href="/WEB_GR4/admin" ><i class="fas fa-home"></i> Trang chủ</a></li>
-            <li><a href="/WEB_GR4/admin/categories"><i class="fas fa-box"></i> Thể loại</a></li>
-            <li><a href="/WEB_GR4/admin/products"><i class="fas fa-box-open"></i> Sản phẩm</a></li>
-            <li><a href="/WEB_GR4/admin/orders"><i class="fas fa-shopping-cart"></i> Đơn hàng</a></li>
-            <li><a href="/WEB_GR4/admin/users"><i class="fas fa-users"></i> Người dùng</a></li>
-            <li><a href="/WEB_GR4/admin/statistics"><i class="fas fa-chart-bar"></i> Thống kê</a></li>
-            <li><a href="/WEB_GR4/admin/backup"><i class="fa-solid fa-copy" style="color: rgb(177,151,252);"></i> Sao lưu</a></li> -->
             <li><a href="/WEB_GR4/logout" class="logout-link"><i class="fa-solid fa-sign-out-alt" style="color: rgb(177, 151, 252);"></i> Đăng xuất</a></li>
         </ul>
     </aside>

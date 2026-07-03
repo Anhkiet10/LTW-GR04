@@ -1,9 +1,7 @@
-// ===== SEARCH REALTIME =====
 const searchInput = document.getElementById("searchInput");
 const suggestions = document.getElementById("searchSuggestions");
 let searchTimer;
 
-// ===== HIGHLIGHT ACTIVE CATEGORY =====
 function highlightActiveCategory() {
   const params = new URLSearchParams(window.location.search);
   const categoryId = params.get("category");
@@ -85,7 +83,6 @@ function doSearch() {
   }
 }
 
-// ===== BACK TO TOP =====
 const backToTop = document.getElementById("backToTop");
 if (backToTop) {
   window.addEventListener("scroll", function () {
@@ -93,7 +90,6 @@ if (backToTop) {
   });
 }
 
-// ===== ADD TO CART =====
 function addToCart(productId, variantId = null) {
   if (!variantId) {
     showToast("Vui lòng chọn phiên bản sản phẩm!", "error");
@@ -120,7 +116,6 @@ function addToCart(productId, variantId = null) {
     .catch(() => showToast("Lỗi kết nối server!", "error"));
 }
 
-// ===== TOAST NOTIFICATION =====
 function showToast(msg, type = "success") {
   const toast = document.createElement("div");
   toast.className = "toast toast-" + type;
@@ -132,7 +127,6 @@ function showToast(msg, type = "success") {
     setTimeout(() => toast.remove(), 300);
   }, 2500);
 }
-// ===== MOBILE MENU TOGGLE =====
 document.addEventListener("DOMContentLoaded", function () {
   const menuToggle = document.getElementById("menuToggle");
   const navContainer = document.querySelector(".nav-container");
@@ -161,7 +155,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 // ... (Các đoạn code cũ giữ nguyên: search, backToTop, addToCart, showToast...)
 
-// ===== MOBILE MENU TOGGLE =====
 document.addEventListener("DOMContentLoaded", function () {
   const menuToggle = document.getElementById("menuToggle");
   const navContainer = document.querySelector(".nav-container");
@@ -188,11 +181,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  /* ==========================================================================
-     DÁN ĐOẠN CODE DƯỚI ĐÂY VÀO TRƯỚC DẤU ĐÓNG NGOẶC CỦA DOMContentLoaded
-     ========================================================================== */
-
-  // ===== XỬ LÝ CLICK DÒNG TRÊN BẢNG ĐƠN HÀNG =====
   const tableRows = document.querySelectorAll(".clickable-row");
   tableRows.forEach((row) => {
     row.addEventListener("click", function (e) {
@@ -206,7 +194,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // ===== HIỆU ỨNG STEP ĐƠN HÀNG CHẠY ĐỘNG (NẾU CÓ TRANG CHI TIẾT) =====
   const steps = document.querySelectorAll(".step-order");
   steps.forEach((step, index) => {
     // Ẩn tạm thời để tạo hiệu ứng mượt

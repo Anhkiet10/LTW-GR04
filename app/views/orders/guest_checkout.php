@@ -1,6 +1,7 @@
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
 <link rel="stylesheet" href="/WEB_GR4/public/assets/css/user/GuestCheckout.css">
 
+
 <div class="gc-container">
 
     <div class="gc-steps">
@@ -15,7 +16,7 @@
         </div>
     </div>
 
-    <!-- ======================== BƯỚC 1: Thông tin + Tóm tắt đơn ======================== -->
+    <!--  BƯỚC 1: Thông tin + Tóm tắt đơn  -->
     <div class="gc-step-panel" id="panel-step-1">
 
         <div class="gc-layout">
@@ -170,7 +171,7 @@
     </div><!-- /#panel-step-1 -->
 
 
-    <!-- ======================== BƯỚC 2: Chọn thanh toán ======================== -->
+    <!-- BƯỚC 2: Chọn thanh toán  -->
     <div class="gc-step-panel hidden" id="panel-step-2"
          data-total="<?php echo (int)$total; ?>">
 
@@ -212,13 +213,15 @@
                 <!-- Panel Chuyển khoản -->
                 <div class="gc-method-panel hidden" id="gc-panel-bank_transfer">
                     <p class="gc-method-desc">
-                        Đặt hàng xong, dùng QR để chuyển khoản. Đơn sẽ được xác nhận sau khi
-                        chúng tôi nhận được thanh toán.
+                        Đơn hàng chỉ được tạo khi bạn bấm nút bên dưới. Sau đó mã QR thật
+                        (gắn với đơn hàng vừa tạo) sẽ hiện ra để bạn chuyển khoản.
                     </p>
 
                     <div class="gc-qr-wrapper">
-                        <img src="https://img.vietqr.io/image/MB-0973469734-print.png?amount=<?php echo (int)$total; ?>&addInfo=DATHANGGUESTORDER"
-                             alt="QR thanh toán" class="gc-qr-image" id="gcQrImage">
+                        <div class="gc-qr-loading hidden" id="gcQrLoading">
+                            <i class="fa-solid fa-spinner fa-spin"></i> Đang tạo đơn hàng để lấy mã QR...
+                        </div>
+                        <img src="" alt="QR thanh toán" class="gc-qr-image hidden" id="gcQrImage">
                         <div class="gc-qr-info">
                             <div class="gc-qr-row">
                                 <span class="gc-qr-label">Ngân hàng</span>
@@ -237,14 +240,14 @@
                             <div class="gc-qr-row">
                                 <span class="gc-qr-label">Nội dung CK</span>
                                 <span class="gc-qr-value gc-highlight" id="gcQrNote">
-                                    Sẽ hiện sau khi đặt hàng
+                                    Chưa tạo đơn hàng
                                 </span>
                             </div>
                         </div>
                     </div>
 
                     <button class="gc-btn-confirm" id="btnConfirmQR">
-                        <i class="fa-solid fa-qrcode"></i> Xác nhận đã Chuyển khoản
+                        <i class="fa-solid fa-qrcode"></i> Tạo đơn hàng & lấy mã QR
                     </button>
                 </div>
 
@@ -279,7 +282,7 @@
     </div><!-- /#panel-step-2 -->
 
 
-    <!-- ======================== BƯỚC 3: Thành công ======================== -->
+    <!--  BƯỚC 3: Thành công  -->
     <div class="gc-step-panel hidden" id="panel-success">
         <div class="gc-success">
             <div class="gc-success-icon">
@@ -307,6 +310,7 @@
     const GC_TOTAL = <?php echo (int)$total; ?>;
     const GC_ITEMS = <?php echo $cartJson ?? '[]'; ?>;
 </script>
-<script src="/WEB_GR4/public/assets/js/user/guest_checkout1.js"></script>
+
+<script src="/WEB_GR4/public/assets/js/user/guest_checkout2.js"></script>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

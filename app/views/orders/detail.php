@@ -43,7 +43,7 @@ $payMethodLabel = $payMethod ? ($paymentMethodMap[$payMethod] ?? ucfirst($payMet
 
 <div class="order-detail-page">
 
-    <!-- ===== HEADER CARD ===== -->
+    <!--  HEADER CARD  -->
     <div class="order-detail-card">
         <div class="order-detail-header">
             <div>
@@ -69,7 +69,7 @@ $payMethodLabel = $payMethod ? ($paymentMethodMap[$payMethod] ?? ucfirst($payMet
             </div>
         </div>
 
-        <!-- ===== PROGRESS STEPS ===== -->
+        <!--  PROGRESS STEPS  -->
         <?php if ($orderStatus !== 'cancelled'): ?>
         <div class="order-detail-body">
             <div class="order-progress">
@@ -100,7 +100,7 @@ $payMethodLabel = $payMethod ? ($paymentMethodMap[$payMethod] ?? ucfirst($payMet
         <?php endif; ?>
     </div>
 
-    <!-- ===== SHIPPING INFO ===== -->
+    <!--  SHIPPING INFO  -->
     <div class="order-summary">
         <h3> Thông tin giao hàng</h3>
         <p><strong>Khách hàng:</strong> <?= htmlspecialchars($order['full_name'] ?? '') ?></p>
@@ -115,7 +115,7 @@ $payMethodLabel = $payMethod ? ($paymentMethodMap[$payMethod] ?? ucfirst($payMet
         <?php endif; ?>
     </div>
 
-    <!-- ===== PAYMENT INFO ===== -->
+    <!--  PAYMENT INFO  -->
     <?php if ($payInfo): ?>
     <div class="order-summary order-payment-info">
         <h3><i class="fa-solid fa-credit-card" style="color: rgb(116, 192, 252);"></i> Thông tin thanh toán</h3>
@@ -153,7 +153,7 @@ $payMethodLabel = $payMethod ? ($paymentMethodMap[$payMethod] ?? ucfirst($payMet
     </div>
     <?php endif; ?>
 
-    <!-- ===== ORDER ITEMS ===== -->
+    <!--  ORDER ITEMS  -->
     <div class="order-detail-card">
         <div class="order-products-title">
             <h2> Sản phẩm trong đơn hàng</h2>
@@ -191,7 +191,7 @@ $payMethodLabel = $payMethod ? ($paymentMethodMap[$payMethod] ?? ucfirst($payMet
             </div>
         <?php endforeach; ?>
 
-        <!-- ===== ORDER TOTAL ===== -->
+        <!--  ORDER TOTAL  -->
         <div class="order-total-row">
             <span>Tổng cộng:</span>
             <strong class="price"><?= number_format($order['total_amount']) ?>đ</strong>
