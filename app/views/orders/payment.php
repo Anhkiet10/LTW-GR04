@@ -1,12 +1,13 @@
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
 <link rel="stylesheet" href="/WEB_GR4/public/assets/css/user/Payment.css">
-
+<link rel="stylesheet" href="/WEB_GR4/public/assets/css/user/responsive_shop.css">
 <div class="payment-container" id="paymentContainer" data-total="<?php echo (int)$total; ?>" data-buynow="<?php echo !empty($isBuyNow) ? '1' : '0'; ?>" data-order-id="<?php echo !empty($order['order_id']) ? (int)$order['order_id'] : 0; ?>">
 
     <h1>Xác nhận thanh toán</h1>
 
     <div class="order-summary">
         <h2>Chi tiết đơn hàng</h2>
+        <div class="table-responsive">
         <table class="summary-table">
             <thead>
                 <tr>
@@ -29,7 +30,7 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
-
+        </div>
         <div class="order-total">
             Tổng cộng: <strong><?php echo number_format($total, 0, ',', '.'); ?>đ</strong>
         </div>

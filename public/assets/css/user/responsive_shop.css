@@ -1,0 +1,647 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   RESPONSIVE_SHOP.CSS
+   File responsive dùng chung cho khu vực MUA HÀNG (không phải admin):
+   Cart, Guestcheckout, Orders, Payment, Profile (Edit/Index), Products.
+
+   Nhúng file này SAU CÙNG, sau style.css và các file page-specific
+   (Cart.css, Payment.css, orders.css, profileEdit.css, profileIndex.css,
+   Guestcheckout.css, style_product.css) để override đúng thứ tự.
+
+   Breakpoint thống nhất: 1024px (tablet) / 768px (tablet nhỏ - mobile lớn)
+   / 640px (mobile) / 480px (mobile nhỏ) / 360px (mobile rất nhỏ).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────────────
+   0. AN TOÀN CHỐNG VỠ LAYOUT NGANG TOÀN TRANG
+   Mặc định: không cho phép cả trang bị scroll ngang (tràn khỏi viewport)
+   vì 1 phần tử lỡ rộng hơn màn hình. body/html giữ overflow-x hidden.
+   Bảng dữ liệu (cart-table, summary-table, orders-table) là trường hợp
+   ĐƯỢC PHÉP scroll ngang RIÊNG trong khung của nó (không phải cả trang)
+   để không mất cột, không vỡ chữ. Đây là kỹ thuật chuẩn: khóa scroll
+   ngang toàn cục, mở scroll ngang cục bộ cho bảng.
+   ────────────────────────────────────────────────────────────────────── */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Khung bọc bảng dùng chung: cho phép kéo ngang mượt trên mobile,
+   không ảnh hưởng tới phần còn lại của trang. */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* FIX QUAN TRỌNG: body ở Cart.css có display:flex; flex-direction:column.
+   .cart-container (và các container tương tự) là flex item, mà flex item
+   mặc định có min-width:auto -> KHÔNG chịu co nhỏ hơn kích thước nội dung
+   bên trong nó (ví dụ .cart-table có min-width:620px sẽ "đội" ngược lên
+   làm cart-container phình to hơn viewport). Khi đó phần tràn xảy ra ở
+   cấp body/html (đã bị overflow-x:hidden ở trên) -> bị CẮT chứ không
+   scroll được, dù .table-responsive có overflow-x:auto.
+   Đặt min-width:0 để các container này được phép co nhỏ hơn nội dung,
+   nhường việc scroll ngang lại đúng cho .table-responsive bên trong. */
+.cart-container,
+.payment-container,
+.orders-page,
+.order-detail-page,
+.gc-container,
+.profile-container,
+.profile-content,
+.profile-section-body,
+.order-summary,
+.order-detail-card,
+.orders-box {
+  min-width: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   1. SCROLL NGANG CHO BẢNG — KHÔNG CẦN SỬA HTML
+   Kỹ thuật: biến chính <table> thành khung scroll bằng cách cho nó
+   display:block + overflow-x:auto, rồi ép thead/tbody/tr quay lại
+   display kiểu bảng để không vỡ layout cột.
+   ────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .cart-table,
+  .summary-table,
+  .orders-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cart-table thead,
+  .cart-table tbody,
+  .summary-table thead,
+  .summary-table tbody,
+  .orders-table thead,
+  .orders-table tbody {
+    display: table;
+    width: 100%;
+    table-layout: auto;
+  }
+
+  .cart-table tr,
+  .summary-table tr,
+  .orders-table tr {
+    display: table-row;
+  }
+
+  /* min-width để cột không bị bóp, buộc phải scroll thay vì vỡ chữ */
+  .cart-table {
+    min-width: 620px;
+  }
+  .summary-table {
+    min-width: 480px;
+  }
+  .orders-table {
+    min-width: 560px;
+  }
+
+  /* Thanh scroll mỏng, dễ thấy trên mobile */
+  .cart-table::-webkit-scrollbar,
+  .summary-table::-webkit-scrollbar,
+  .orders-table::-webkit-scrollbar {
+    height: 6px;
+  }
+  .cart-table::-webkit-scrollbar-thumb,
+  .summary-table::-webkit-scrollbar-thumb,
+  .orders-table::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 10px;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   2. CART (Cart.css)
+   ────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .cart-container {
+    margin: 28px auto;
+    padding: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cart-container {
+    margin: 20px auto;
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .cart-container h1 {
+    font-size: 22px;
+  }
+
+  .cart-table th,
+  .cart-table td {
+    padding: 12px 10px;
+    font-size: 13px;
+  }
+
+  .btn-delete {
+    padding: 7px 10px;
+    font-size: 14px;
+  }
+
+  .plus,
+  .btn-min {
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+  }
+
+  /* Tổng tiền + nút hành động xuống dòng, full width cho dễ bấm */
+  .cart-total {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 18px 20px;
+  }
+  .cart-total h2 {
+    font-size: 20px;
+  }
+
+  .cart-action {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cart-action .btn {
+    width: 100%;
+    text-align: center;
+    padding: 12px 20px;
+    box-sizing: border-box;
+  }
+
+  .empty-cart {
+    padding: 50px 20px;
+  }
+  .empty-cart h3 {
+    font-size: 24px;
+    margin-top: 20px;
+  }
+
+  /* Modal địa chỉ full width trên mobile */
+  .address-content {
+    width: 92vw;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-table th,
+  .cart-table td {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+  .quantity {
+    width: 28px;
+    font-size: 15px;
+  }
+  .cart-container h1 {
+    font-size: 20px;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   3. GUEST CHECKOUT (Guestcheckout.css)
+   ────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .gc-layout {
+    grid-template-columns: 1fr;
+  }
+  .gc-summary-col {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .gc-container {
+    margin: 20px auto 40px;
+    padding: 0 12px;
+  }
+
+  /* Các bước (step indicator) co lại, cho phép wrap để không vỡ */
+  .gc-steps {
+    gap: 4px;
+  }
+  .gc-step-line {
+    max-width: 40px;
+    margin: 0 4px 22px;
+  }
+  .gc-step-label {
+    font-size: 11px;
+  }
+  .gc-step-num {
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+  }
+
+  .gc-summary-col {
+    padding: 18px;
+  }
+
+  .gc-section-title {
+    font-size: 16px;
+  }
+
+  .gc-qr-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  .gc-qr-info {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .gc-steps {
+    justify-content: space-between;
+  }
+  .gc-step-label {
+    display: none; /* chỉ hiện số bước, đỡ chật trên màn rất nhỏ */
+  }
+  .gc-qr-image {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+  }
+  .gc-success-detail {
+    padding: 16px 18px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .gc-success-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .gc-success-actions > * {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   4. ORDERS (orders.css)
+   ────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .orders-stats {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .orders-page,
+  .order-detail-page {
+    margin: 20px auto;
+    padding: 0 12px;
+  }
+
+  .orders-page-header h1 {
+    font-size: 24px;
+  }
+
+  .orders-stats {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .orders-stat-card {
+    padding: 16px;
+  }
+  .orders-stat-number {
+    font-size: 26px;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  .orders-table {
+    min-width: 560px;
+  }
+
+  .order-detail-header {
+    padding: 16px;
+    flex-direction: column;
+  }
+  .order-detail-body,
+  .order-summary {
+    padding: 18px;
+  }
+
+  .order-product img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .order-product {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .order-total-row {
+    flex-wrap: wrap;
+    padding: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .orders-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+  .product-names-cell {
+    max-width: 110px;
+  }
+  .orders-page-header h1 {
+    font-size: 20px;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   5. PAYMENT (Payment.css)
+   ────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .payment-container {
+    max-width: 100%;
+    padding: 0 20px 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .payment-container {
+    margin: 20px auto;
+    padding: 0 12px 40px;
+  }
+  .payment-container h1 {
+    font-size: 1.4rem;
+  }
+
+  .order-summary {
+    padding: 16px;
+  }
+
+  .summary-table th,
+  .summary-table td {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+
+  .method-tabs {
+    flex-direction: column;
+  }
+  .method-tab {
+    justify-content: center;
+  }
+
+  .method-panel {
+    padding: 18px;
+  }
+
+  .qr-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  .qr-image {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+  }
+  .qr-info {
+    width: 100%;
+  }
+
+  .cod-info {
+    flex-direction: column;
+    padding: 16px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-container h1 {
+    font-size: 1.2rem;
+  }
+  .qr-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   6. PROFILE — Edit (profileEdit.css) & Index (profileIndex.css)
+   ────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .profile-grid {
+    grid-template-columns: 260px 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-page {
+    padding: 20px 0;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-content,
+  .profile-card,
+  .profile-section-body {
+    padding: 20px;
+  }
+
+  .profile-sidebar {
+    padding: 20px;
+  }
+
+  .profile-info-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+  .form-actions .profile-btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Card địa chỉ: info + nút xếp dọc để nút không bị bóp nhỏ */
+  .address-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .address-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .addr-btn {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  .custom-modal-content {
+    padding: 22px;
+    max-width: 92vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-avatar {
+    width: 72px;
+    height: 72px;
+    font-size: 26px;
+  }
+  .address-actions {
+    flex-direction: column;
+  }
+  .addr-btn {
+    width: 100%;
+  }
+  .profile-section-title,
+  .profile-section-header .profile-section-title {
+    font-size: 17px;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   7. PRODUCTS (style_product.css)
+   ────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  .detail-wrap {
+    gap: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .products-page h2 {
+    font-size: 18px;
+  }
+
+  .search-form-page {
+    flex-direction: column;
+  }
+
+  .search-form-page input {
+    min-width: 100%;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+
+  .product-card img,
+  .no-img {
+    height: 130px;
+  }
+
+  .product-info {
+    padding: 10px;
+  }
+
+  .product-info h3 {
+    font-size: 13px;
+  }
+
+  .price {
+    font-size: 14px;
+  }
+
+  .detail-wrap {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .detail-info h1 {
+    font-size: 24px;
+  }
+
+  .detail-info .price {
+    font-size: 22px;
+  }
+
+  .attribute-values {
+    gap: 6px;
+  }
+
+  .attr-value-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .detail-btn-group {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px;
+  }
+
+  .product-card img,
+  .no-img {
+    height: 110px;
+  }
+}
+
+@media (max-width: 360px) {
+  .product-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .product-card img,
+  .no-img {
+    height: 160px;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+   8. HEADER / NAVBAR — đảm bảo không tràn ngang trên mobile
+   (nếu style.css chưa xử lý phần menu-toggle/nav-container responsive,
+   phần dưới đây bổ sung an toàn tối thiểu, không override nếu đã có)
+   ────────────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-inner {
+    flex-wrap: wrap;
+  }
+  .search-wrap {
+    order: 3;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .categories-list {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+  .categories-list::-webkit-scrollbar {
+    height: 4px;
+  }
+}

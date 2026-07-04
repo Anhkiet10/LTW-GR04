@@ -87,6 +87,7 @@ $paymentStatusMap = [
             <a class="shop-btn" href="/WEB_GR4/products">Mua sắm ngay</a>
         </div>
     <?php else: ?>
+        <div class="table-responsive">
         <div class="orders-table-wrap">
             <div class="orders-box">
                 <table class="orders-table">
@@ -149,6 +150,7 @@ $paymentStatusMap = [
                 </table>
             </div>
         </div>
+    </div>
     <?php endif; ?>
 </div>
 
