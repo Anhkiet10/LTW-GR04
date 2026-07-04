@@ -86,12 +86,34 @@ class ProductModel extends Model {
         return $row ?: null;
     }
 
-    /** Tìm kiếm sản phẩm */
+    /** Tìm kiếm sản phẩm theo tên, mô tả và danh mục (hỗ trợ nhiều từ khóa) */
     public function search(string $keyword, int $limit = 6): array {
-        $kw = $this->escape($keyword);
+        $keyword = trim($keyword);
+        if ($keyword === '') return [];
+
+        $fullKw = $this->escape($keyword);
+
+        // Tách thành từng từ để tìm không phụ thuộc thứ tự
+        // Ví dụ: "thun nam" vẫn khớp "Áo thun nam form rộng"
+        $words = preg_split('/\s+/', $keyword, -1, PREG_SPLIT_NO_EMPTY);
+
+        $wordConditions = [];
+        foreach ($words as $word) {
+            $w = $this->escape($word);
+            $wordConditions[] = "(
+                p.product_name  LIKE '%$w%'
+                OR p.description LIKE '%$w%'
+                OR c.category_name LIKE '%$w%'
+                OR pc.category_name LIKE '%$w%'
+            )";
+        }
+        // Mỗi từ trong từ khóa phải khớp ở đâu đó (tên, mô tả, danh mục hoặc danh mục cha)
+        $whereWords = implode(' AND ', $wordConditions);
+
         return $this->fetchAll("
             SELECT p.*,
                    pi.image_url,
+                   c.category_name,
                    MIN(pv.price)          AS min_price,
                    MAX(pv.price)          AS max_price,
                    SUM(pv.stock_quantity) AS total_stock
@@ -100,11 +122,23 @@ class ProductModel extends Model {
                    ON pi.product_id = p.product_id AND pi.is_primary = 1
             LEFT JOIN product_variants pv
                    ON pv.product_id = p.product_id AND pv.is_active = 1
+            LEFT JOIN categories c
+                   ON c.category_id = p.category_id
+            LEFT JOIN categories pc
+                   ON pc.category_id = c.parent_id
             WHERE  p.is_active = 1
-              AND  (p.product_name LIKE '%$kw%' OR p.description LIKE '%$kw%')
+              AND  ($whereWords)
             GROUP  BY p.product_id
-            ORDER  BY CASE WHEN p.product_name LIKE '$kw%' THEN 0 ELSE 1 END,
-                      p.product_name ASC
+            ORDER  BY
+                CASE
+                    WHEN p.product_name LIKE '$fullKw'    THEN 0
+                    WHEN p.product_name LIKE '$fullKw%'   THEN 1
+                    WHEN p.product_name LIKE '%$fullKw%'  THEN 2
+                    WHEN c.category_name LIKE '%$fullKw%' THEN 3
+                    WHEN pc.category_name LIKE '%$fullKw%' THEN 3
+                    ELSE 4
+                END,
+                p.product_name ASC
             LIMIT  $limit
         ");
     }

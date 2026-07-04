@@ -727,6 +727,25 @@
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
 }
 
+/* Ô bắt buộc bị bỏ trống khi nhấn Lưu */
+.field-error {
+  border-color: #e53935 !important;
+  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.12) !important;
+  animation: field-error-shake 0.3s;
+}
+@keyframes field-error-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
 /* toggle switch */
 .toggle {
   display: inline-flex;
