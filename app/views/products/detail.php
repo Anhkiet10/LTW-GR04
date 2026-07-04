@@ -33,7 +33,8 @@
                          : number_format($product['min_price'], 0, ',', '.') . ' - ' . number_format($product['max_price'], 0, ',', '.') . 'đ')
                      : '—'
              , ENT_QUOTES, 'UTF-8'); ?>"
-             data-product-id="<?php echo (int)$product['product_id']; ?>">
+             data-product-id="<?php echo (int)$product['product_id']; ?>"
+             data-logged-in="<?php echo isset($_SESSION['user_id']) ? '1' : '0'; ?>">
 
             <?php if (!empty($product['image_url'])): ?>
                 <img id="mainProductImage"
@@ -107,8 +108,30 @@
             </div>
         </div>
     </div>
+
+    <div id="addressModal" class="address-modal" style="display: none;">
+        <div class="address-content">
+            <h3>Nhập thông tin giao hàng</h3>
+            <span class="close">X</span>
+
+            <form id="addressForm" class="addressForm">
+                <input type="text" name="phone"
+                placeholder="Vui lòng nhập số điện thoại" required>
+
+                <input type="text" name="label" placeholder="Nhà / Công ty" value="Nhà" required>
+
+                <input type="text" name="city"
+                placeholder="Vui lòng nhập tên thành phố" required>
+
+                <input type="text" name="full_address"
+                placeholder="Vui lòng nhập đầy đủ địa chỉ" required>
+                <button type="submit" class="btn">Lưu thông tin</button>
+            </form>
+        </div>
+    </div>
 </section>
 
+<link rel="stylesheet" href="/WEB_GR4/public/assets/css/user/Cart.css">
 <script src="/WEB_GR4/public/assets/js/user/product_detail.js"></script>
 <script src="/WEB_GR4/public/assets/js/user/Detailbuynow.js"></script>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

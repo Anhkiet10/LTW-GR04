@@ -179,9 +179,32 @@ class CartModel extends Model{
     public function saveAddress(
         $userId,
         $fullAddress,
-        $city
+        $city,
+        $label = 'Nhà'
     )
     {
+        $existing = $this->getDefaultAddress($userId);
+
+        // Đã có địa chỉ mặc định -> cập nhật lại chính nó, không tạo thêm bản ghi mới
+        if ($existing) {
+            return $this->query("
+                UPDATE addresses
+                SET label = '$label',
+                    full_address = '$fullAddress',
+                    city = '$city',
+                    is_default = 1
+                WHERE address_id = {$existing['address_id']}
+            ");
+        }
+
+        // Phòng trường hợp dữ liệu cũ đang có nhiều địa chỉ is_default=1,
+        // đảm bảo trước khi thêm mới thì không còn địa chỉ mặc định nào khác
+        $this->query("
+            UPDATE addresses
+            SET is_default = 0
+            WHERE user_id = $userId
+        ");
+
         return $this->query("
             INSERT INTO addresses
             (
@@ -194,7 +217,7 @@ class CartModel extends Model{
             VALUES
             (
                 $userId,
-                'Nhà',
+                '$label',
                 '$fullAddress',
                 '$city',
                 1
@@ -229,4 +252,4 @@ class CartModel extends Model{
         ");
     }
 
-}  
+}
