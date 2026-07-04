@@ -8,6 +8,7 @@
         ?>
 
         <?php if ($stats && $chartData): ?>
+            <div class="sidebar-overlay"></div>
             <div class="dashboard-header">
                 <div>
                     <h1><i class="fas fa-chart-line" style="color:#7c3aed; margin-right:8px;"></i>Bảng điều khiển</h1>

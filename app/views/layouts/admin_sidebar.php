@@ -18,10 +18,17 @@ function getMenuActiveClass($pagePath) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/WEB_GR4/public/assets/css/admin/respon_admin.css">
 </head>
 <body>
 <div class="admin-layout">
+    <button class="sidebar-toggle-btn" onclick="toggleAdminSidebar()">
+    <i class="fa fa-bars"></i>
+    </button>
+
+    <div class="sidebar-overlay" onclick="toggleAdminSidebar()"></div>
 <aside class="admin-sidebar">
+        <div class="sidebar-overlay"></div>
         <div class="admin-logo"><i class="fas fa-store"></i> W4Shop</div>
         <div class="admin-user-info">
             <div class="admin-avatar">
@@ -54,5 +61,11 @@ function getMenuActiveClass($pagePath) {
             <li><a href="/WEB_GR4/logout" class="logout-link"><i class="fa-solid fa-sign-out-alt" style="color: rgb(177, 151, 252);"></i> Đăng xuất</a></li>
         </ul>
     </aside>
-    
+    <script>
+        function toggleAdminSidebar() {
+        document.querySelector('.admin-sidebar').classList.toggle('open');
+        document.querySelector('.sidebar-overlay').classList.toggle('active');
+        document.body.classList.toggle('no-scroll');
+        }
+    </script>
 </body>
