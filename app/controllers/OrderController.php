@@ -1,14 +1,9 @@
 <?php
-
 require_once __DIR__ . '/../../core/Controller.php';
 require_once __DIR__ . '/../models/OrderModel.php';
 
 class OrderController extends Controller
 {
-    // -------------------------------------------------------
-    // Trạng thái đơn hàng hợp lệ theo DB
-    // pending | confirmed | shipping | completed | cancelled
-    // -------------------------------------------------------
 
     public function checkout()
     {
@@ -107,9 +102,6 @@ class OrderController extends Controller
         ]);
     }
 
-    // -------------------------------------------------------
-    // Trang chọn phương thức thanh toán (GET /orders/pay/{id})
-    // -------------------------------------------------------
     public function pay($orderId)
     {
         if (session_status() === PHP_SESSION_NONE) session_start();
@@ -128,7 +120,7 @@ class OrderController extends Controller
             die('Không tìm thấy đơn hàng');
         }
 
-        // Đã có payment → chuyển thẳng sang detail
+        // Đã có payment ->chuyển thẳng sang detail
         if (!empty($order['payment_method'])) {
             header("Location: /WEB_GR4/orders/$orderId");
             exit;
@@ -143,10 +135,6 @@ class OrderController extends Controller
         ]);
     }
 
-    // -------------------------------------------------------
-    // Xác nhận thanh toán (POST /orders/confirmPayment)
-    // Nhận JSON: { order_id, method }
-    // -------------------------------------------------------
     public function confirmPayment() {
         header('Content-Type: application/json');
 
@@ -162,7 +150,7 @@ class OrderController extends Controller
         $model = new OrderModel();
 
         if ($method === 'bank_transfer') {
-            // Khách vừa bấm "Đã chuyển khoản" → chờ admin xác nhận
+            // Khách vừa bấm "Đã chuyển khoản" ->chờ admin xác nhận
             $ok = $model->updatePaymentStatus($orderId, 'processing', 'bank_transfer');
         } elseif ($method === 'cod') {
             // COD: ghi nhận phương thức, giữ payment_status=pending, chờ giao hàng
@@ -179,11 +167,7 @@ class OrderController extends Controller
         }
     }
 
-    // -------------------------------------------------------
-    // Admin duyệt / từ chối thanh toán
-    // POST /orders/updatePaymentStatus
-    // JSON: { order_id, payment_status }   (paid | failed)
-    // -------------------------------------------------------
+
     public function updatePaymentStatus()
     {
         header('Content-Type: application/json');
@@ -201,12 +185,12 @@ class OrderController extends Controller
         $model = new OrderModel();
         $ok    = $model->updatePaymentStatus($orderId, $status);
 
-        // Nếu admin duyệt paid → tự động chuyển đơn hàng sang confirmed
+        // Nếu admin duyệt paid -> tự động chuyển đơn hàng sang confirmed
         if ($ok && $status === 'paid') {
             $model->updateOrderStatus($orderId, 'confirmed');
         }
 
-        // Nếu admin từ chối → đơn hàng chuyển sang cancelled
+        // Nếu admin từ chối -> đơn hàng chuyển sang cancelled
         if ($ok && $status === 'failed') {
             $model->updateOrderStatus($orderId, 'cancelled');
         }
@@ -215,7 +199,7 @@ class OrderController extends Controller
     }
     public function guestCheckout()
 {
-    // Khách đã đăng nhập → chuyển sang luồng bình thường
+    // Khách đã đăng nhập -> chuyển sang luồng bình thường
     if (isset($_SESSION['user_id'])) {
         header('Location: /WEB_GR4/cart');
         exit;
@@ -253,11 +237,6 @@ class OrderController extends Controller
     ]);
 }
 
-
-// ----------------------------------------------------------------
-// 2. Xử lý đặt hàng từ guest (POST /orders/guest-place)
-//    Nhận JSON từ JS, tạo đơn hàng, trả JSON response
-// ----------------------------------------------------------------
 public function guestPlace()
 {
     header('Content-Type: application/json; charset=utf-8');
@@ -284,8 +263,6 @@ public function guestPlace()
     $guestCity    = trim($body['guest_city']    ?? '');
     $guestAddress = trim($body['guest_address'] ?? '');
     $note         = trim($body['note']          ?? '');
-    $method       = in_array($body['payment_method'] ?? '', ['cod', 'bank_transfer', 'momo', 'vnpay', 'zalopay'])
-                    ? $body['payment_method'] : 'cod';
     $items        = $body['items'] ?? [];
     $total        = (float)($body['total'] ?? 0);
 
@@ -296,7 +273,31 @@ public function guestPlace()
 
     // --- Lưu đơn hàng ---
     require_once __DIR__ . '/../models/OrderModel.php';
+    require_once __DIR__ . '/../models/CartModel.php';
     $orderModel = new OrderModel();
+    $cartModel  = new CartModel();
+
+    // --- Kiểm tra tồn kho TRƯỚC khi tạo đơn ---
+    foreach ($items as $item) {
+        $variantId = !empty($item['variant_id']) ? (int)$item['variant_id'] : null;
+        $qty       = (int)($item['quantity'] ?? 1);
+
+        if (!$variantId) {
+            continue;
+        }
+
+        $stock = $cartModel->getStockByVariant($variantId);
+        if ($qty > $stock) {
+            $name = trim($item['product_name'] ?? '') ?: 'Sản phẩm';
+            echo json_encode([
+                'success' => false,
+                'message' => $stock > 0
+                    ? "$name chỉ còn $stock trong kho"
+                    : "$name đã hết hàng",
+            ]);
+            exit;
+        }
+    }
 
     try {
         // Tạo đơn với user_id = NULL (guest), address_id = NULL
@@ -310,20 +311,26 @@ public function guestPlace()
             throw new \Exception('Không tạo được đơn hàng');
         }
 
-        // Thêm từng sản phẩm vào order_items
+        // Thêm từng sản phẩm vào order_items + trừ tồn kho tương ứng
         foreach ($items as $item) {
+            $variantId = !empty($item['variant_id']) ? (int)$item['variant_id'] : null;
+            $qty       = (int)($item['quantity'] ?? 1);
+
             $orderModel->addOrderItem(
                 $orderId,
-                (int)($item['product_id']  ?? 0),
-                !empty($item['variant_id']) ? (int)$item['variant_id'] : null,
-                (int)($item['quantity']    ?? 1),
+                (int)($item['product_id'] ?? 0),
+                $variantId,
+                $qty,
                 (float)($item['price_snapshot'] ?? 0)
             );
+
+            if ($variantId) {
+                $cartModel->reduceStock($variantId, $qty);
+            }
         }
 
-        // Tạo bản ghi payment
-        $payStatus = ($method === 'bank_transfer') ? 'pending' : 'pending';
-        $orderModel->createPayment($orderId, $method, $payStatus);
+        // Tạo bản ghi payment ở trạng thái pending, CHƯA gán phương thức
+        $orderModel->createPayment($orderId, null, 'pending');
 
         // Xóa guest cart trong session
         unset($_SESSION['guest_cart']);
@@ -341,10 +348,7 @@ public function guestPlace()
 
     exit;
 }
-    // -------------------------------------------------------
-    // Trang xem trước đơn hàng Mua ngay (member)
-    // GET /orders/buynow-preview
-    // -------------------------------------------------------
+
     public function buyNowPreview()
     {
         if (!isset($_SESSION['user_id'])) {
@@ -381,10 +385,6 @@ public function guestPlace()
         ]);
     }
 
-    // -------------------------------------------------------
-    // Tạo đơn hàng từ Mua ngay (member)
-    // POST /orders/buynow-place  (JSON)
-    // -------------------------------------------------------
     public function buyNowPlace()
     {
         header('Content-Type: application/json');
@@ -412,9 +412,10 @@ public function guestPlace()
         // Kiểm tra tồn kho
         $stock = $cartModel->getStockByVariant($item['variant_id']);
         if ($item['quantity'] > $stock) {
+            $name = trim($item['product_name'] ?? '') ?: 'Sản phẩm';
             echo json_encode([
                 'success' => false,
-                'message' => "Sản phẩm chỉ còn $stock trong kho"
+                'message' => $stock > 0 ? "$name chỉ còn $stock trong kho" : "$name đã hết hàng",
             ]);
             exit;
         }

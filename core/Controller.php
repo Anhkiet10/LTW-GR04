@@ -1,8 +1,10 @@
 <?php
 class Controller {
-    public function __construct() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start(); // ← Thêm dòng này
+    public function __construct() { //là một Magic Method (phương thức đặc biệt) mà PHP quy định sẵn.
+    //PHP chỉ tự tìm __construct()
+    // khi anh dùng từ khóa new để tạo object.    
+    if (session_status() === PHP_SESSION_NONE) {
+            session_start(); 
         }
     }
     

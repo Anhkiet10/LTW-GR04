@@ -1,9 +1,6 @@
-// ===== SEARCH REALTIME =====
-// const searchInput = document.getElementById("searchInput");
 const suggestions = document.getElementById("searchSuggestions");
 let searchTimer;
 
-// ===== HIGHLIGHT ACTIVE CATEGORY =====
 function highlightActiveCategory() {
   const params = new URLSearchParams(window.location.search);
   const categoryId = params.get("category");
@@ -85,7 +82,6 @@ function doSearch() {
   }
 }
 
-// ===== BACK TO TOP =====
 const backToTop = document.getElementById("backToTop");
 if (backToTop) {
   window.addEventListener("scroll", function () {
@@ -93,7 +89,6 @@ if (backToTop) {
   });
 }
 
-// ===== ADD TO CART =====
 function addToCart(productId, variantId = null) {
   if (!variantId) {
     showToast("Vui lòng chọn phiên bản sản phẩm!", "error");
@@ -123,7 +118,6 @@ function addToCart(productId, variantId = null) {
     });
 }
 
-// ===== TOAST NOTIFICATION =====
 function showToast(msg, type = "success") {
   const toast = document.createElement("div");
   toast.className = "toast toast-" + type;
@@ -135,7 +129,6 @@ function showToast(msg, type = "success") {
     setTimeout(() => toast.remove(), 300);
   }, 2500);
 }
-// ===== MOBILE MENU TOGGLE =====
 document.addEventListener("DOMContentLoaded", function () {
   const menuToggle = document.getElementById("menuToggle");
   const navContainer = document.querySelector(".nav-container");
@@ -146,7 +139,6 @@ document.addEventListener("DOMContentLoaded", function () {
       navContainer.classList.toggle("active");
     });
 
-    // Đóng menu khi click vào link
     const navLinks = navContainer.querySelectorAll("a");
     navLinks.forEach((link) => {
       link.addEventListener("click", function () {
@@ -154,7 +146,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
-    // Đóng menu khi click bên ngoài
     document.addEventListener("click", function (e) {
       if (!e.target.closest(".navbar")) {
         navContainer.classList.remove("active");

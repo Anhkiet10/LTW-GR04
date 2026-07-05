@@ -5,11 +5,6 @@ require_once __DIR__ . '/../../core/Model.php';
 class CategoryModelAdmin extends Model
 {
     protected string $table = 'categories';
-
-    // ------------------------------------------------------------------ //
-    //  READ                                                                //
-    // ------------------------------------------------------------------ //
-
     /**
      * Lấy tất cả danh mục, kèm tên danh mục cha (nếu có)
      * Dùng cho trang danh sách admin
@@ -141,10 +136,6 @@ class CategoryModelAdmin extends Model
         return (int)($row['cnt'] ?? 0) > 0;
     }
 
-    // ------------------------------------------------------------------ //
-    //  WRITE                                                               //
-    // ------------------------------------------------------------------ //
-
     /**
      * Tạo danh mục mới
      * @param array $data ['category_name', 'description', 'parent_id']
@@ -194,10 +185,6 @@ class CategoryModelAdmin extends Model
         $sql = "DELETE FROM {$this->table} WHERE category_id = :id";
         $this->execute($sql, [':id' => $id]);
     }
-
-    // ------------------------------------------------------------------ //
-    //  PRIVATE HELPERS                                                     //
-    // ------------------------------------------------------------------ //
 
     private function buildWhereClause(array $filters): array
     {

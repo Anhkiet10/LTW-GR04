@@ -1,7 +1,4 @@
 <?php
-// app/views/admin/UserForm.php
-// Nhận: $user (array|null), $errors (array), $mode ('create'|'edit')
-
 $isEdit  = $mode === 'edit';
 $title   = $isEdit ? 'Chỉnh sửa người dùng' : 'Thêm người dùng mới';
 $action  = $isEdit ? '/WEB_GR4/admin/users/update'   : '/WEB_GR4/admin/users/store';
@@ -14,7 +11,6 @@ $val = fn(string $k, string $default = '') => htmlspecialchars($user[$k] ?? $def
 <link rel="stylesheet" href="/WEB_GR4/public/assets/css/admin/UserForm.css">
 <div class="admin-content">
 
-  <!-- ── Header ────────────────────────────────────────────── -->
   <div class="page-header">
     <div>
       <a href="/WEB_GR4/admin/users" class="back-link"><i class="fas fa-arrow-left"></i> Quay lại</a>
@@ -22,7 +18,6 @@ $val = fn(string $k, string $default = '') => htmlspecialchars($user[$k] ?? $def
     </div>
   </div>
 
-  <!-- ── Form ───────────────────────────────────────────────── -->
   <div class="form-card">
     <form method="POST" action="<?= $action ?>">
       <?php if ($isEdit): ?>
@@ -131,14 +126,4 @@ $val = fn(string $k, string $default = '') => htmlspecialchars($user[$k] ?? $def
 
 </div>
 
-<script>
-// Toggle show / hide password
-const pwdInput = document.getElementById('password');
-const eyeIcon  = document.getElementById('eyeIcon');
-
-document.querySelector('.toggle-password').addEventListener('click', () => {
-  const show = pwdInput.type === 'password';
-  pwdInput.type      = show ? 'text' : 'password';
-  eyeIcon.className  = show ? 'fas fa-eye-slash' : 'fas fa-eye';
-});
-</script>
+<script src="/WEB_GR4/public/assets/js/admin/userForm.js"></script>

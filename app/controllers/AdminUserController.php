@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__ . '/../../core/Controller.php';
 require_once __DIR__ . '/../models/UserModelAdmin.php';
 
@@ -12,11 +11,6 @@ class AdminUserController extends Controller
         $this->checkAdminAuth();
         $this->userModel = new UserModelAdmin();
     }
-
-    // ------------------------------------------------------------------ //
-    //  AUTH GUARD                                                          //
-    // ------------------------------------------------------------------ //
-
 private function checkAdminAuth(): void
 {
     if (session_status() === PHP_SESSION_NONE) session_start();
@@ -28,9 +22,6 @@ private function checkAdminAuth(): void
     }
 }
 
-    // ------------------------------------------------------------------ //
-    //  GET /admin/users  – danh sách user (có tìm kiếm + phân trang)      //
-    // ------------------------------------------------------------------ //
     public function index(): void
     {
         $search   = trim($_GET['search']  ?? '');
@@ -54,10 +45,6 @@ private function checkAdminAuth(): void
             'filters'    => $filters,
         ]);
     }
-
-    // ------------------------------------------------------------------ //
-    //  GET /admin/users/create  – form thêm user mới                      //
-    // ------------------------------------------------------------------ //
     public function create(): void
     {
         $this->render('admin/UserForm', [
@@ -67,9 +54,6 @@ private function checkAdminAuth(): void
         ]);
     }
 
-    // ------------------------------------------------------------------ //
-    //  POST /admin/users/store  – lưu user mới                            //
-    // ------------------------------------------------------------------ //
     public function store(): void
     {
         $data   = $this->sanitizeInput($_POST);
@@ -101,10 +85,6 @@ private function checkAdminAuth(): void
         header('Location: /WEB_GR4/admin/users'); 
         exit;
     }
-
-    // ------------------------------------------------------------------ //
-    //  GET /admin/users/edit?id=  – form sửa user                         //
-    // ------------------------------------------------------------------ //
     public function edit(): void
     {
         $id   = (int)($_GET['id'] ?? 0);
@@ -123,9 +103,6 @@ private function checkAdminAuth(): void
         ]);
     }
 
-    // ------------------------------------------------------------------ //
-    //  POST /admin/users/update  – cập nhật user                          //
-    // ------------------------------------------------------------------ //
     public function update(): void
     {
         $id   = (int)($_POST['id'] ?? 0);
@@ -174,9 +151,6 @@ private function checkAdminAuth(): void
         exit;
     }
 
-    // ------------------------------------------------------------------ //
-    //  POST /admin/users/delete  – xóa user                               //
-    // ------------------------------------------------------------------ //
     public function delete(): void
     {
         $id = (int)($_POST['id'] ?? 0);
@@ -194,9 +168,6 @@ private function checkAdminAuth(): void
         exit;
     }
 
-    // ------------------------------------------------------------------ //
-    //  POST /admin/users/toggle-status  – khoá / mở khoá tài khoản       //
-    // ------------------------------------------------------------------ //
     public function toggleStatus(): void
     {
         $id   = (int)($_POST['id'] ?? 0);
@@ -218,9 +189,6 @@ private function checkAdminAuth(): void
         $this->jsonResponse(['success' => true, 'status' => $newStatus]);
     }
 
-    // ------------------------------------------------------------------ //
-    //  GET /admin/users/detail?id=  – xem chi tiết user                   //
-    // ------------------------------------------------------------------ //
     public function detail(): void
     {
         $id   = (int)($_GET['id'] ?? 0);
@@ -240,9 +208,6 @@ private function checkAdminAuth(): void
         ]);
     }
 
-    // ------------------------------------------------------------------ //
-    //  HELPERS                                                             //
-    // ------------------------------------------------------------------ //
     private function sanitizeInput(array $post): array
     {
         return [

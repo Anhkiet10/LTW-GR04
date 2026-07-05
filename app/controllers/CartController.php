@@ -120,10 +120,11 @@ class CartController extends Controller{
         $phone       = $_POST['phone'];
         $city        = $_POST['city'];
         $fullAddress = $_POST['full_address'];
+        $label       = !empty($_POST['label']) ? $_POST['label'] : 'Nhà';
 
         $cartModel = new CartModel();
         $cartModel->saveUserPhone($userId, $phone);
-        $cartModel->saveAddress($userId, $fullAddress, $city);
+        $cartModel->saveAddress($userId, $fullAddress, $city, $label);
 
         header("Content-Type: application/json");
         echo json_encode(["success" => true]);

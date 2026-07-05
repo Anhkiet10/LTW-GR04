@@ -2,14 +2,12 @@
 <link rel="stylesheet" href="/WEB_GR4/public/assets/css/admin/dashboard.css">
 
 <main class="admin-content">
-    <!-- ═══ PAGE HEADER ═══ -->
     <div class="page-header">
         <div class="statistics-header">
             <h1><i class="fas fa-chart-bar" style="color:#7c3aed; margin-right:10px;"></i>Thống kê</h1>
             <p class="subtitle">Tổng quan doanh số và hiệu suất bán hàng</p>
         </div>
 
-        <!-- ═══ NAVIGATION TABS ═══ -->
         <div class="statistics-tabs">
             <button class="tab-btn active" data-tab="revenue">
                 <i class="fas fa-dollar-sign"></i>
@@ -29,7 +27,7 @@
             </button>
         </div>
 
-        <!-- ═══ DATE FILTER ═══ -->
+
         <div class="filter-section">
             <form method="GET" action="/WEB_GR4/admin/statistics" class="date-filter-form">
                 <div class="filter-group">
@@ -54,9 +52,6 @@
         </div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB 1: TỔNG DOANH THU -->
-    <!-- ════════════════════════════════════════════════════════════ -->
     <?php $stats = $dashboardStats ?? []; ?>
     
     <div class="tab-content active" id="revenue-tab">
@@ -125,9 +120,7 @@
         </div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB 2: SỐ ĐƠN HÀNG -->
-    <!-- ════════════════════════════════════════════════════════════ -->
+
     <div class="tab-content" id="orders-tab">
         <div class="stats-overview">
             <!-- Thẻ thống kê đơn hàng -->
@@ -201,9 +194,6 @@
         </div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB 3: SẢN PHẨM BÁN CHẠY -->
-    <!-- ════════════════════════════════════════════════════════════ -->
     <div class="tab-content" id="bestseller-tab">
         <div class="stats-overview">
             <!-- Sản phẩm bán chạy nhất -->
@@ -267,9 +257,6 @@
         </div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════════ -->
-    <!-- TAB 4: THỐNG KÊ THEO THÁNG -->
-    <!-- ════════════════════════════════════════════════════════════ -->
     <div class="tab-content" id="monthly-tab">
         <div class="stats-overview">
             <!-- Biểu đồ chi tiết -->

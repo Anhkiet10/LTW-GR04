@@ -1,16 +1,19 @@
 
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
 <link rel="stylesheet" href="/WEB_GR4/public/assets/css/user/Cart.css">
+<link rel="stylesheet" href="/WEB_GR4/public/assets/css/user/responsive_shop.css">
 
 
+ <div class="table-responsive">
     <div class="cart-container">
         <h1>Giỏ hàng</h1>
         <?php if(!empty($items)):?>
             <?php $total =0; ?>
+            <div class="table-responsive">
             <table class="cart-table" >
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>Chọn</th>
                         <th>Sản phẩm </th>
                         <th>Mô tả</th>
                         <th>Biến thể</th>
@@ -57,8 +60,7 @@
                             <td>
                                 <button class="btn-delete" data-id="<?php
                                     echo $item['cart_item_id'];?>">
-                                     Xóa
-                                    <i class="fa-solid fa-delete-left"></i>
+                                     Xóa <i class="fa-solid fa-delete-left"></i>
                                 </button>
 
                             </td>
@@ -66,6 +68,7 @@
                     <?php endforeach;?>
                 </tbody>
             </table>
+            </div>
 
             <div class="cart-total">
                 <h2>
@@ -87,8 +90,9 @@
             <div id="addressModal" class="address-modal" style="display: none;">
                 <div class="address-content">
                     <h3>Nhập thông tin giao hàng</h3>
+                    <span class="close">X</span>
 
-                    <form id="addressForm">
+                    <form id="addressForm" class="addressForm">
                         <input type="text" name="phone" 
                         placeholder="Vui lòng nhập số điện thoại" required>
                         
@@ -103,14 +107,16 @@
                     </form>
                 </div>
             </div>
+    </div>
     <?php else: ?>
-        <h2>Giỏ hàng đang trống</h2>
+        <div class="empty-cart">
+        <h3>Giỏ hàng đang trống</h3>
         <a href="/WEB_GR4/products">
             Mua sắm ngay
         </a>
         <?php endif;?>
+        </div>
     </div>
-
-<script src="/WEB_GR4/public/assets/js/user/Cart1.js"></script>
-<script src="/WEB_GR4/public/assets/js/user/Detailbuynow.js"></script>
+ 
+<script src="/WEB_GR4/public/assets/js/user/orders.js"></script>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

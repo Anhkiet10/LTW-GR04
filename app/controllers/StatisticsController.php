@@ -1,9 +1,4 @@
 <?php
-/**
- * app/controllers/StatisticsController.php
- * Controller xử lý tất cả request liên quan đến thống kê
- */
-
 require_once __DIR__ . '/../../core/Controller.php';
 require_once __DIR__ . '/../models/StatisticsModel.php';
 

@@ -21,6 +21,7 @@ $router->get('/login',    'AuthController', 'loginPage');
 $router->post('/login',   'AuthController', 'loginPage');
 $router->get('/register', 'AuthController', 'registerPage');
 $router->post('/register','AuthController', 'registerPage');
+$router->get('/forgot-password', 'AuthController', 'forgotPassword');
 $router->get('/logout',   'AuthController', 'logout');
 $router->get('/profile',          'ProfileController', 'index');
 $router->get('/profile/edit',           'ProfileController', 'edit');

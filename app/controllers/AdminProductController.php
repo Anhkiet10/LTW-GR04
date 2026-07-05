@@ -24,9 +24,6 @@ class AdminProductController extends Controller {
         exit;
     }
 }
-    /**
-     * Xóa buffer rác, set header JSON, và echo response — dùng thay cho mọi echo json_encode().
-     */
     private function json(array $data, int $status = 200): void {
         ob_end_clean();
         http_response_code($status);
@@ -34,7 +31,7 @@ class AdminProductController extends Controller {
         echo json_encode($data);
     }
 
-    // ─── GET /admin/products ──────────────────────────────────────────────────────
+
     public function index(): void {
         $perPage = 8;
         $page    = max(1, (int)($_GET['page'] ?? 1));
@@ -67,7 +64,6 @@ class AdminProductController extends Controller {
         ]);
     }
 
-    // ─── GET /admin/products/getProduct?id=X ─────────────────────────────────────
 public function getProduct(): void {
     $id = (int)($_GET['id'] ?? 0);
     if ($id <= 0) {
@@ -90,7 +86,7 @@ public function getProduct(): void {
         'attributeTypes' => $this->model->getAllAttributeValues(),
     ]);
 }
-    // ─── POST /admin/products/store ───────────────────────────────────────────────
+
     public function store(): void {
         $name = trim($_POST['product_name'] ?? '');
         if ($name === '') {
@@ -117,7 +113,6 @@ public function getProduct(): void {
         }
     }
 
-    // ─── POST /admin/products/update ─────────────────────────────────────────────
     public function update(): void {
         $id   = (int)($_POST['product_id'] ?? 0);
         $name = trim($_POST['product_name'] ?? '');
@@ -146,7 +141,6 @@ public function getProduct(): void {
         }
     }
 
-    // ─── POST /admin/products/delete ─────────────────────────────────────────────
     public function delete(): void {
         $id = (int)($_POST['product_id'] ?? 0);
         if ($id <= 0) {
@@ -169,7 +163,6 @@ public function getProduct(): void {
         }
     }
 
-    // ─── POST /admin/products/deleteVariant ──────────────────────────────────────
     public function deleteVariant(): void {
         $vid = (int)($_POST['variant_id'] ?? 0);
         if ($vid <= 0) {
@@ -188,7 +181,6 @@ public function getProduct(): void {
         }
     }
 
-    // ─── GET /admin/products/getAttributes ───────────────────────────────────────
     public function getAttributes(): void {
         $this->json([
             'success'        => true,
@@ -197,7 +189,6 @@ public function getProduct(): void {
     }
 
 
-    // ─── POST /admin/products/deleteAttribute ────────────
     public function deleteAttribute(): void {
         $attrId = (int)($_POST['attribute_id'] ?? 0);
         if ($attrId <= 0) {
@@ -220,7 +211,6 @@ public function getProduct(): void {
         }
     }
 
-    // ─── POST /admin/products/deleteAttributeValue ───────────
     public function deleteAttributeValue(): void {
         $valueId = (int)($_POST['value_id'] ?? 0);
         if ($valueId <= 0) {
@@ -243,7 +233,6 @@ public function getProduct(): void {
         }
     }
 
-    // ─── POST /admin/products/createAttribute ────────────────────────────────────
     public function createAttribute(): void {
         $name = trim($_POST['attribute_name'] ?? '');
         if ($name === '') {
@@ -274,8 +263,6 @@ public function getProduct(): void {
             ]);
         }
     }
-
-    // ─── POST /admin/products/createAttributeValue ───────────────────────────────
     public function createAttributeValue(): void {
         $attrId = (int)($_POST['attribute_id'] ?? 0);
         $name   = trim($_POST['value_name'] ?? '');
@@ -307,8 +294,6 @@ public function getProduct(): void {
             ]);
         }
     }
-
-    // ─── POST /admin/products/uploadVariantImage ──────────────────────────────────
     public function uploadVariantImage(): void {
         $productId = (int)($_POST['product_id'] ?? 0);
         $variantId = (int)($_POST['variant_id'] ?? 0);
@@ -329,8 +314,6 @@ public function getProduct(): void {
             $this->json(['success' => false, 'message' => 'Lỗi upload: ' . $e->getMessage()]);
         }
     }
-
-    // ─── Helper: lưu danh sách variants từ POST ───────────────────────────────────
     private function saveVariants(int $productId): array {
         $variantIds = $_POST['variant_id'] ?? [];
         $skus       = $_POST['sku']        ?? [];
@@ -342,7 +325,7 @@ public function getProduct(): void {
         // Dùng variant_active_index[] để biết chính xác row nào được check.
         // Fallback: dùng hidden field variant_active_map[] nếu JS đã sửa.
         // Ở đây dùng cách an toàn: JS phải gửi kèm hidden field is_active[]
-        $isActives = $_POST['is_active'] ?? [];
+        $isActives = $_POST['variant_is_active'] ?? [];
 
         $count = count($prices);
         $indexToVariantId = [];
@@ -367,8 +350,6 @@ public function getProduct(): void {
         }
         return $indexToVariantId;
     }
-
-    // ─── Helper: xử lý ảnh variant gửi lên cùng form (variant_image[rowIndex]) ──
     private function saveVariantImages(int $productId, array $indexToVariantId): void {
         $files = $_FILES['variant_image'] ?? [];
         if (empty($files) || empty($files['name'])) return;
@@ -395,8 +376,6 @@ public function getProduct(): void {
             }
         }
     }
-
-    // ─── Helper: upload ảnh đại diện ─────────────────────────────────────────────
     private function handleImageUpload(int $productId, int $variantId = 0): void {
     $file = $_FILES['image'] ?? null;
     if (!$file || $file['error'] !== UPLOAD_ERR_OK || $file['size'] === 0) {

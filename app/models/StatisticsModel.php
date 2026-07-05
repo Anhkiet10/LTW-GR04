@@ -1,10 +1,4 @@
 <?php
-/**
- * app/models/StatisticsModel.php
- * Model xử lý tất cả logic lấy dữ liệu thống kê từ database
- * ✅ FIXED: Tính TẤT CẢ đơn hàng (không filter status)
- */
-
 require_once __DIR__ . '/../../config/database.php';
 
 class StatisticsModel {

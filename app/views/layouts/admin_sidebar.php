@@ -18,10 +18,17 @@ function getMenuActiveClass($pagePath) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/WEB_GR4/public/assets/css/admin/respon_admin.css">
 </head>
 <body>
 <div class="admin-layout">
+    <button class="sidebar-toggle-btn" onclick="toggleAdminSidebar()">
+    <i class="fa fa-bars"></i>
+    </button>
+
+    <div class="sidebar-overlay" onclick="toggleAdminSidebar()"></div>
 <aside class="admin-sidebar">
+        <div class="sidebar-overlay"></div>
         <div class="admin-logo"><i class="fas fa-store"></i> W4Shop</div>
         <div class="admin-user-info">
             <div class="admin-avatar">
@@ -51,15 +58,14 @@ function getMenuActiveClass($pagePath) {
                 <i class="fa-solid fa-copy"></i> Sao lưu</a></li>
 
 
-            <!-- <li><a href="/WEB_GR4/admin" ><i class="fas fa-home"></i> Trang chủ</a></li>
-            <li><a href="/WEB_GR4/admin/categories"><i class="fas fa-box"></i> Thể loại</a></li>
-            <li><a href="/WEB_GR4/admin/products"><i class="fas fa-box-open"></i> Sản phẩm</a></li>
-            <li><a href="/WEB_GR4/admin/orders"><i class="fas fa-shopping-cart"></i> Đơn hàng</a></li>
-            <li><a href="/WEB_GR4/admin/users"><i class="fas fa-users"></i> Người dùng</a></li>
-            <li><a href="/WEB_GR4/admin/statistics"><i class="fas fa-chart-bar"></i> Thống kê</a></li>
-            <li><a href="/WEB_GR4/admin/backup"><i class="fa-solid fa-copy" style="color: rgb(177,151,252);"></i> Sao lưu</a></li> -->
             <li><a href="/WEB_GR4/logout" class="logout-link"><i class="fa-solid fa-sign-out-alt" style="color: rgb(177, 151, 252);"></i> Đăng xuất</a></li>
         </ul>
     </aside>
-    
+    <script>
+        function toggleAdminSidebar() {
+        document.querySelector('.admin-sidebar').classList.toggle('open');
+        document.querySelector('.sidebar-overlay').classList.toggle('active');
+        document.body.classList.toggle('no-scroll');
+        }
+    </script>
 </body>

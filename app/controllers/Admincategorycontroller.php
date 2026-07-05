@@ -12,11 +12,6 @@ class AdminCategoryController extends Controller
         $this->checkAdminAuth();
         $this->categoryModel = new CategoryModelAdmin();
     }
-
-    // ------------------------------------------------------------------ //
-    //  AUTH GUARD                                                          //
-    // ------------------------------------------------------------------ //
-
     private function checkAdminAuth(): void
     {
         if (session_status() === PHP_SESSION_NONE) session_start();
@@ -26,11 +21,6 @@ class AdminCategoryController extends Controller
             exit;
         }
     }
-
-    // ------------------------------------------------------------------ //
-    //  GET /admin/categories  – danh sách danh mục (tìm kiếm + phân trang)//
-    // ------------------------------------------------------------------ //
-
     public function index(): void
     {
         $search  = trim($_GET['search'] ?? '');
@@ -53,11 +43,6 @@ class AdminCategoryController extends Controller
             'filters'    => $filters,
         ]);
     }
-
-    // ------------------------------------------------------------------ //
-    //  GET /admin/categories/create  – form thêm danh mục mới             //
-    // ------------------------------------------------------------------ //
-
     public function create(): void
     {
         $parentList = $this->categoryModel->getAllForSelect();
@@ -69,10 +54,6 @@ class AdminCategoryController extends Controller
             'parentList' => $parentList,
         ]);
     }
-
-    // ------------------------------------------------------------------ //
-    //  POST /admin/categories/store  – lưu danh mục mới                   //
-    // ------------------------------------------------------------------ //
 
     public function store(): void
     {
@@ -106,11 +87,6 @@ class AdminCategoryController extends Controller
         header('Location: /WEB_GR4/admin/categories');
         exit;
     }
-
-    // ------------------------------------------------------------------ //
-    //  GET /admin/categories/edit?id=  – form sửa danh mục                //
-    // ------------------------------------------------------------------ //
-
     public function edit(): void
     {
         $id       = (int)($_GET['id'] ?? 0);
@@ -132,11 +108,6 @@ class AdminCategoryController extends Controller
             'parentList' => $parentList,
         ]);
     }
-
-    // ------------------------------------------------------------------ //
-    //  POST /admin/categories/update  – cập nhật danh mục                 //
-    // ------------------------------------------------------------------ //
-
     public function update(): void
     {
         $id       = (int)($_POST['id'] ?? 0);
@@ -191,10 +162,6 @@ class AdminCategoryController extends Controller
         exit;
     }
 
-    // ------------------------------------------------------------------ //
-    //  POST /admin/categories/delete  – xóa danh mục                      //
-    // ------------------------------------------------------------------ //
-
     public function delete(): void
     {
         $id = (int)($_POST['id'] ?? 0);
@@ -225,10 +192,6 @@ class AdminCategoryController extends Controller
         header('Location: /WEB_GR4/admin/categories');
         exit;
     }
-
-    // ------------------------------------------------------------------ //
-    //  HELPERS                                                             //
-    // ------------------------------------------------------------------ //
 
     private function sanitizeInput(array $post): array
     {

@@ -1,9 +1,9 @@
-// ─── State ───────────────────────────────────────────────────────────────────
+//  State
 let currentDeleteId = null;
 let allAttributes = window.PRODUCT_ATTRIBUTES || [];
 let selectedAttrColumns = [];
 
-// ─── Filter / Search (server-side: điều hướng URL kèm query string) ──────────
+//  Filter / Search (server-side: điều hướng URL kèm query string)
 const searchInput = document.getElementById("searchInput");
 const filterCat = document.getElementById("filterCategory");
 const filterStatus = document.getElementById("filterStatus");
@@ -19,7 +19,7 @@ function navigateWithFilters() {
   window.location.href = `/WEB_GR4/admin/products${qs ? "?" + qs : ""}`;
 }
 
-// Đổi select (danh mục / trạng thái) → điều hướng ngay
+// Đổi select (danh mục / trạng thái) -> điều hướng ngay
 [filterCat, filterStatus].forEach((el) =>
   el?.addEventListener("change", navigateWithFilters),
 );
@@ -31,14 +31,14 @@ searchInput?.addEventListener("input", () => {
   searchDebounce = setTimeout(navigateWithFilters, 500);
 });
 
-// Nhấn Enter trong ô search → submit ngay, không cần chờ debounce
+// Nhấn Enter trong ô search -> submit ngay, không cần chờ debounce
 filterForm?.addEventListener("submit", (e) => {
   e.preventDefault();
   clearTimeout(searchDebounce);
   navigateWithFilters();
 });
 
-// ─── Modal helpers ────────────────────────────────────────────────────────────
+//  Modal helpers
 function openModal(id) {
   document.getElementById(id).classList.add("active");
 }
@@ -53,7 +53,7 @@ document.querySelectorAll(".modal-overlay").forEach((el) => {
   });
 });
 
-// ─── Open Add ────────────────────────────────────────────────────────────────
+//  Open Add
 document.getElementById("btnAddProduct")?.addEventListener("click", openAdd);
 
 function openAdd() {
@@ -70,7 +70,7 @@ function openAdd() {
   openModal("productModal");
 }
 
-// ─── Open Edit ────────────────────────────────────────────────────────────────
+//  Open Edit
 async function openEdit(id) {
   document.getElementById("modalTitle").textContent = "Chỉnh sửa sản phẩm";
   document.getElementById("btnSubmit").dataset.action = "update";
@@ -137,7 +137,7 @@ function closeModal() {
   closeOverlay("productModal");
 }
 
-// ─── Toggle label ─────────────────────────────────────────────────────────────
+//  Toggle label
 document
   .getElementById("fIsActive")
   ?.addEventListener("change", updateToggleLabel);
@@ -149,7 +149,7 @@ function updateToggleLabel() {
     : "Đã ẩn";
 }
 
-// ─── Image upload preview ─────────────────────────────────────────────────────
+//  Image upload preview
 document.getElementById("imagePreview")?.addEventListener("click", () => {
   document.getElementById("fImage").click();
 });
@@ -179,7 +179,7 @@ function resetImagePreview() {
   }
 }
 
-// ─── Attribute columns ────────────────────────────────────────────────────────
+//  Attribute columns
 function getAttributeById(attrId) {
   return allAttributes.find((a) => a.attribute_id == attrId);
 }
@@ -324,7 +324,7 @@ function refreshVariantAttributeSelects() {
   });
 }
 
-// ─── Custom confirm (thay thế window.confirm) ────────────────────────────────
+//  Custom confirm (thay thế window.confirm)
 function showConfirm(msg, okLabel = "Xác nhận xóa") {
   return new Promise((resolve) => {
     const overlay = document.getElementById("confirmModal");
@@ -359,7 +359,7 @@ function showConfirm(msg, okLabel = "Xác nhận xóa") {
   });
 }
 
-// ─── Attribute manage modal ───────────────────────────────────────────────────
+//  Attribute manage modal
 function openAttributeManageModal() {
   renderAttributeManageList();
   openModal("attributeManageModal");
@@ -623,7 +623,7 @@ document
     }
   });
 
-// ─── Variant rows ─────────────────────────────────────────────────────────────
+//  Variant rows
 function addVariantRow(v = null) {
   const tbody = document.getElementById("variantRows");
   const tr = document.createElement("tr");
@@ -683,7 +683,7 @@ function addVariantRow(v = null) {
         <td data-col="price"><input type="number" name="price[]" value="${price}" placeholder="0" min="0" class="v-input" required></td>
         <td><input type="number" name="stock[]" value="${stock}" placeholder="0" min="0" class="v-input"></td>
         <td class="text-center">
-            <input type="hidden" name="is_active[]" value="${active ? 1 : 0}" class="v-active-hidden">
+            <input type="hidden" name="variant_is_active[]" value="${active ? 1 : 0}" class="v-active-hidden">
             <input type="checkbox" value="1" ${active ? "checked" : ""} class="v-checkbox"
                    onchange="this.previousElementSibling.value = this.checked ? 1 : 0">
         </td>
@@ -786,7 +786,48 @@ function removeVariantRow(btn, vid) {
   }
 }
 
-// ─── Validate variants trước khi submit ──────────────────────────────────────
+//  Validate các ô bắt buộc (required) trước khi submit — trả về thông báo lỗi hoặc null nếu OK
+function validateRequiredFields(form) {
+  // Xóa trạng thái lỗi cũ
+  form
+    .querySelectorAll(".field-error")
+    .forEach((el) => el.classList.remove("field-error"));
+
+  const invalidEls = [...form.querySelectorAll("[required]")].filter(
+    (el) => !el.checkValidity(),
+  );
+
+  if (invalidEls.length === 0) return null;
+
+  invalidEls.forEach((el) => {
+    el.classList.add("field-error");
+    el.addEventListener("input", () => el.classList.remove("field-error"), {
+      once: true,
+    });
+  });
+
+  // Cuộn tới và focus ô lỗi đầu tiên
+  invalidEls[0].scrollIntoView({ behavior: "smooth", block: "center" });
+  invalidEls[0].focus();
+
+  // Tên hiển thị dễ hiểu cho từng ô bắt buộc
+  const fieldLabel = (el) => {
+    if (el.id === "fName") return "Tên sản phẩm";
+    if (el.name === "price[]") return "Giá biến thể";
+    return (
+      el
+        .closest(".form-group")
+        ?.querySelector("label")
+        ?.textContent?.replace("*", "")
+        .trim() || "một số trường"
+    );
+  };
+
+  const labels = [...new Set(invalidEls.map(fieldLabel))];
+  return `Vui lòng điền đầy đủ thông tin bắt buộc: ${labels.join(", ")}.`;
+}
+
+//  Validate variants trước khi submit
 function validateVariants() {
   const rows = document.querySelectorAll("#variantRows tr");
   const keysSeen = new Set();
@@ -815,11 +856,19 @@ function validateVariants() {
   return null; // OK
 }
 
-// ─── Form submit ──────────────────────────────────────────────────────────────
+//  Form submit
 document
   .getElementById("productForm")
   ?.addEventListener("submit", async function (e) {
     e.preventDefault();
+
+    // Validate các ô bắt buộc (tên sản phẩm, giá biến thể...) trước khi gửi lên server
+    const requiredError = validateRequiredFields(this);
+    if (requiredError) {
+      showToast(requiredError, "error");
+      return;
+    }
+
     const action =
       document.getElementById("btnSubmit").dataset.action || "store";
     const btn = document.getElementById("btnSubmit");
@@ -878,7 +927,7 @@ document
     }
   });
 
-// ─── Delete ───────────────────────────────────────────────────────────────────
+//  Delete
 function confirmDelete(id, name) {
   currentDeleteId = id;
   document.getElementById("deleteProductName").textContent = name;
@@ -927,56 +976,7 @@ document
     }
   });
 
-// ─── Upload ảnh biến thể ──────────────────────────────────────────────────────
-function triggerVariantImageUpload(imgEl, variantId) {
-  const productId = window._currentProductId ?? 0;
-  if (!productId || !variantId) return;
-
-  const input = document.createElement("input");
-  input.type = "file";
-  input.accept = "image/jpeg,image/png,image/webp";
-  input.onchange = async function () {
-    const file = this.files[0];
-    if (!file) return;
-
-    const fd = new FormData();
-    fd.append("product_id", productId);
-    fd.append("variant_id", variantId);
-    fd.append("image", file);
-
-    try {
-      const res = await fetch("/WEB_GR4/admin/products/uploadVariantImage", {
-        method: "POST",
-        body: fd,
-      });
-      const data = await res.json();
-      if (data.success) {
-        window._currentImagesByVariant = data.images || {};
-        // Cập nhật ảnh thumb ngay tại chỗ
-        if (imgEl) {
-          const url = getImageForVariant(
-            window._currentImagesByVariant,
-            variantId,
-          );
-          imgEl.src =
-            url.startsWith("http") ||
-            url.startsWith("data:") ||
-            url.startsWith("/assets/img/no-image")
-              ? url
-              : "/WEB_GR4/public" + url;
-        }
-        showToast(data.message || "Đã cập nhật ảnh biến thể.");
-      } else {
-        showToast(data.message || "Không thể upload ảnh.", "error");
-      }
-    } catch {
-      showToast("Có lỗi xảy ra khi upload ảnh.", "error");
-    }
-  };
-  input.click();
-}
-
-// ─── Toast ────────────────────────────────────────────────────────────────────
+//  Toast
 function showToast(msg, type = "success") {
   const toast = document.getElementById("toast");
   if (!toast) return;

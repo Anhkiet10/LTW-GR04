@@ -8,8 +8,6 @@ unset($_SESSION['flash']);
 <link rel="stylesheet" href="/WEB_GR4/public/assets/css/admin/User.css">
 
 <div class="admin-content">
-
-  <!-- ── Header ─────────────────────────────────────────────── -->
   <div class="page-header">
     <div>
       <h1 class="page-title">Quản lý danh mục</h1>
@@ -19,16 +17,12 @@ unset($_SESSION['flash']);
       <i class="fas fa-plus"></i> Thêm danh mục
     </a>
   </div>
-
-  <!-- ── Flash ───────────────────────────────────────────────── -->
   <?php if ($flash): ?>
     <div class="alert alert-<?= $flash['type'] === 'success' ? 'success' : 'danger' ?> alert-dismissible">
       <?= htmlspecialchars($flash['message']) ?>
       <button class="alert-close" onclick="this.parentElement.remove()">×</button>
     </div>
   <?php endif; ?>
-
-  <!-- ── Bộ lọc ──────────────────────────────────────────────── -->
   <div class="filter-card">
     <form method="GET" action="/WEB_GR4/admin/categories" class="filter-form">
       <input
@@ -52,7 +46,6 @@ unset($_SESSION['flash']);
     </form>
   </div>
 
-  <!-- ── Bảng danh sách ──────────────────────────────────────── -->
   <div class="table-card">
     <?php if (empty($categories)): ?>
       <div class="empty-state">
@@ -110,7 +103,7 @@ unset($_SESSION['flash']);
         </tbody>
       </table>
 
-      <!-- ── Phân trang ────────────────────────────────────── -->
+
       <?php if ($totalPages > 1): ?>
         <div class="pagination">
           <?php
@@ -140,9 +133,8 @@ unset($_SESSION['flash']);
   </div>
 </div>
 
-<!-- ── Modal xác nhận xoá ──────────────────────────────────── -->
-<div id="deleteModal" class="modal" style="display:none">
-  <div class="modal-box">
+<div id="deleteModal" class="confirm-overlay" style="display:none">
+  <div class="confirm-box">
     <h3>Xác nhận xóa</h3>
     <p>Bạn có chắc muốn xóa danh mục <strong id="deleteCatName"></strong>?<br>
        Không thể xóa nếu danh mục còn danh mục con hoặc sản phẩm.</p>
