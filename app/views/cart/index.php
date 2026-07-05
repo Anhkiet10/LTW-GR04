@@ -118,5 +118,6 @@
         </div>
     </div>
  
+<script src="/WEB_GR4/public/assets/js/user/cart.js"></script>
 <script src="/WEB_GR4/public/assets/js/user/orders.js"></script>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

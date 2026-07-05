@@ -195,11 +195,26 @@ class OrderModel extends Model {
 
     public function getOrderItems($orderId) {
         $orderId = (int)$orderId;
-        $sql = "SELECT oi.*, p.product_name, pi.image_url,
-                       pv.sku, pv.price as variant_price, pv.variant_key
+        // Ưu tiên ảnh riêng của biến thể đã mua (pi.variant_id = oi.variant_id).
+        // Nếu không có ảnh riêng cho biến thể đó, lấy ảnh gốc của sản phẩm
+        // (variant_id IS NULL), ưu tiên is_primary = 1, rồi đến sort_order nhỏ nhất.
+        // Dùng subquery tương quan + LIMIT 1 để đảm bảo mỗi order_item chỉ ra đúng 1 ảnh,
+        // tránh JOIN trực tiếp làm nhân dòng khi sản phẩm có nhiều ảnh.
+        $sql = "SELECT oi.*, p.product_name,
+                       pv.sku, pv.price as variant_price, pv.variant_key,
+                       (
+                           SELECT pi.image_url
+                           FROM product_images pi
+                           WHERE pi.product_id = oi.product_id
+                             AND (pi.variant_id = oi.variant_id OR pi.variant_id IS NULL)
+                           ORDER BY
+                               (pi.variant_id = oi.variant_id) DESC,
+                               pi.is_primary DESC,
+                               pi.sort_order ASC
+                           LIMIT 1
+                       ) AS image_url
                 FROM order_items oi
                 LEFT JOIN products p ON oi.product_id = p.product_id
-                LEFT JOIN product_images pi ON p.product_id = pi.product_id AND pi.is_primary = 1
                 LEFT JOIN product_variants pv ON oi.variant_id = pv.variant_id
                 WHERE oi.order_id = $orderId
                 ORDER BY oi.order_item_id";
