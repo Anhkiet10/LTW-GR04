@@ -515,7 +515,7 @@ CREATE TABLE `reviews` (
   `rating` tinyint(4) NOT NULL COMMENT '1–5 sao',
   `comment` text DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -666,7 +666,8 @@ ALTER TABLE `product_variants`
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`review_id`),
   ADD UNIQUE KEY `uq_review_user_product` (`user_id`,`product_id`) COMMENT 'Mỗi user chỉ review 1 lần / sản phẩm',
-  ADD KEY `idx_reviews_product` (`product_id`);
+  ADD KEY `idx_reviews_product` (`product_id`),
+  ADD KEY `idx_reviews_created_at` (`created_at`);
 
 --
 -- Indexes for table `users`

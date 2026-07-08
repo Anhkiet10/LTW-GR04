@@ -45,6 +45,21 @@ class ProductController extends Controller {
         $variants = $model->getVariants($product['product_id']);
         $attributes = $model->getAttributesForProduct($product['product_id']);
         $categoryName = $model->getCategoryName($product['category_id']);
+        $reviews = $model->getReviews($product['product_id']);
+        $currentUserReview = null;
+        $canReview = false;
+        $reviewRestrictionMessage = '';
+
+        if (!empty($_SESSION['user_id'])) {
+            $currentUserReview = $model->getReviewByUserAndProduct((int)$_SESSION['user_id'], (int)$product['product_id']);
+            $canReview = $model->canUserReviewProduct((int)$_SESSION['user_id'], (int)$product['product_id']);
+            if (!$canReview) {
+                $reviewRestrictionMessage = 'Bạn cần mua sản phẩm này trước khi gửi đánh giá.';
+            }
+        }
+
+        $reviewMessage = $_SESSION['review_message'] ?? '';
+        unset($_SESSION['review_message']);
 
         $this->render('products/detail', [
             'pageTitle' => $product['product_name'],
@@ -54,7 +69,43 @@ class ProductController extends Controller {
             'attributes'=> $attributes,
             'categoryName' => $categoryName,
             'categories' => $model->getCategoriesWithParent(),
+            'reviews' => $reviews,
+            'currentUserReview' => $currentUserReview,
+            'reviewMessage' => $reviewMessage,
+            'canReview' => $canReview,
+            'reviewRestrictionMessage' => $reviewRestrictionMessage,
         ]);
+    }
+
+    public function submitReview($id) {
+        if (!isset($_SESSION['user_id'])) {
+            $this->redirect('/WEB_GR4/login');
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/WEB_GR4/products/' . (int)$id);
+        }
+
+        $productId = (int)$id;
+        $model = new ProductModel();
+        $product = $model->getById($productId);
+
+        if (!$product) {
+            $this->redirect('/WEB_GR4/products');
+        }
+
+        if (!$model->canUserReviewProduct((int)$_SESSION['user_id'], $productId)) {
+            $_SESSION['review_message'] = 'Bạn chỉ có thể đánh giá sau khi đã mua sản phẩm này.';
+            $this->redirect('/WEB_GR4/products/' . $productId);
+        }
+
+        $rating = max(1, min(5, (int)($_POST['rating'] ?? 0)));
+        $comment = trim($_POST['comment'] ?? '');
+
+        $model->saveReview((int)$_SESSION['user_id'], $productId, $rating, $comment);
+        $_SESSION['review_message'] = 'Cảm ơn bạn đã gửi đánh giá cho sản phẩm.';
+
+        $this->redirect('/WEB_GR4/products/' . $productId);
     }
 
     public function search() {

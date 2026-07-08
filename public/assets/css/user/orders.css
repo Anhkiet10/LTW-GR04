@@ -30,6 +30,55 @@
   margin-top: 10px;
 }
 
+.orders-filter-box {
+  background: #fff;
+  border: 1px solid var(--mint);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(155, 142, 199, 0.08);
+  margin-bottom: 24px;
+}
+
+.orders-filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: end;
+}
+
+.orders-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 180px;
+}
+
+.orders-filter-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--forest);
+}
+
+.orders-filter-group select {
+  padding: 10px 12px;
+  border: 1px solid var(--mint);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--soil);
+}
+
+.orders-filter-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.shop-btn-secondary {
+  background: #fff;
+  color: var(--plum);
+  border: 1px solid var(--mint);
+}
+
 .orders-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

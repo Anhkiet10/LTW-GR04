@@ -15,6 +15,7 @@ $router->get('/', 'HomeController', 'index');
 $router->get('/products',          'ProductController', 'index');
 $router->get('/products/search',   'ProductController', 'search');
 $router->get('/products/{id}',     'ProductController', 'detail');
+$router->post('/products/{id}/review', 'ProductController', 'submitReview');
 
 // ===== AUTH =====
 $router->get('/login',    'AuthController', 'loginPage');
@@ -66,6 +67,8 @@ $router->post('/orders/updatePaymentStatus', 'OrderController', 'updatePaymentSt
 $router->get('/admin',              'AdminController', 'home');
 $router->get('/admin/orders',       'AdminController', 'orders');
 $router->get('/admin/order-detail', 'AdminController', 'orderDetail');
+$router->get('/admin/reviews',      'AdminController', 'reviews');
+$router->post('/admin/reviews/delete', 'AdminController', 'deleteReview');
 $router->post('/admin/save-homepage',       'AdminController', 'saveHomepage');
 $router->post('/admin/update-order-status', 'AdminController', 'updateOrderStatus');
 

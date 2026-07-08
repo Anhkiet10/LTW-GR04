@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../core/Model.php';
 
 class OrderModel extends Model {
 
-    public function getAllOrders($limit = null, $offset = 0, $status = null, $guestOnly = false, $search = '') {
+    public function getAllOrders($limit = null, $offset = 0, $status = null, $guestOnly = false, $search = '', $sortDate = 'desc', $sortOrderId = 'desc') {
         $sql = "SELECT o.*,
                        COALESCE(u.full_name,  o.guest_name)    AS full_name,
                        COALESCE(u.email,      o.guest_email)   AS email,
@@ -39,7 +39,9 @@ class OrderModel extends Model {
             )";
         }
 
-        $sql .= " GROUP BY o.order_id ORDER BY o.order_date DESC";
+        $sortDate = $sortDate === 'asc' ? 'ASC' : 'DESC';
+        $sortOrderId = $sortOrderId === 'asc' ? 'ASC' : 'DESC';
+        $sql .= " GROUP BY o.order_id ORDER BY o.order_date $sortDate, o.order_id $sortOrderId";
 
         if ($limit) {
             $offset = (int)$offset;

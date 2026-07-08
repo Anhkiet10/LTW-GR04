@@ -1,5 +1,22 @@
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
 
+<?php
+$renderStars = function ($rating) {
+    $full = max(0, min(5, (int)$rating));
+    $html = '';
+    for ($i = 1; $i <= 5; $i++) {
+        $html .= $i <= $full ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>';
+    }
+    return $html;
+};
+
+$reviewCount = count($reviews ?? []);
+$avgRating = 0;
+if ($reviewCount > 0) {
+    $avgRating = round(array_sum(array_column($reviews, 'rating')) / $reviewCount, 1);
+}
+?>
+
 <section class="product-detail">
     <div class="container">
         <a href="/WEB_GR4/products" class="btn btn-secondary">Quay lại</a>
@@ -106,6 +123,85 @@
                     </button>
                 <?php endif; ?>
             </div>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: 32px;">
+        <div class="product-reviews-section" style="background: #fff; border: 1px solid #e9e9e9; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+            <h3 style="margin-bottom: 12px;">Đánh giá & Bình luận</h3>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-bottom: 16px;">
+                <div style="font-size: 1.2rem; font-weight: 600;">
+                    <?php echo number_format($avgRating, 1); ?> / 5
+                    <span style="margin-left: 6px; color: #f4b400;">
+                        <?php echo $renderStars($avgRating); ?>
+                    </span>
+                </div>
+                <div style="color: #666;">
+                    <?php echo $reviewCount; ?> đánh giá
+                </div>
+            </div>
+
+            <?php if (!empty($reviewMessage)): ?>
+                <div style="background: #eefbf2; color: #1f7a3b; padding: 10px 12px; border-radius: 8px; margin-bottom: 16px;">
+                    <?php echo htmlspecialchars($reviewMessage); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($_SESSION['user_id'])): ?>
+                <?php if ($canReview): ?>
+                    <form method="post" action="/WEB_GR4/products/<?php echo (int)$product['product_id']; ?>/review" style="margin-bottom: 20px;">
+                        <div style="margin-bottom: 10px;">
+                            <label for="reviewRating" style="display: block; margin-bottom: 6px; font-weight: 600;">Đánh giá của bạn</label>
+                            <select id="reviewRating" name="rating" required style="padding: 8px 10px; border-radius: 6px; border: 1px solid #ccc; min-width: 140px;">
+                                <option value="5" <?php echo (!empty($currentUserReview) && $currentUserReview['rating'] == 5) ? 'selected' : ''; ?>>5 sao</option>
+                                <option value="4" <?php echo (!empty($currentUserReview) && $currentUserReview['rating'] == 4) ? 'selected' : ''; ?>>4 sao</option>
+                                <option value="3" <?php echo (!empty($currentUserReview) && $currentUserReview['rating'] == 3) ? 'selected' : ''; ?>>3 sao</option>
+                                <option value="2" <?php echo (!empty($currentUserReview) && $currentUserReview['rating'] == 2) ? 'selected' : ''; ?>>2 sao</option>
+                                <option value="1" <?php echo (!empty($currentUserReview) && $currentUserReview['rating'] == 1) ? 'selected' : ''; ?>>1 sao</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <label for="reviewComment" style="display: block; margin-bottom: 6px; font-weight: 600;">Bình luận</label>
+                            <textarea id="reviewComment" name="comment" rows="4" placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm..." style="width: 100%; max-width: 640px; padding: 10px; border-radius: 8px; border: 1px solid #ccc;"><?php echo !empty($currentUserReview) ? htmlspecialchars($currentUserReview['comment'] ?? '') : ''; ?></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="border: none;">
+                            <?php echo !empty($currentUserReview) ? 'Cập nhật đánh giá' : 'Gửi đánh giá'; ?>
+                        </button>
+                    </form>
+                <?php else: ?>
+                    <p style="margin-bottom: 20px; color: #666;">
+                        <?php echo htmlspecialchars($reviewRestrictionMessage ?: 'Bạn cần mua sản phẩm này trước khi gửi đánh giá.'); ?>
+                    </p>
+                <?php endif; ?>
+            <?php else: ?>
+                <p style="margin-bottom: 20px; color: #666;">
+                    Vui lòng <a href="/WEB_GR4/login">đăng nhập</a> để đánh giá sản phẩm.
+                </p>
+            <?php endif; ?>
+
+            <?php if (!empty($reviews)): ?>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <?php foreach ($reviews as $review): ?>
+                        <div style="border-top: 1px solid #eee; padding-top: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
+                                <strong><?php echo htmlspecialchars($review['full_name']); ?></strong>
+                                <span style="color: #f4b400;">
+                                    <?php echo $renderStars($review['rating']); ?>
+                                </span>
+                            </div>
+                            <div style="color: #888; font-size: 0.9rem; margin-bottom: 8px;">
+                                <?php echo htmlspecialchars($review['created_at']); ?>
+                            </div>
+                            <div style="color: #444; line-height: 1.5;">
+                                <?php echo !empty($review['comment']) ? nl2br(htmlspecialchars($review['comment'])) : 'Không có bình luận.'; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p style="color: #666; margin: 0;">Chưa có đánh giá nào cho sản phẩm này.</p>
+            <?php endif; ?>
         </div>
     </div>
 

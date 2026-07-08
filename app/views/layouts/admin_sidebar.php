@@ -50,6 +50,8 @@ function getMenuActiveClass($pagePath) {
                 <i class="fas fa-box-open"></i> Sản phẩm</a></li>
             <li><a href="/WEB_GR4/admin/orders" class="<?php echo getMenuActiveClass('/WEB_GR4/admin/orders'); ?>">
                 <i class="fas fa-shopping-cart"></i> Đơn hàng</a></li>
+            <li><a href="/WEB_GR4/admin/reviews" class="<?php echo getMenuActiveClass('/WEB_GR4/admin/reviews'); ?>">
+                <i class="fas fa-comments"></i> Đánh giá</a></li>
             <li><a href="/WEB_GR4/admin/users" class="<?php echo getMenuActiveClass('/WEB_GR4/admin/users'); ?>">
                 <i class="fas fa-users"></i> Người dùng</a></li>
             <li><a href="/WEB_GR4/admin/statistics" class="<?php echo getMenuActiveClass('/WEB_GR4/admin/statistics'); ?>">
