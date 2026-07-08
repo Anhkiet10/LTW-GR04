@@ -264,6 +264,10 @@
 
                 <div class="gc-address-confirm" id="gcAddressConfirm">
                     <!-- Điền bằng JS từ bước 1 -->
+                    <strong><i class="fa-solid fa-user"></i> Chưa có tên</strong>
+                    <span><i class="fa-solid fa-phone"></i> Chưa có số điện thoại</span>
+                    <span><i class="fa-solid fa-envelope"></i> Chưa có email</span>
+                    <span><i class="fa-solid fa-location-dot"></i> Chưa có địa chỉ</span>
                 </div>
 
                 <div class="gc-divider"></div>

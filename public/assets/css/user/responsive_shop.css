@@ -215,6 +215,47 @@ video {
   }
 }
 
+@media (max-width: 768px) {
+  .hero {
+    padding: 72px 16px 84px;
+    border-radius: 0 0 22px 22px;
+  }
+
+  .category-section {
+    padding: 28px 0 8px;
+  }
+
+  .category-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .view-more-link {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+
+  .product-card {
+    border-radius: 14px;
+  }
+
+  .product-card img,
+  .no-img {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-card img,
+  .no-img {
+    aspect-ratio: 1 / 1;
+  }
+
+  .product-info h3 {
+    font-size: 12px;
+  }
+}
+
 /* ──────────────────────────────────────────────────────────────────────
    3. GUEST CHECKOUT (Guestcheckout.css)
    ────────────────────────────────────────────────────────────────────── */

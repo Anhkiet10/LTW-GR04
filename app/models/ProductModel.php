@@ -274,6 +274,112 @@ class ProductModel extends Model {
         ");
         return implode(', ', array_column($rows, 'value_name'));
     }
+public function getReviews(int $productId): array {
+        $pid = (int)$productId;
+        return $this->fetchAll(" 
+            SELECT r.*, u.full_name
+            FROM   reviews r
+            JOIN   users u ON u.user_id = r.user_id
+            WHERE  r.product_id = $pid
+            ORDER  BY r.created_at DESC
+        ");
+    }
+
+    public function getReviewByUserAndProduct(int $userId, int $productId): ?array {
+        $uid = (int)$userId;
+        $pid = (int)$productId;
+        $row = $this->fetchOne(" 
+            SELECT r.*, u.full_name
+            FROM   reviews r
+            JOIN   users u ON u.user_id = r.user_id
+            WHERE  r.user_id = $uid AND r.product_id = $pid
+        ");
+        return $row ?: null;
+    }
+
+    public function canUserReviewProduct(int $userId, int $productId): bool {
+        $uid = (int)$userId;
+        $pid = (int)$productId;
+        $row = $this->fetchOne(" 
+            SELECT 1
+            FROM order_items oi
+            JOIN orders o ON o.order_id = oi.order_id
+            WHERE oi.product_id = $pid
+              AND o.user_id = $uid
+              AND o.status IN ('paid', 'shipping', 'completed')
+            LIMIT 1
+        ");
+        return !empty($row);
+    }
+
+    public function saveReview(int $userId, int $productId, int $rating, string $comment): bool {
+        $uid = (int)$userId;
+        $pid = (int)$productId;
+        $rating = max(1, min(5, (int)$rating));
+        $comment = trim($comment);
+        $escapedComment = $this->escape($comment);
+
+        $this->query(" 
+            INSERT INTO reviews (product_id, user_id, rating, comment)
+            VALUES ($pid, $uid, $rating, '$escapedComment')
+            ON DUPLICATE KEY UPDATE
+                rating = $rating,
+                comment = '$escapedComment',
+                created_at = NOW()
+        ");
+        return true;
+    }
+
+public function getAllReviewsForAdmin(?string $fromDate = null, ?string $toDate = null, ?int $orderId = null, ?string $sortDate = null, ?string $sortOrderId = null): array {
+        $sql = " 
+            SELECT r.review_id, r.rating, r.comment, r.created_at,
+                   u.user_id, u.full_name AS user_name,
+                   p.product_id, p.product_name,
+                   (
+                       SELECT MAX(o.order_id)
+                       FROM order_items oi
+                       JOIN orders o ON o.order_id = oi.order_id
+                       WHERE oi.product_id = r.product_id
+                         AND o.user_id = r.user_id
+                   ) AS order_id
+            FROM   reviews r
+            JOIN   users u ON u.user_id = r.user_id
+            JOIN   products p ON p.product_id = r.product_id
+            WHERE  1 = 1";
+
+        if ($fromDate !== null && $fromDate !== '') {
+            $sql .= " AND DATE(r.created_at) >= '" . $this->escape($fromDate) . "'";
+        }
+
+        if ($toDate !== null && $toDate !== '') {
+            $sql .= " AND DATE(r.created_at) <= '" . $this->escape($toDate) . "'";
+        }
+
+        if ($orderId !== null && (int)$orderId > 0) {
+            $orderIdValue = (int)$orderId;
+            $sql .= " AND EXISTS (
+                SELECT 1
+                FROM order_items oi
+                JOIN orders o ON o.order_id = oi.order_id
+                WHERE oi.product_id = r.product_id
+                  AND o.user_id = r.user_id
+                  AND o.order_id = $orderIdValue
+            )";
+        }
+
+        $sortDate = $sortDate === 'asc' ? 'ASC' : 'DESC';
+        $sortOrderId = $sortOrderId === 'asc' ? 'ASC' : 'DESC';
+
+        $sql .= " ORDER BY r.created_at $sortDate, order_id $sortOrderId, r.review_id DESC";
+        return $this->fetchAll($sql);
+    }
+
+    public function deleteReview(int $reviewId): bool {
+        $rid = (int)$reviewId;
+        $this->query("DELETE FROM reviews WHERE review_id = $rid");
+        return true;
+    }
+
     public function getAllCategories(): array {
         return $this->fetchAll("
             SELECT category_id, category_name

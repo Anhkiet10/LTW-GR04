@@ -53,10 +53,12 @@ class AdminController extends Controller {
         $status    = isset($_GET['status']) ? trim($_GET['status'])       : null;
         $guestOnly = isset($_GET['guest'])  && $_GET['guest'] === '1';
         $search    = isset($_GET['search']) ? trim($_GET['search'])       : '';
+        $sortDate  = isset($_GET['sort_date']) ? trim($_GET['sort_date']) : 'desc';
+        $sortOrderId = isset($_GET['sort_order_id']) ? trim($_GET['sort_order_id']) : 'desc';
         $perPage   = 15;
         $offset    = ($page - 1) * $perPage;
 
-        $orders      = $orderModel->getAllOrders($perPage, $offset, $status, $guestOnly, $search);
+        $orders      = $orderModel->getAllOrders($perPage, $offset, $status, $guestOnly, $search, $sortDate, $sortOrderId);
         $totalOrders = $orderModel->getTotalOrders($status, $guestOnly, $search);
         $stats       = $orderModel->getOrderStats();
         $totalPages  = ceil($totalOrders / $perPage);
@@ -71,6 +73,8 @@ class AdminController extends Controller {
             'currentStatus' => $status,
             'guestOnly'     => $guestOnly,
             'search'        => $search,
+            'sortDate'      => $sortDate,
+            'sortOrderId'   => $sortOrderId,
         ]);
     }
 
@@ -216,6 +220,45 @@ class AdminController extends Controller {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
         exit;
+    }
+
+    public function reviews() {
+        $this->requireAdmin();
+
+        $fromDate = isset($_GET['from_date']) ? trim($_GET['from_date']) : '';
+        $toDate   = isset($_GET['to_date']) ? trim($_GET['to_date']) : '';
+        $orderId  = isset($_GET['order_id']) ? (int)$_GET['order_id'] : 0;
+        $sortDate = isset($_GET['sort_date']) ? trim($_GET['sort_date']) : 'desc';
+        $sortOrderId = isset($_GET['sort_order_id']) ? trim($_GET['sort_order_id']) : 'desc';
+
+        $productModel = new ProductModel();
+        $reviews = $productModel->getAllReviewsForAdmin($fromDate, $toDate, $orderId, $sortDate, $sortOrderId);
+
+        $this->render('admin/Reviews', [
+            'pageTitle' => 'Quản lý đánh giá & bình luận',
+            'reviews'   => $reviews,
+            'fromDate'  => $fromDate,
+            'toDate'    => $toDate,
+            'orderId'   => $orderId,
+            'sortDate'  => $sortDate,
+            'sortOrderId' => $sortOrderId,
+        ]);
+    }
+
+    public function deleteReview() {
+        $this->requireAdmin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/WEB_GR4/admin/reviews');
+        }
+
+        $reviewId = isset($_POST['review_id']) ? (int)$_POST['review_id'] : 0;
+        if ($reviewId > 0) {
+            $productModel = new ProductModel();
+            $productModel->deleteReview($reviewId);
+        }
+
+        $this->redirect('/WEB_GR4/admin/reviews');
     }
 
     public function backup() {

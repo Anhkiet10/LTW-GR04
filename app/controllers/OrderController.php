@@ -70,11 +70,17 @@ class OrderController extends Controller
         }
 
         $model  = new OrderModel();
-        $orders = $model->getOrdersByUser($_SESSION['user_id']);
+        $sortDate = isset($_GET['sort_date']) ? trim($_GET['sort_date']) : 'desc';
+        $sortOrderId = isset($_GET['sort_order_id']) ? trim($_GET['sort_order_id']) : 'desc';
+        $status = isset($_GET['status']) ? trim($_GET['status']) : '';
+        $orders = $model->getOrdersByUser($_SESSION['user_id'], $sortDate, $sortOrderId, $status);
 
         $this->render('orders/history', [
             'pageTitle' => 'Đơn hàng của tôi',
-            'orders'    => $orders
+            'orders'    => $orders,
+            'sortDate'  => $sortDate,
+            'sortOrderId' => $sortOrderId,
+            'status'    => $status,
         ]);
     }
 

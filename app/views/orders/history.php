@@ -52,6 +52,40 @@ $paymentStatusMap = [
         <p>Theo dõi các đơn hàng đã đặt</p>
     </div>
 
+    <div class="orders-filter-box">
+        <form method="get" action="/WEB_GR4/orders" class="orders-filter-form">
+            <div class="orders-filter-group">
+                <label for="sort_date">Sắp xếp ngày</label>
+                <select id="sort_date" name="sort_date">
+                    <option value="desc" <?= (($sortDate ?? 'desc') === 'desc') ? 'selected' : '' ?>>Mới nhất trước</option>
+                    <option value="asc" <?= (($sortDate ?? 'desc') === 'asc') ? 'selected' : '' ?>>Cũ nhất trước</option>
+                </select>
+            </div>
+            <div class="orders-filter-group">
+                <label for="sort_order_id">Sắp xếp mã đơn</label>
+                <select id="sort_order_id" name="sort_order_id">
+                    <option value="desc" <?= (($sortOrderId ?? 'desc') === 'desc') ? 'selected' : '' ?>>Giảm dần</option>
+                    <option value="asc" <?= (($sortOrderId ?? 'desc') === 'asc') ? 'selected' : '' ?>>Tăng dần</option>
+                </select>
+            </div>
+            <div class="orders-filter-group">
+                <label for="status">Trạng thái</label>
+                <select id="status" name="status">
+                    <option value="" <?= empty($status ?? '') ? 'selected' : '' ?>>Tất cả</option>
+                    <option value="pending" <?= (($status ?? '') === 'pending') ? 'selected' : '' ?>>Chờ xử lý</option>
+                    <option value="paid" <?= (($status ?? '') === 'paid') ? 'selected' : '' ?>>Đã thanh toán</option>
+                    <option value="shipping" <?= (($status ?? '') === 'shipping') ? 'selected' : '' ?>>Đang giao</option>
+                    <option value="completed" <?= (($status ?? '') === 'completed') ? 'selected' : '' ?>>Hoàn thành</option>
+                    <option value="cancelled" <?= (($status ?? '') === 'cancelled') ? 'selected' : '' ?>>Đã hủy</option>
+                </select>
+            </div>
+            <div class="orders-filter-actions">
+                <button type="submit" class="shop-btn">Lọc</button>
+                <a href="/WEB_GR4/orders" class="shop-btn shop-btn-secondary">Đặt lại</a>
+            </div>
+        </form>
+    </div>
+
     <!-- ===== STATS CARDS ===== -->
     <div class="orders-stats">
         <div class="orders-stat-card stat-total">

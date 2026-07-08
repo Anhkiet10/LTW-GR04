@@ -12,7 +12,7 @@ class OrderModel extends Model {
         return $this->fetchAll($sql);
     }
 
-    public function getOrdersByUser($userId) {
+    public function getOrdersByUser($userId, ?string $sortDate = null, ?string $sortOrderId = null, ?string $status = null) {
         $userId = (int)$userId;
         $sql = "SELECT o.*, a.full_address, a.city,
                        COUNT(DISTINCT oi.order_item_id) as item_count,
@@ -23,9 +23,19 @@ class OrderModel extends Model {
                 LEFT JOIN order_items oi ON o.order_id = oi.order_id
                 LEFT JOIN products pdt ON oi.product_id = pdt.product_id
                 LEFT JOIN payments p ON o.order_id = p.order_id
-                WHERE o.user_id = $userId
-                GROUP BY o.order_id
-                ORDER BY o.order_date DESC";
+                WHERE o.user_id = $userId";
+
+        if ($status !== null && $status !== '') {
+            $status = $this->escape($status);
+            $sql .= " AND o.status = '$status'";
+        }
+
+        $sql .= " GROUP BY o.order_id";
+
+        $sortDate = $sortDate === 'asc' ? 'ASC' : 'DESC';
+        $sortOrderId = $sortOrderId === 'asc' ? 'ASC' : 'DESC';
+        $sql .= " ORDER BY o.order_date $sortDate, o.order_id $sortOrderId";
+
         return $this->fetchAll($sql);
     }
 
