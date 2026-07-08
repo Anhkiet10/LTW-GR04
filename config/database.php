@@ -7,7 +7,7 @@ class Database {
     private static $conn = null;
 
     const DB_HOST = '127.0.0.1';
-    const DB_PORT = 3307;
+    const DB_PORT = 3306;
     const DB_USER = 'root';
     const DB_PASS = '';
     const DB_NAME = 'W4SHOPDB';

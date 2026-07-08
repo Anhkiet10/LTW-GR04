@@ -143,28 +143,16 @@
 
     // Cập nhật ô xác nhận địa chỉ ở bước 2
     gcAddressConfirm.innerHTML = [
-      "<strong><i class='fa-solid fa-user'></i> " +
-        escHtml(guestInfo.name) +
-        "</strong>",
-      "<span><i class='fa-solid fa-phone'></i> " +
-        escHtml(guestInfo.phone) +
-        "</span>",
-      guestInfo.email
-        ? "<span><i class='fa-solid fa-envelope'></i> " +
-          escHtml(guestInfo.email) +
-          "</span>"
-        : "",
-      "<span><i class='fa-solid fa-location-dot'></i> " +
-        escHtml(guestInfo.address) +
-        ", " +
-        escHtml(guestInfo.city) +
-        "</span>",
-      guestInfo.note
-        ? "<span><i class='fa-solid fa-pen'></i> " +
-          escHtml(guestInfo.note) +
-          "</span>"
-        : "",
-    ].join("");
+    "<div><strong><i class='fa-solid fa-user'></i> " + escHtml(guestInfo.name) + "</strong></div>",
+    "<div><span><i class='fa-solid fa-phone'></i> " + escHtml(guestInfo.phone) + "</span></div>",
+    guestInfo.email
+      ? "<div><span><i class='fa-solid fa-envelope'></i> " + escHtml(guestInfo.email) + "</span></div>"
+      : "",
+    "<div><span><i class='fa-solid fa-location-dot'></i> " + escHtml(guestInfo.address) + ", " + escHtml(guestInfo.city) + "</span></div>",
+    guestInfo.note
+      ? "<div><span><i class='fa-solid fa-pen'></i> " + escHtml(guestInfo.note) + "</span></div>"
+      : "",
+  ].join("");
 
     showPanel(panel2);
     setStepActive(2);
