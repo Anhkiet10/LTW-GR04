@@ -54,11 +54,10 @@ class AdminController extends Controller {
         $guestOnly = isset($_GET['guest'])  && $_GET['guest'] === '1';
         $search    = isset($_GET['search']) ? trim($_GET['search'])       : '';
         $sortDate  = isset($_GET['sort_date']) ? trim($_GET['sort_date']) : 'desc';
-        $sortOrderId = isset($_GET['sort_order_id']) ? trim($_GET['sort_order_id']) : 'desc';
         $perPage   = 15;
         $offset    = ($page - 1) * $perPage;
 
-        $orders      = $orderModel->getAllOrders($perPage, $offset, $status, $guestOnly, $search, $sortDate, $sortOrderId);
+        $orders      = $orderModel->getAllOrders($perPage, $offset, $status, $guestOnly, $search, $sortDate);
         $totalOrders = $orderModel->getTotalOrders($status, $guestOnly, $search);
         $stats       = $orderModel->getOrderStats();
         $totalPages  = ceil($totalOrders / $perPage);
@@ -74,7 +73,6 @@ class AdminController extends Controller {
             'guestOnly'     => $guestOnly,
             'search'        => $search,
             'sortDate'      => $sortDate,
-            'sortOrderId'   => $sortOrderId,
         ]);
     }
 

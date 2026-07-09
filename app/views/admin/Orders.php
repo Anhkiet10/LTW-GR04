@@ -47,8 +47,6 @@
             <div style="margin-bottom:16px;">
                 <form method="GET" action="/WEB_GR4/admin/orders" id="searchForm"
                       style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-                    <input type="hidden" name="sort_date" value="<?php echo htmlspecialchars($sortDate ?? 'desc'); ?>">
-                    <input type="hidden" name="sort_order_id" value="<?php echo htmlspecialchars($sortOrderId ?? 'desc'); ?>">
                     <?php if ($currentStatus): ?>
                         <input type="hidden" name="status" value="<?php echo htmlspecialchars($currentStatus); ?>">
                     <?php endif; ?>
@@ -80,16 +78,9 @@
             <div style="margin-bottom:16px;padding:16px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;display:flex;flex-wrap:wrap;gap:12px;align-items:end;">
                 <div style="display:flex;flex-direction:column;gap:6px;min-width:180px;">
                     <label for="sort_date" style="font-size:13px;font-weight:600;color:#374151;">Sắp xếp ngày</label>
-                    <select id="sort_date" name="sort_date" style="padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;background:#fff;">
+                    <select id="sort_date" name="sort_date" form="searchForm" style="padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;background:#fff;">
                         <option value="desc" <?php echo (($sortDate ?? 'desc') === 'desc') ? 'selected' : ''; ?>>Mới nhất trước</option>
                         <option value="asc" <?php echo (($sortDate ?? 'desc') === 'asc') ? 'selected' : ''; ?>>Cũ nhất trước</option>
-                    </select>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:6px;min-width:180px;">
-                    <label for="sort_order_id" style="font-size:13px;font-weight:600;color:#374151;">Sắp xếp mã đơn</label>
-                    <select id="sort_order_id" name="sort_order_id" style="padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;background:#fff;">
-                        <option value="desc" <?php echo (($sortOrderId ?? 'desc') === 'desc') ? 'selected' : ''; ?>>Giảm dần</option>
-                        <option value="asc" <?php echo (($sortOrderId ?? 'desc') === 'asc') ? 'selected' : ''; ?>>Tăng dần</option>
                     </select>
                 </div>
                 <button type="submit" form="searchForm" style="padding:10px 18px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">

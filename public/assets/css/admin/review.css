@@ -140,6 +140,13 @@
   border-bottom: 1px solid #f1f3f8;
   text-align: left;
   vertical-align: middle;
+  white-space: normal;
+}
+
+.review-table th:nth-child(6),
+.review-table td.review-comment {
+  width: 280px;
+  max-width: 280px;
 }
 
 .review-table thead th {
@@ -197,10 +204,14 @@
 }
 
 .review-comment {
-  max-width: 320px;
+  max-width: 280px;
   white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
   color: #374151;
   line-height: 1.5;
+  padding-right: 5px;
+  display: inline-block;
 }
 
 .review-delete-btn {
